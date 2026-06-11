@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style type="text/css">
+div {
+	border: 10px dotted;
+	margin: 30px 10px;
+	padding: 20px;
+	height : 100px;
+	
+/* 	background-image : url(../images/flower-1.jpg);
+	background-size: 100px; */
+/* 	background-repeat: no-repeat; */
+	background-color: lightblue;
+}
+div#d1{
+	background-clip: border-box;
+}
+div[id=d2]{
+	background-clip: content-box;
+}
+#d3{
+	background-clip: padding-box;
+}
+
+
+</style>
+
+</head>
+<body>
+
+background-clip: border-box;<div id="d1"></div>
+background-clip: content-box;<div id="d2"></div>
+background-clip: padding-box;<div id="d3"></div>
+
+
+</body>
+</html>

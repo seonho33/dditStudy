@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+
+  <!-- USERS 테이블 insert -->
+  <insert id="insertUser" parameterType="kr.or.ddit.member.vo.UserVO">
+    INSERT INTO USERS (
+      USER_ID,
+      PASSWORD,
+      NAME,
+      DIVISION
+    ) VALUES (
+      #{userId},
+      #{password},
+      #{name},
+      #{division}
+    )
+  </insert>
+
+  <!-- MEMBER 테이블 insert -->
+  <insert id="insertMember" parameterType="kr.or.ddit.member.vo.MemberVO">
+    INSERT INTO MEMBER (
+      USER_ID,
+      USER_BIR,
+      USER_MAIL,
+      USER_NO
+    ) VALUES (
+      #{userId},
+      #{userBir},
+      #{userMail},
+      #{userNo}
+    )
+  </insert>
+
+  <!-- MYMEMBER 업데이트 -->
+  <update id="updateMember" parameterType="kr.or.ddit.member.vo.MemberVO">
+    UPDATE MYMEMBER
+    SET MEM_NAME = #{memName},
+        MEM_TEL = #{memTel},
+        MEM_ADDR = #{memAddr},
+        ATCH_FILE_ID = #{atchFileId}
+    WHERE MEM_ID = #{memId}
+  </update>
+
+  <delete id="deleteMember">
+    DELETE FROM MYMEMBER
+    WHERE MEM_ID = #{memId}
+  </delete>
+
+  <!-- 전체 조회 -->
+  <select id="getAllMember" resultType="kr.or.ddit.member.vo.MemberVO">
+    SELECT mem_id AS memId,
+           mem_name AS memName,
+           mem_tel AS memTel,
+           mem_addr AS memAddr,
+           reg_dt AS regDt,
+           atch_file_id AS atchFileId
+    FROM MYMEMBER
+  </select>
+
+  <resultMap id="memMap" type="kr.or.ddit.member.vo.MemberVO">
+    <id     column="mem_id"        property="memId"/>
+    <result column="mem_name"      property="memName"/>
+    <result column="mem_tel"       property="memTel"/>
+    <result column="mem_addr"      property="memAddr"/>
+    <result column="reg_dt"        property="regDt"/>
+    <result column="atch_file_id"  property="atchFileId"/>
+  </resultMap>
+
+  <select id="getMember" resultMap="memMap">
+    SELECT *
+    FROM MYMEMBER
+    WHERE mem_id = #{memId}
+  </select>
+
+  <select id="checkMember" resultType="int">
+    SELECT COUNT(*) 
+    FROM mymember
+    WHERE mem_id = #{memId}
+  </select>
+
+  <select id="searchMember" resultMap="memMap">
+    SELECT *
+    FROM MYMEMBER
+    <where>
+      <if test="memId != null and memId != ''">
+        AND mem_id = #{memId}
+      </if>
+      <if test="memName != null and memName != ''">
+        AND mem_name = #{memName}
+      </if>
+      <if test="memTel != null and memTel != ''">
+        AND mem_tel = #{memTel}
+      </if>
+      <if test="memAddr != null and memAddr != ''">
+        AND mem_addr LIKE '%' || #{memAddr} || '%'
+      </if>
+    </where>
+  </select>
+
+</mapper>

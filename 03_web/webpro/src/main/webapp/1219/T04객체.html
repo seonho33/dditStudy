@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+
+const myCar = {
+		make : "bmw" ,
+		model : "x5" ,
+		year : 2010,
+		speed : 10,
+		
+		break : function(){
+			this.speed = 0;
+		},
+		accel : function(){
+			this.speed +=50;
+		}
+}
+
+//객체 정보를 출력하는 함수
+const objPrint = (out) =>{
+	
+	let str = `make : ${myCar.make}<br>
+			   model : ${myCar.model}<br>
+			   year : ${myCar["year"]}<br>
+			   speed : ${myCar["speed"]}<br>`
+
+	document.querySelector(out).innerHTML = str;
+
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+//		console.log(this);
+	let clickB = document.querySelector("#btn1");
+	let clickB2 = document.querySelector("#btn2");
+	
+	clickB.onclick = () =>{
+		//consloe.log(this);	//화살표 => 면 부모의 this...
+		//객체 정보 출력
+		objPrint("#result1");
+	}
+	
+	clickB2.onclick = () =>{
+		myCar.accel();
+		myCar.accel();
+		
+		//출력함수 호출
+	objPrint("#result2")
+	}
+
+})
+
+</script>
+
+</head>
+<body>
+
+
+
+<div class="box">
+	<h3>
+	myCar의 speed의 값을 올리기, 내리기
+	</h3>
+
+	<input type="button" value="확인" id="btn1">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+</div>
+
+<div class="box">
+	<h3>
+	myCar의 speed의 값을 올리기, 내리기
+	</h3>
+
+	<input type="button" value="확인" id="btn2">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+───────────────────────────────────────────────────
+# JSPProject
+# 2025.02.05
+# JSPProject 프로젝트를 생성하고 기본 설정에 대해 작성합니다.
+───────────────────────────────────────────────────
+
+1. 개발환경
+
+IDE Tool		: Eclipse 24-09 R
+JDK				: JDK 21
+Servlet			: servlet 5.0 이상 (사용 버전 6.0)
+Apache-Tomcat	: 10.1v
+
+2. 설정
+
+	1) JDK 설치 및 설정
+	- http://adoptium.net/temurin/releases
+	- 21.0.5+11-LTS Windows x64 버전의 JDK(.zip) 설치
+		> C드라이브의 JDK 폴더 생성 후, 압축 해제
+	- JDK21 환경변수 설정
+	- 명령 프롬픙트에서 JDK 버전 확인
+		>'java -version' 명령어 실행
+		
+	** JDK 21 은 다운로드 경로는 오라클도 존재하고 테무린도 존재하고 다양합니다.
+	   어떤걸 다운로드 받아서 설정하더라도 상관없습니다.
+	   
+	2) Apache-Tomcat 설치
+	-https://tomcat.apache.org/download-10.cgi
+	-apache-tomcat 10.1.xx 버전의 Core(.zip) 설치
+	
+	3)Eclipse 설치
+	-https://www.eclipse.org/download/packages/release/2024-06/r
+	-Eclipse IDE for Enterprise Java and Web Developers 종류의 Windows x86_64 설치
+	> Web Developers 가 포함된 종류여야지만 웹 개발이 가능합니다.
+	
+	4) Eclipse 기본 설정
+	-Web 개발을 위한 기본 설정
+		
+		4-1) Encoding 설정
+		 -Window > Preferences > 'enc' 검색
+		 -General, Web, XML 항복들 모두 'UTF-8' 로 업데이트 및 설정
+		
+		4-2) Java 설정
+		 -Window > Preferences > Java
+		 -Installed JREs 항목에 JDK21 설정
+		 
+		4-3) Server 설정
+		 -Window > Preferences > Server
+		 -Runtime Environments 항목에 tomcat 설정
+		
+		4-5) icon 설정
+		 -바로가기 만들고 icon 편집(바로가기 아이콘 마우스 우 클릭 후 속성의 아이콘 편집)
+		 
+3. JSP Project 생성
+	
+	1) Dynamic Web Project 생성
+	 -File > New, Dynamic Web Project 검색
+	  >Project Name : JSPProject
+	  >Target Runtime : Apache Tomcat v10.1
+	  >Dynamic Web Module Version : 6.0 (Servlet 버전에 해당한다)
+	  >Configuration : Apache Tomcat v10.1
+	  
+	  *** Servlet 버전에 따른 특징
+	  # Servlet 3.1
+	   -Javax.servlet 패키지 네임 스페이스 사용
+	   -HttpServletRequest 가용 매서드 범위 개선 (ex, getServletContext())
+	  # Servlet 5.0
+	   -javax.servlet -> jakarta.servlet 으로 변경
+	   -보안 및 HTTP 향상
+	   -최소 JDK8, 권장 JDK11
+	  # Servlet 6.0
+	   -최소 JDK11 이상 필요
+	   -jakarta ee 10 이상
+	   -Deprecated API (오래된 기능 제거) ::: DiskFileUpload 객체가 제거됨
+	   
+	2) Dynamic Web Project 구조 살피기
+	 -src/main/java : .java 파일과 같은 Source들을 관리
+	 -src/main/webapp : jsp 파일 관리와 같은 정적 소스 관리
+	 
+	 	*** ClassPath 와 ContextPath
+	 	# ClassPath
+	 	 -JVM 이 Java 클래스를 찾는 경로
+	 	 -.class 파일이 위치한 폴더
+	 	 -기존 프로젝트 내에서는 'src/main/java' 위치이거나 배포 시에는 'WEB-INF/classes' 경로
+	 	# ContextPath
+	 	- 웹 에플리케이션의 URL 에서 루트 경로를 의미
+	 	-Tomcat 배포 시, ROOT 폴더가 '/'(루트)를 의미
+	 	
+	3) Project 환경 설정
+	 -프로젝트 우 클릭, Properties or 프로젝트 선택 후, Alt + Enter
+	  > Java Build Path : Modulepath 의 JRE System Library 를 JDK21로 설정
+	  > Compiler : JDK 21 설정으로 되어 있는지 확인 (설정된 JDK 버전에 맞춰서)
+	  > Project Facets : Servlet 버전 6.0, Java 버전 21 설정 및 Runtime 탭 클릭 후 Apache-Tomcat 체크 설정
+	  
+	4) web.xml 설정
+	 - 프로젝트 우 클릭 후, Java EE Tools > Generate Deployment Stub 클릭
+	  > welcome 페이지 설정 및 관련 필터 설정이 필요한 경우 web.xml 파일 살려서 설정
+	  
+	5) Apache-Tomcat 설정
+	 - Server 탭의 Overview 항목에서 ports 를 80으로 설정
+	 - Server 탭의 Overview 항목에서 Timeouts의 start를 120s로 설정
+	 - Server 탭의 Modules 항목에서 Path를 '/' 로 설정
+		

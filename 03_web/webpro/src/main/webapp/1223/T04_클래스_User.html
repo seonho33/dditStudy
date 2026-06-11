@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+class User{
+	
+	constructor(name)
+	{
+		this.name = name;
+	}
+	
+	
+	get nameVale(){
+		return this.name;
+	}
+
+	set nameVale(name){
+		this.name = name
+	}
+}
+
+const proc1 = () => {
+	
+	const user = new User("홍길동");
+	
+	let str = `${user.name}<br>`;
+	str +=`${user.nameVale}<br>`;	//get메소드 호출
+
+	//이름변경 - set메소드 이용
+	user.nameVale = "홍도화";
+	str +=`이름변경 : ${user.nameVale}<br>`;
+	str +=`${user.name}<br>`;
+	
+	
+	document.querySelector("#result1").innerHTML =str;
+	
+	
+}
+
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+</body>
+</html>

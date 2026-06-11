@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public_css.css">
+
+<script>
+
+const arr = ["바나나", "사과","복숭아","참외","사과", "자두","딸기" ,"사과"];
+
+
+// 1. find : 해당 요소 찾기(사과) - 첫번째 요소 한개만 검색 , 없으면 
+// undefined undefined 비교시 일반문자열로 비교 하지 않고 typeof를 이용하여 비교
+const proc1 = () =>{
+	target = prompt("찾는 과일 입력");
+	
+	let frValue = arr.find(function(fr, idx){
+		//if(fr===target) retrun fr;
+		
+			return fr === target;
+	})
+	
+	let str = `찾는과일 : ${target} <br>`
+
+	if(typeof frValue == "undefined")
+		str += "없어요";
+	else
+		str += "있어요";
+		
+	document.querySelector("#result1").innerHTML =str;
+}
+
+const proc2 = () =>{
+	//인덱스가 2인 위치의 항목 찾기
+	let index = 2;
+	
+	let frValue = arr.find((fr,idx)=>{
+		return idx === index;	//fr을 리턴
+	})
+	
+	document.querySelector("#result2").innerHTML = frValue;
+}
+
+const proc3 = () =>{	// var, const, let 
+	const nums =  [11,22,33,44,55,66];
+	
+	//짝수 찾기
+	let even = nums.find(num=>{
+		//if(num%2==0) return num;
+		
+		return num%2==0;
+	})
+	
+		str = "짝수찾기 <br>"
+	if(typeof even == "undefined"){
+		str += "없습니다.<br>"
+	}else{
+		str += even +"가 있습니다.<br>"
+	}
+	let odd = nums.find(num=>{
+		return num%2==1;
+	})
+	
+	str += "홀수찾기 <br>"
+	if(typeof odd == "undefined"){
+		str +="없습니다."
+	}else{
+		str += odd + "가 있습니다."
+	}
+	document.querySelector("#result3").innerHTML = str;
+}
+
+const proc4 = () =>{
+	const nums = [1,2,3,8,5,9];
+	let idx = -1;
+	
+	//입력
+	item = prompt("과일입력");
+	
+	idx = arr.findIndex(fr=>{
+		return item === fr;
+	})
+	
+	let str = "찾는과일 " + item + "<br>";
+	if(idx < 0){
+		str += "없습니다."
+	}else{
+		str += `${idx+1}번째 있습니다.<br>`
+	}
+
+	document.querySelector("#result4").innerHTML = str;
+	
+	idx = -1;
+	
+	idx = nums.findIndex(num=>{
+		return num%2==0;
+	})
+	
+	str = "짝수찾기<br>"
+	if(idx<0)
+		str +="없습니다.";
+	else
+		str +=`${idx+1} 번째 있습니다.<br>`;
+	
+	document.querySelector("#result4").innerHTML += str;
+}
+
+//5. filter : 조건을 만족하는 모든요소를 배열형테로 변환
+//모든 사과 찾기 / 모든 짝수 찾기
+//nums = [10,5,9,20,56,1]
+const proc5 = () =>{
+	
+	const nums = [10,5,9,20,56,1];
+	
+	let even = nums.filter(num=>{
+		return num%2==0;
+	})
+	str = "짝수찾기 <br>"
+	if(typeof even == "undefined"){
+		str += "없습니다.";
+	}else{
+		even.forEach(evenNums=>{
+			str += ` ${evenNums} `
+		})
+	}
+	document.querySelector("#result5").innerHTML = str+"<br>";
+
+	//모든 사과찾기
+	str = "";
+	let frValues = arr.filter((fr,idx)=>{
+		return fr ==="사과";
+	})
+	if(typeof frValues == "undefined")
+		str += `찾는과일은 없습니다.`;
+	else
+		str += `찾는과일은 <br> ${frValues}`;
+
+	document.querySelector("#result5").innerHTML += str;
+}
+
+/* const numbers = [1,4,5,9,7]
+reduce()메소드는 배열의 각요소에 대해 주어진 리듀서 함수를 실행하여
+하나의 결과값을 반환- 합, 최대값, 최소값
+numbers.reduce(function(tot, atgs){ 리듀서 함수 })
+6. reduce : 모든요소를 이용하여 하나의 값으로 만들때- 합구하기 */
+const proc6 = () =>{
+	const numbers = [1,4,5,9,7];
+	
+/* 	let tot = 0;
+	numbers.forEach(num=>{
+		tot+=num;
+	})
+ */
+	sum = numbers.reduce((tot,num)=>{
+		return tot + num;		
+	},0)
+	str = `합 : ${sum}<br>`
+	
+	//최댓값
+	let max = numbers.reduce((acc, num)=>{
+		return acc > num ? acc : num;
+	},numbers[0])//초기값 생략시 numbers의 첫번째 값으로 초기화된다.
+	
+	str += `최대값 : ${max}<br>`;
+	
+	let min = numbers.reduce((acc, num)=>{
+	/* 	return acc < num ? acc : num; */
+	if(acc<num)return acc
+	else return num
+	},numbers[0]);
+	
+	str += `최소값 : ${min}<br>`;
+	document.querySelector("#result6").innerHTML +=str;
+}
+
+const proc7 = () =>{
+   const fruits = ["APPLE", "BAnana", "CHErry"]; 
+   numbers = [1,2,3,4,5];
+
+   let str = `[${fruits}]<br>`
+   
+   //소문자 변경
+   let lower = fruits.map((fr,idx)=>{
+	   return fr.toLowerCase();
+   })
+   
+	str += `toLowerCase() : [${lower}]<br>`
+	
+	//제곱구하기
+	let nums = numbers.map(num=>{
+		
+		return Math.pow(num,2)
+	})
+	
+	str += `Math.pow(num,2) : [${nums}] <br>`;
+	document.querySelector("#result7").innerHTML=str
+}
+
+const proc8 = () =>{
+	const numbers = [40,54,67,58,30];
+	let str = `[40,54,67,58,30] <br>`
+	
+	let res = numbers.some(num =>{
+		return num>=60;
+	})
+	str +=`some : ${res}<br>`
+	res = numbers.every(num=>{
+		return num >=60;
+	})
+	str +=`every : ${res}<br>`
+	
+	document.querySelector("#result8").innerHTML = str;
+}
+
+
+</script>
+</head>
+<body>
+
+
+<div class="box">
+
+  <h3>1. find : 해당 요소 찾기(사과) - 첫번째 요소 한개만 검색 , 없으면 undefined
+  undefined 비교시 일반문자열로 비교 하지 않고  typeof를 이용하여 비교 
+  </h3>
+  <input type="button" value="확인" onclick="proc1()">
+  <br><br>
+  
+  <div id="result1"></div>
+</div>
+
+<div class="box">
+
+  <h3>2. find : 인덱스를 이용한 요소 찾기(index==2) - 첫번째 요소 한개만 검색, 없으면 undefined
+  </h3>
+  <input type="button" value="확인" onclick="proc2()">
+  <br><br>
+  
+  <div id="result2"></div>
+</div>
+
+<div class="box">
+  
+  <h3>3. find : 짝수값 , 홀수 찾기, - 첫번째 요소 하나만 검색 -  없으면 undefined<br>
+   var nums =  [11,22,33,44,55,66];
+  </h3>
+  <input type="button" value="확인" onclick="proc3()">
+  <br><br>
+  
+  <div id="result3"></div>
+</div>
+
+<div class="box">
+   
+  <h3>4. findIndex :  요소의 위치 찾기 - 첫번째 요소만 찾는다, 없으면 -1<br>
+    var nums = [1,2,3,8,5,9]  <br>
+      사과위치 찾기 / 짝수위치 찾기 -  indexOf와 같은 결과가 나옴
+  </h3>
+  <input type="button" value="확인" onclick="proc4()">
+  <br><br>
+  <div id="result4"></div>
+</div>
+
+<div class="box">
+
+  <h3>5. filter : 조건을 만족하는 모든요소를 배열형테로 변환<br>
+   모든 사과 찾기 / 모든 짝수  찾기<br>
+   nums = [10,5,9,20,56,1]
+  </h3>
+  <input type="button" value="확인" onclick="proc5()">
+  <br><br>
+  <div id="result5"></div>
+</div>
+
+<div class="box">
+ <h3> 
+  const numbers = [1,4,5,9,7]<br>
+  reduce()메소드는 배열의 각요소에 대해 주어진 리듀서 함수를 실행하여 <br>
+    하나의 결과값을 반환- 합, 최대값, 최소값 <br>
+   numbers.reduce(function(tot, atgs){  리듀서 함수 }) <br>
+  6. reduce : 모든요소를 이용하여 하나의 값으로 만들때-  합구하기 
+  </h3>
+  <input type="button" value="확인" onclick="proc6()">
+  <br><br>
+   <div id="result6"></div>
+</div>
+
+<div class="box">
+ <h3>
+   const fruits = ["APPLE", "BAnana", "CHErry"] / numbers = [1,2,3,4,5]<br>
+   <br>
+ 7. map : 전체배열을 대상으로 각 배열요소를  순회하며 콜백함수를 실행한 결과를 모아  
+      새로운 배열을 반환 <br>
+    원본 배열은 변경되지 않는다<br>
+   fruits 배열의 각요소를 소문자로 변환 / numbers 배열 각요소의 제곱구하기
+  </h3>
+  <input type="button" value="확인" onclick="proc7()">
+  <br><br>
+  
+  <div id="result7"></div>
+</div>
+
+
+<div class="box">
+ <h3>
+   numbers = [40,54,67,58,30]<br>
+   <br>
+  8. some :  조건을 만족하는 요소가 하나라도 있는지- true/ flase <br>
+    every :  배열의 모든 요소가 조건을 만족하는 지 -true/ flase   
+  </h3>
+  <input type="button" value="확인" onclick="proc8()">
+  <br><br>
+  
+  <div id="result8"></div>
+</div>
+
+
+
+</body>
+</html>

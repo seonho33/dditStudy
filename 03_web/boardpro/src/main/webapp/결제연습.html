@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약하기 - D.D.M</title>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #fefaf8; color: #191f28; }
+        :root { --main-orange: #ff6b35; --soft-orange: #fff1eb; }
+        .orange-btn { background-color: var(--main-orange); color: white; transition: all 0.2s; border: none; cursor: pointer; }
+        .orange-btn:hover { background-color: #e85a24; transform: translateY(-1px); }
+        .input-box { width: 100%; padding: 14px; border: 1px solid #e5e8eb; border-radius: 12px; font-size: 15px; transition: 0.2s; }
+        .input-box:focus { border-color: var(--main-orange); outline: none; box-shadow: 0 0 0 1px var(--main-orange); }
+        .deposit-card { border: 2px solid var(--main-orange); background-color: var(--soft-orange); border-radius: 16px; padding: 20px; }
+        .step-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .step-title::before { content: ''; width: 4px; height: 18px; background: var(--main-orange); border-radius: 2px; }
+        .count-btn { border: 1px solid #e5e8eb; background: white; padding: 10px 0; border-radius: 10px; font-weight: 600; transition: 0.2s; cursor: pointer; text-align: center; }
+        .count-btn.active { border-color: var(--main-orange); background-color: var(--soft-orange); color: var(--main-orange); }
+        
+        /* 결제수단 스타일 */
+        .pg-option { border: 2px solid #e5e8eb; padding: 15px; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: 0.3s; background: white; }
+        .pg-option.active { border-color: var(--main-orange); background-color: var(--soft-orange); color: var(--main-orange); }
+    </style>
+</head>
+<body class="py-12">
+
+    <div class="max-w-[1000px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 px-4">
+        
+        <div class="lg:col-span-2 space-y-8">
+            <section class="bg-white p-8 rounded-[24px] shadow-sm border border-orange-50">
+                <div class="flex items-center gap-5 mb-8 pb-8 border-b border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400" class="w-20 h-20 rounded-2xl object-cover">
+                    <div>
+                        <h2 class="text-2xl font-bold">조합짬뽕</h2>
+                        <p class="text-gray-400 text-sm">맛있는 한 끼를 예약하세요</p>
+                    </div>
+                </div>
+
+                <div class="step-title">방문 일정 설정</div>
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-gray-600">날짜 선택</label>
+                        <input type="date" id="resDate" class="input-box">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-gray-600">시간 선택</label>
+                        <select id="resTime" class="input-box">
+                            <option>12:00</option><option>13:00</option><option>18:00</option><option>19:00</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="step-title">방문 인원</div>
+                <div class="grid grid-cols-5 gap-3 mb-8">
+                    <div class="count-btn" data-value="1명">1명</div>
+                    <div class="count-btn active" data-value="2명">2명</div>
+                    <div class="count-btn" data-value="3명">3명</div>
+                    <div class="count-btn" data-value="4명">4명</div>
+                    <div class="count-btn" data-value="5명+">5명+</div>
+                </div>
+
+                <div class="step-title">예약자 정보</div>
+                <div class="space-y-4 mb-8">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="buyerName" placeholder="성함" class="input-box">
+                        <input type="tel" id="buyerTel" placeholder="연락처 (숫자만)" class="input-box">
+                    </div>
+                    <textarea id="buyerNote" placeholder="사장님께 남길 요청사항 (선택)" class="input-box h-32"></textarea>
+                </div>
+
+                <div class="step-title">결제 수단 선택</div>
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="pg-option active" onclick="selectPG('kakaopay.TC0ONETIME', this)">
+                        <i class="fa-solid fa-comment text-[#FEE500] text-xl"></i>
+                        <span class="text-xs font-bold">카카오페이</span>
+                    </div>
+                    <div class="pg-option" onclick="selectPG('tosspay.tosstest', this)">
+                        <i class="fa-solid fa-bolt text-[#0050FF] text-xl"></i>
+                        <span class="text-xs font-bold">토스페이</span>
+                    </div>
+                    <div class="pg-option" onclick="selectPG('payco.AUTOPAY', this)">
+                        <i class="fa-solid fa-p text-[#ff002b] text-xl font-black"></i>
+                        <span class="text-xs font-bold">페이코</span>
+                    </div>
+                </div>
+
+                <div class="deposit-card">
+                    <h4 class="font-bold text-[#ff6b35] mb-2">예약금 10원 결제</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        노쇼 방지를 위한 예약금입니다. 방문 시 차액만 결제해 주세요.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <aside>
+            <div class="bg-white p-8 rounded-[24px] shadow-lg border border-orange-100 sticky top-10">
+                <h3 class="text-lg font-bold mb-6">최종 확인</h3>
+                <div class="space-y-4 text-sm mb-8">
+                    <div class="flex justify-between text-gray-400"><span>방문일</span><span class="text-gray-800 font-semibold" id="viewDate">-</span></div>
+                    <div class="flex justify-between text-gray-400"><span>시간</span><span class="text-gray-800 font-semibold" id="viewTime">12:00</span></div>
+                    <div class="flex justify-between text-gray-400"><span>인원</span><span class="text-gray-800 font-semibold" id="viewCount">2명</span></div>
+                </div>
+                <div class="border-t border-dashed border-gray-200 my-6"></div>
+                <div class="flex justify-between items-center mb-8">
+                    <span class="font-bold">결제 금액</span>
+                    <span class="text-2xl font-black text-[#ff6b35]">10원</span>
+                </div>
+                <button onclick="requestPay()" class="orange-btn w-full py-4 rounded-xl font-bold text-lg shadow-lg">
+                    예약금 결제하기
+                </button>
+                <p class="text-[11px] text-gray-400 mt-4 text-center">결제 정보는 자동으로 예약 시스템에 연동됩니다.</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const resDate = document.getElementById('resDate');
+        const viewDate = document.getElementById('viewDate');
+        const resTime = document.getElementById('resTime');
+        const viewTime = document.getElementById('viewTime');
+        const viewCount = document.getElementById('viewCount');
+        const countBtns = document.querySelectorAll('.count-btn');
+        
+        let currentPG = "kakaopay.TC0ONETIME";
+
+        // UI 이벤트 핸들러
+        resDate.addEventListener('change', (e) => viewDate.innerText = e.target.value);
+        resTime.addEventListener('change', (e) => viewTime.innerText = e.target.value);
+        countBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                countBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                viewCount.innerText = btn.getAttribute('data-value');
+            });
+        });
+
+        // PG 선택 함수
+        function selectPG(pgCode, element) {
+            document.querySelectorAll('.pg-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            currentPG = pgCode;
+        }
+
+        // 초기 날짜 설정
+        resDate.value = new Date().toISOString().split('T')[0];
+        viewDate.innerText = resDate.value;
+
+        // 결제 요청 함수
+        function requestPay() {
+            const name = document.getElementById('buyerName').value;
+            const tel = document.getElementById('buyerTel').value;
+
+            if(!name || !tel) {
+                alert("성함과 연락처를 입력해 주세요.");
+                return;
+            }
+
+            const { IMP } = window;
+            IMP.init("imp12217307"); // 가맹점 식별코드
+
+            IMP.request_pay({
+                pg: currentPG,
+                pay_method: "card",
+                merchant_uid: "DDM_" + new Date().getTime(),
+                name: "조합짬뽕 예약금",
+                amount: 100,
+                buyer_name: name, // 입력한 성함 연동
+                buyer_tel: tel,   // 입력한 연락처 연동
+            }, function (rsp) {
+                if (rsp.success) {
+                    alert(name + "님, 예약 결제가 완료되었습니다!");
+                } else {
+                    alert("결제 실패: " + rsp.error_msg);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

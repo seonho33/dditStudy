@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+
+label{
+	display: inline-block;
+	width: 150px;
+}
+
+</style>
+
+<script type="text/javascript">
+const calc = () => {
+	let first = Number(document.getElementById("firstVal").value);
+	let second = Number(document.getElementById("secondVal").value);
+	
+	let sum = first + second;
+	sum = sum.toLocaleString();
+	
+	document.getElementById("sum").value = sum;
+}
+
+</script>
+</head>
+<body>
+<label>첫번째 입력 값 : &nbsp;</label><input id="firstVal"> <br>		<!-- input 타입 기본이 text..  -->
+<label>두번째 입력 값 : &nbsp;</label><input id="secondVal"> <br>
+<label>합계 : &nbsp;</label><input id="sum"><br>
+
+<input type="button" value="계산" onclick="calc()">
+
+
+</body>
+</html>

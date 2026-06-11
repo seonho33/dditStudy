@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="deadukGame">
+
+    <!-- 모든 식당 조회 (게임용) -->
+    <select id="selectAllStores" resultType="kr.or.ddit.store.vo.StoreVO">
+        SELECT 
+            STORE_ID as storeId,
+            STORE_NAME as storeName,
+            STORE_ADDR as storeAddr,
+            STORE_ADDR2 as storeAddr2,
+            STORE_PHONE as storePhone,
+            CATEGORY as category,
+            STORE_CONTENT as storeContent,
+            OPERATION_HOURS as operationHours,
+            CREATE_DATE as createDate,
+            RATING as rating,
+            DIBS_COUNT as dibsCount,
+            REVIEW_COUNT as reviewCount,
+            STATUS as status,
+            BIZ_NO as bizNo,
+            OWNER_EMAIL as ownerEmail,
+            DEPOSIT as deposit,
+            USER_ID as userId,
+            STORE_PICTURE as storePicture,
+            LIKES_COUNT as likesCount
+        FROM STORE
+        ORDER BY DBMS_RANDOM.VALUE  <!-- Oracle 랜덤 정렬 -->
+    </select>
+    
+    <!-- 특정 식당 조회 -->
+    <select id="selectStoreById" parameterType="string" resultType="kr.or.ddit.store.vo.StoreVO">
+        SELECT 
+            STORE_ID as storeId,
+            STORE_NAME as storeName,
+            STORE_ADDR as storeAddr,
+            STORE_ADDR2 as storeAddr2,
+            STORE_PHONE as storePhone,
+            CATEGORY as category,
+            STORE_CONTENT as storeContent,
+            OPERATION_HOURS as operationHours,
+            CREATE_DATE as createDate,
+            RATING as rating,
+            DIBS_COUNT as dibsCount,
+            REVIEW_COUNT as reviewCount,
+            STATUS as status,
+            BIZ_NO as bizNo,
+            OWNER_EMAIL as ownerEmail,
+            DEPOSIT as deposit,
+            USER_ID as userId,
+            STORE_PICTURE as storePicture,
+            LIKES_COUNT as likesCount
+        FROM STORE
+        WHERE STORE_ID = #{storeId}
+    </select>
+
+<!-- 대표메뉴 1개 (가장 앞 메뉴) -->
+<select id="selectMainMenuName" parameterType="string" resultType="string">
+    SELECT menu_name
+    FROM (
+        SELECT menu_name
+        FROM menu
+        WHERE store_id = #{storeId}
+        ORDER BY menu_id
+    )
+    WHERE ROWNUM = 1
+</select>
+
+<select id="selectRandomStore" resultType="kr.or.ddit.store.vo.StoreVO">
+  SELECT *
+  FROM (
+    SELECT 
+      STORE_ID as storeId,
+      STORE_NAME as storeName,
+      STORE_ADDR as storeAddr,
+      STORE_ADDR2 as storeAddr2,
+      STORE_PHONE as storePhone,
+      CATEGORY as category,
+      STORE_CONTENT as storeContent,
+      OPERATION_HOURS as operationHours,
+      CREATE_DATE as createDate,
+      RATING as rating,
+      DIBS_COUNT as dibsCount,
+      REVIEW_COUNT as reviewCount,
+      STATUS as status,
+      BIZ_NO as bizNo,
+      OWNER_EMAIL as ownerEmail,
+      DEPOSIT as deposit,
+      USER_ID as userId,
+      STORE_PICTURE as storePicture,
+      LIKES_COUNT as likesCount
+    FROM STORE
+    ORDER BY DBMS_RANDOM.VALUE
+  )
+  WHERE ROWNUM = 1
+</select>
+
+
+</mapper>

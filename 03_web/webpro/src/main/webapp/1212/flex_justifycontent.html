@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/flex.css">
+
+<script type="text/javascript">
+//메뉴요소 인 radio를 검색할 필요가 없다 
+
+
+document.addEventListener("DOMContentLoaded", function(){
+	
+	//부모요소 검색
+	fcont = document.querySelector("#container")
+	//
+})
+
+
+function menuPro(target){
+	
+/* 	//부모요소 검색
+	fcont = document.querySelector("#container");
+	=> 이미 위의 document.addEventListener 로 요소를 검색함...
+	target은 클릭한 radio 버튼.. 이벤트 대상
+*/
+	//부모의 배치 방법을 메뉴의 값으로 결정
+	fcont.style.justifyContent=target.value
+}
+
+</script>
+
+</head>
+<body>
+
+<h2>메뉴선택</h2>
+
+<form action="">
+
+<label>
+<input type="radio" onclick="menuPro(this)" name="menu" value="flex-start">flex-start
+</label>
+
+<label>
+<input type="radio" onclick="menuPro(this)" name="menu" value="flex-end" >flex-end
+</label>
+
+<label>
+<input type="radio" onclick="menuPro(this)" name="menu" value="center" > center
+</label>
+
+<label>
+<input type="radio" onclick="menuPro(this)" name="menu" value="space-around" >space-around
+</label>
+
+<label>
+<input type="radio" onclick="menuPro(this)" name="menu" value="space-between" >space-between
+</label>
+
+</form>
+<br>
+<div id="container" class="f-container">
+	<div>1</div>
+	<div>2</div>
+	<div>3</div>
+	<div>4</div>
+	<div>5</div>
+	<div>6</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+
+const fruits1 = ["사과","바나나","복숭아","참외","수박"];
+const fruits2 = ["망고","파인애플","포도","자두","키위"];
+const fruits3 = ["앵두","딸기","오렌지","토마토","귤"];
+
+document.addEventListener("DOMContentLoaded", function(){
+	clickB1 = document.querySelector("#btn1");
+	clickB2 = document.querySelector("#btn2");
+	clickB3 = document.querySelector("#btn3");
+	console.log(clickB1,clickB2,clickB3);
+	//class 이름을 이용한 검색..
+	
+	btns = document.getElementsByClassName("btn");
+	console.log("111",btns); //HTMLCollection
+	
+	btns = document.querySelectorAll(".btn");
+	console.log("222",btns)	// NodeList
+	
+	//각 버튼들에 대한 이벤트 핸들러 작성 - 반복문으로
+	let str = "";
+ 	
+	btns.forEach((btn,idx)=>{
+		btn.onclick = () =>{
+
+			console.log(btn.id,idx);
+			console.log("proc"+idx);
+ 			if(btn.id == "btn1"){
+				frprint(fruits1,"#result1");
+			}else if(btn.id == "btn2"){
+				frprint(fruits2,"#result2");
+			}else if(btn.id == "btn3"){
+				frprint(fruits3,"#result3");
+			}
+		}
+	});
+	
+});
+
+const frprint = (frs, out) =>{
+	str="";
+	frs.forEach((fr,idx) => {
+		str += `${idx+1}번째 : ${fr}<br>`;
+	})
+	document.querySelector(out).innerHTML =str;
+}
+
+const proc1 = () =>{
+	frprint(fruits1,"#result1");
+};
+
+const proc2 = () =>{
+	frprint(fruits2,"#result2")
+};
+
+const proc3 = () =>{
+	frprint(fruits3,"#result3")
+};
+
+
+</script>
+</head>
+<body>
+<pre>
+버튼에 대한 이벤트 핸들러 작성
+버튼에 onclick="" 대신에 id를 부여하고 class를 설정해서
+스크립트에서 id와 클래스를 검색한 후
+이벤트 핸들러를 작성한다.
+</pre>
+<div class="box">
+	<h3>
+	리터럴 배열 <br>
+	const fruits1 = ["사과","바나나","복숭아","참외","수박"]<br>
+	</h3>
+	<input type="button" value="확인" id="btn1" class="btn">
+	<br><br>
+	<div id="result1"></div>
+</div>
+
+<div class="box">
+
+	<h3>
+	리터럴 배열 <br>
+	const fruits2 = ["망고","파인애플","포도","자두","키위"]<br>
+	</h3>
+	<input type="button" value="확인" id="btn2" class="btn">
+	<br><br>
+	<div id="result2"></div>
+</div>
+
+<div class="box">
+
+	<h3>
+	리터럴 배열 <br>
+	const fruits3 = ["앵두","딸기","오렌지","토마토","귤"]<br>
+	</h3>
+	<input type="button" value="확인" id="btn3" class="btn">
+	<br><br>
+	<div id="result3"></div>
+</div>
+
+</body>
+</html>

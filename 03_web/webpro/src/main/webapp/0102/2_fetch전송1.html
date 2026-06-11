@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public.css">
+
+<style type="text/css">
+
+table {
+	border: 2px solid blad;
+}
+
+td{
+	width:  200px;
+	height : 50px;
+	text-align: center;
+}
+
+.title{
+	font-size: 1.5rem;
+	background: blue;
+	color: white;
+}
+
+</style>
+
+<script>
+/*
+//객체 선언 //-----------
+const fetchPro = {
+	 key1 : value1 ,
+	 key2 : value2 ,
+     getSend(url){  }, 
+     postSend(url, hearder, data){  } 
+} 
+//값사용--------------------------
+fetchPro.key1  fetchPro['key1']
+fetchPro.key2  fetchPro['key2']
+//호출---------------------------
+fetchPro.getSend(url)
+fetchPro.postSend(url, vhearder, vdata)
+
+fetchPro['getSend'](url)
+fetchPro['postSend'](url, vhearder, vdata)
+*/
+
+const fetchPro = {
+	     getSend(url){
+	    	 fetch(url)
+	    	 .then(res=>res.json())
+	    	 .then(datas =>{
+	    		 	
+					arr = Object.entries(datas);
+	    	 	 
+					let code = "<table border='1'>";
+					code += "<tr><th class ='title'>아이디</td>";
+					code +=	"<th class ='title'>이름</td>";
+					code +=	"<th class ='title'>이메일</td></tr>";
+					code += "<tr>"
+					arr.forEach((item) =>{
+						code += `<td>${item[1]}</td>`
+					})
+					code += "</tr></table>"
+					
+					document.querySelector("#result1").innerHTML=code;
+	    	 })
+	    	 .catch(err => console.log(err));
+	     },
+	     postSend(url, header, data){
+	    	 fetch(url,{
+	    		method : 'post',
+	    		headers: header,
+	    		body : data
+	    	 })
+			.then(res => res.json())
+			.then(datas =>{
+    		 	
+/* 				
+				console.log(datas);
+				{
+				  "id": "123123",
+				  "name": "1231",
+  				  "mail": "123"
+				}
+*/
+
+
+ 
+/*  				arr = Object.entries(datas);
+    	 	 	//[name,...],[id,...],[mail,...]
+				let code = "<table border='1'>";
+				code += "<tr><th class ='title'>아이디</td>";
+				code +=	"<th class ='title'>이름</td>";
+				code +=	"<th class ='title'>이메일</td></tr>";
+				code += "<tr>"
+				arr.forEach(item =>{
+					code += `<td>${item[1]}</td>`
+				})
+				code += "</tr></table>"
+ */				
+ 
+ 				arr = Object.entries(datas);
+				let code = "<table border='1'>";
+/* 				arr.forEach(item =>{
+					
+					code += `<tr><td class="title">${item[0]}</td>
+					<td>${item[1]}</td></tr>`
+				})
+	 */
+	 			arr.forEach(([key,value])=>{
+	 				
+					code += `<tr><td class="title">${key}</td>
+					<td>${value}</td></tr>`		
+	 			});
+	 
+				code +="</table>";
+ 
+				document.querySelector("#result2").innerHTML=code;
+			})
+			.catch(err => console.log(err));
+	     } 
+	} 
+
+const proc1 = () => {
+	
+	//입력한 값 가져오기...
+	idValue = document.querySelector("#gid").value;
+	nameValue = document.querySelector("#gname").value;
+	mailValue = document.querySelector("#gmail").value;
+	
+	fetchPro['getSend']("http://localhost/webpro/0102/fetch_get.jsp?id="
+			+ idValue + "&name=" + nameValue + "&mail=" + mailValue);
+}
+
+const proc2 = () => {
+	// 입력한 데이터 가져오기...
+	//입력한 값 가져오기...
+	idValue = document.querySelector("#id").value;
+	nameValue = document.querySelector("#name").value;
+	mailValue = document.querySelector("#mail").value;
+	
+	data = "id="+ idValue + "&name=" + nameValue + "&mail=" + mailValue;
+	head = {"content-type" : "application/x-www-form-urlencoded"}
+	url = "http://localhost/webpro/0102/fetch_post.jsp"
+	
+	fetchPro['postSend'](url,head,data)
+}
+
+const proc3 = () =>{
+	//입력한 값 가져오기
+	idValue = document.querySelector("#id").value;
+	nameValue = document.querySelector("#name").value;
+	mailValue = document.querySelector("#mail").value;
+	
+	data = JSON.stringify({id:idValue,name:nameValue,mail:mailValue});
+	head = {"content-type" : "application/json;charset=utf-8"};
+	url = "http://localhost:80/webpro/0102/fetch_seria.jsp";
+	
+	fetchPro['postSend'](url,head,data);
+}
+
+</script>
+
+<style>
+label{
+display : inline-block;
+width : 80px;
+height : 30px;
+}
+</style>
+</head>
+<body>
+
+
+<div class="box">
+
+	<h3>
+	동기 get 전송 /동기 post 전송
+	동기전송방식일때는 응답페이지를 새롭게 생성해서 주소를 바꾼다. 
+	</h3>
+	
+	<form action="sync_pro.jsp" method="get">
+	  <label>아이디</label><input type="text" id="sgid" name="id"><br>
+	  <label>이름</label><input type="text" id="sgname" name="name"><br>
+	  <label>이메일</label><input type="text" id="sgmail" name="mail"><br>
+	<br>
+	<input type="submit" value="get">
+	</form>
+	<br><br>
+	<form action="sync_pro.jsp" method="post">
+	  <label>아이디</label><input type="text" id="spid" name="id"><br>
+	  <label>이름</label><input type="text" id="spname" name="name"><br>
+	  <label>이메일</label><input type="text" id="spmail" name="mail"><br>
+	<br>
+	<input type="submit" value="post">
+	</form>
+	    
+</div>
+
+<div class="box">
+
+	<h3>
+	fetch-get 전송
+	
+	</h3>
+	
+	<form>
+	  <label>아이디</label><input type="text" id="gid" name="id"><br>
+	  <label>이름</label><input type="text" id="gname" name="name"><br>
+	  <label>이메일</label><input type="text" id="gmail" name="mail"><br>
+	<br>
+	<input type="button" value="get" onclick="proc1()">
+	</form>
+   <div id="result1"></div>
+    
+</div>
+
+<div class="box">
+
+	<h3>
+	fetch - post 전송<br>
+	문자열 전송시 : "Content-type" : "application/x-www-form-urlencoded"<br>
+	직렬화 전송시 : "Content-type" : "application/json;charset=utf-8"<br>
+	
+	</h3>
+	
+	<form>
+	  <label>아이디</label><input type="text" id="id" name="id"><br>
+	  <label>이름</label><input type="text" id="name" name="name"><br>
+	  <label>이메일</label><input type="text" id="mail" name="mail"><br>
+	<br>
+	<input type="button" value="문자열" onclick="proc2()">
+	<input type="button" value="직렬화" onclick="proc3()">
+	</form>
+    <div id="result2"></div>
+    
+</div>
+</body>
+</html>

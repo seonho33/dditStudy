@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.tesst.mapper.ITestMemberMapper">
+
+<resultMap type="kr.or.ddit.vo.crud.CrudMember" id="memberMap" >
+	<id property="userNo" column="user_no"/>
+	<result property="userNo" column="user_no"/>
+	<result property="userId" column="user_id"/>
+	<result property="userPw" column="user_pw"/>
+	<result property="userName" column="user_name"/>
+	<result property="regDate" column="REG_DATE"/>
+	<result property="updDate" column="UPD_DATE"/>
+	<result property="enabled" column="ENABLED"/>
+	<collection property="authList" resultMap="memberAuthMap" />
+</resultMap>
+
+<resultMap type="kr.or.ddit.vo.crud.CrudMemberAuth" id="memberAuthMap">
+	<result property="userNo" column="user_no"/>
+	<result property="auth" column="auth"/>
+</resultMap>
+
+
+
+<insert id="register" useGeneratedKeys="true" parameterType="kr.or.ddit.vo.crud.CrudMember">
+	<selectKey keyProperty="userNo" order="BEFORE" resultType="int">
+		select SEQ_MEMBER.nextval from dual
+	</selectKey>
+	
+	insert into member (
+		USER_NO, 
+		USER_ID, 
+		USER_PW, 
+		USER_NAME, 
+		REG_DATE
+	)values(
+		#{userNo},#{userId},#{userPw},#{userName},sysdate
+	)
+</insert>
+
+<insert id="create" parameterType="kr.or.ddit.vo.crud.CrudMemberAuth">
+	insert into MEMBER_AUTH (
+		USER_NO,
+		AUTH
+	)values(
+		#{userNo},
+		#{auth}
+	)
+
+</insert>
+
+<select id="getList" resultType="kr.or.ddit.vo.crud.CrudMember">
+	select 	USER_NO,
+			USER_ID, 
+			USER_PW, 
+			USER_NAME, 
+			REG_DATE,
+			UPD_DATE
+	from	member
+	order by USER_NO desc
+</select>
+
+<select id="getMember" parameterType="int" resultMap="memberMap">
+	select	m.user_no,
+			m.user_id,
+			m.user_pw,
+			m.user_name,
+			m.REG_DATE,
+			m.upd_date,
+			ma.auth
+	from	member m
+	left join	member_auth ma
+	on		(m.user_no = ma.user_no)
+	where	m.user_no = #{userNo}
+</select>
+
+<delete id="deleteAuth" parameterType="int">
+	delete
+	from	member_auth
+	where	user_no=#{userNo}
+</delete>
+
+<delete id="deleteMember">
+	delete
+	from	member
+	where	user_no=#{userNo}
+</delete>
+
+<update id="updateDate" parameterType="kr.or.ddit.vo.crud.CrudMember">
+	update	member
+	set		
+			user_pw = #{userPw},
+			user_name = #{userName},
+			upd_date = sysdate
+	where	user_no = #{userNo}
+</update>
+
+</mapper>

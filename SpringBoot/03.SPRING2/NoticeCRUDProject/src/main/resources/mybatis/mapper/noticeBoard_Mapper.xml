@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.INoticeMapper">
+	
+	<sql id="noticeSearch">
+		<if test="searchWord != null and searchType == 'title'">
+			and (bo_title like '%'||#{searchWord}||'%')
+		</if>
+		<if test="searchWord != null and searchType == 'writer'">
+			and (bo_writer like '%'||#{searchWord}||'%')
+		</if>
+	</sql>
+	
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertNotice" parameterType="kr.or.ddit.vo.NoticeVO" useGeneratedKeys="true">
+		
+		<selectKey keyProperty="boNo" order="BEFORE" resultType="int">
+			select seq_notice.nextval from dual
+		</selectKey>
+	
+	insert into notice(
+		bo_no, bo_title, bo_content, bo_writer, bo_date
+	)values(
+		#{boNo},#{boTitle},#{boContent},#{boWriter}, SYSDATE
+	)
+	</insert>
+
+	<insert id="insertNoticeFile" parameterType="kr.or.ddit.vo.NoticeFileVO">
+		insert into noticefile(
+			file_no, bo_no, file_name, file_size, file_fancysize, file_mime,
+			file_savepath, file_downcount
+		)values(
+			seq_noticefile.nextval, #{boNo},#{fileName},#{fileSize},#{fileFancysize},#{fileMime},
+			#{fileSavepath},0			
+		)
+	</insert>
+
+	<update id="incrementHit" parameterType="int">
+		update 	notice
+		set		bo_hit 	= bo_hit + 1
+		where	bo_no 	= #{boNo}
+	</update>
+	
+	<resultMap type="kr.or.ddit.vo.NoticeVO" id="noticeMap">
+		<id column="bo_no" property="boNo"/>
+		<result column="bo_title" property="boTitle"/>
+		<result column="bo_content" property="boContent"/>
+		<result column="bo_writer" property="boWriter"/>
+		<result column="bo_date" property="boDate"/>
+		<result column="bo_hit" property="boHit"/>
+		<collection property="noticeFileList" resultMap="noticeFileMap" />
+	</resultMap>
+	
+	<resultMap type="kr.or.ddit.vo.NoticeFileVO" id="noticeFileMap">
+		<id column="file_no" property="fileNo"/>
+		<result property="fileNo" column="file_no"/>
+		<result property="fileName" column="file_name"/>
+		<result property="fileSize" column="file_size"/>
+		<result property="fileFancysize" column="file_fancysize"/>
+		<result property="fileMime" column="file_mime"/>
+		<result property="fileSavepath" column="file_savepath"/>
+		<result property="fileDowncount" column="file_downcount"/>
+	</resultMap>
+
+	<select id="selectNotice" parameterType="int" resultMap="noticeMap">
+		select	
+			n.bo_no, 	bo_title, 
+			bo_content,	bo_writer, 
+			to_char(bo_date, 'yy-mm-dd hh24:mi:ss') bo_date, bo_hit,
+			file_no,	file_name, 
+			file_size,	file_fancysize, 
+			file_mime,	file_savepath, 
+			file_downcount
+		from
+			notice n
+		left join noticefile nf
+				on(n.bo_no = nf.bo_no)
+		where	
+			n.bo_no = #{boNo}			
+	</select>
+
+	<select id="noticeDownload" parameterType="int" resultType="kr.or.ddit.vo.NoticeFileVO">
+		select
+			file_no, file_name, file_size, file_savepath
+		from	
+			noticeFile
+		where	
+			file_no = #{fileNo}
+	</select>
+	
+	<update id="incrementNoticeDownCount" parameterType="int">
+		update 	
+			noticefile
+		set		
+			file_downcount = file_downcount+1
+		where	
+			file_no = #{fileNo}
+	</update>
+
+	<update id="updateNotice" parameterType="kr.or.ddit.vo.NoticeVO">
+		update	
+			notice
+		set		
+			bo_title = #{boTitle},
+			bo_content = #{boContent},
+			bo_date = sysdate
+		where	
+			bo_no = #{boNo}
+	</update>
+	
+	<select id="selectNoticeFile" parameterType="int" resultType="kr.or.ddit.vo.NoticeFileVO">
+		select
+			file_savepath
+		from
+			noticefile
+		where
+			file_no = #{fileNo}
+	</select>
+	
+	<delete id="deleteNoticeFile">
+		delete
+		from
+			noticefile
+		where
+			file_no = #{fileNo}
+	</delete>
+	
+	<delete id="deleteNoticeFileByNo" parameterType="int">
+		delete
+		from
+			noticefile
+		where
+			bo_no = #{boNo}
+	</delete>
+	
+	<delete id="deleteNoticeComment" parameterType="int">
+		delete
+		from
+			noticecomment
+		where
+			bo_no = #{boNo}
+	</delete>
+	
+	<delete id="deleteNotice" parameterType="int">
+		delete
+		from
+			notice
+		where
+			bo_no = #{boNo}
+	</delete>
+	
+	<select id="selectNoticeCount" parameterType="kr.or.ddit.vo.PaginationInfoVO" resultType="int">
+		select
+			count(bo_no)
+		from
+			notice
+		where	1=1
+		<include refid="noticeSearch"/>
+	</select>
+
+	<select id="selectNoticeList" parameterType="kr.or.ddit.vo.PaginationInfoVO" resultType="kr.or.ddit.vo.NoticeVO">
+	select b.*
+	from(	
+		select a.* ,row_number() over (order by a.bo_no desc) rnum
+		from (
+				select
+					bo_no, bo_title, bo_content, bo_writer, 
+					to_char(bo_date, 'yy-mm-dd hh24:mi:ss') bo_date, bo_hit,
+					(select count(file_no) from noticeFile nf where nf.bo_no=n.bo_no) as file_count
+				from
+					notice n
+				where
+					1=1
+					<include refid="noticeSearch"/>
+					order by bo_no desc
+					) a
+				) b
+				<![CDATA[
+				where b.rnum >= #{startRow} and b.rnum <= #{endRow}
+				]]>
+	</select>
+	
+    <insert id="mergeLawDong" parameterType="kr.or.ddit.vo.LawDongVO">
+        MERGE INTO LAW_DONG A
+        USING (SELECT #{lawdCd} AS LAWD_CD FROM DUAL) B
+        ON (A.LAWD_CD = B.LAWD_CD)
+        WHEN NOT MATCHED THEN
+        INSERT (
+            LAWD_CD,
+            SIDO_NM,
+            SIGUNGU_NM,
+            DONG_NM,
+            RI_NM,
+            USE_YN
+        )
+        VALUES (
+            #{lawdCd},
+            #{sidoNm},
+            #{sigunguNm},
+            #{dongNm},
+            #{riNm},
+            #{useYn}
+        )
+    </insert>
+    
+    <select id="selectAllDongCodes" resultType="string">
+	    SELECT LAWD_CD
+	    FROM LAW_DONG
+	    WHERE USE_YN = 'Y'
+	</select>
+	
+	<insert id="mergeApt" parameterType="kr.or.ddit.vo.AptVO">
+	    MERGE INTO APT_COMPLEX A
+	    USING (SELECT #{aptId} AS APT_ID FROM DUAL) B
+	    ON (A.APT_ID = B.APT_ID)
+	
+	    WHEN NOT MATCHED THEN
+	    INSERT (
+	        APT_ID,
+	        APT_NAME,
+	        LAWD_CD,
+	        SIDO_NM,
+	        SIGUNGU_NM,
+	        DONG_NM,
+	        DETAIL_ADDR
+	    )
+	    VALUES (
+	        #{aptId},
+	        #{aptName},
+	        #{lawdCd},
+	        #{sidoNm},
+	        #{sigunguNm},
+	        #{dongNm},
+	        #{detailAddr}
+	    )
+	</insert>
+	
+	
+</mapper>

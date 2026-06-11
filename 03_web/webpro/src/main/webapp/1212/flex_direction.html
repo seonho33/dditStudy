@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="../css/flex.css">
+
+<style type="text/css">
+</style>
+
+</head>
+<body>
+
+<h2>메뉴선택</h2>
+
+<form action="">
+
+<label>
+<input type="radio" name="menu" value="column" >column
+</label>
+
+<label>
+<input type="radio" name="menu" value="row"  checked="checked" >row
+</label>
+
+<label>
+<input type="radio" name="menu" value="row-reverse" >row-reverse
+</label>
+
+</form>
+<br>
+<div id="container" class="f-container">
+	<div>1</div>
+	<div>2</div>
+	<div>3</div>
+	<div>4</div>
+	<div>5</div>
+	<div>6</div>
+</div>
+
+<script type="text/javascript">
+//메뉴선택 접근
+
+menus = document.querySelectorAll('input[type=radio]');
+
+//각 메뉴에 대한 이벤트 핸들러 작성
+menus.forEach(function(item,idx){
+	
+//부모 요소 접근
+fcont = document.querySelector("#container")
+	
+	
+	/* 	item.onchange = function(){} */
+	item.addEventListener('change',function(){
+	
+		// 부모의 배치 방향을 메뉴의 값으로 설정
+		fcont.style.flexDirection=this.value;
+	})
+
+})
+
+
+</script>
+
+
+</body>
+</html>

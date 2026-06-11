@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<script type="text/javascript">
+const proc1 = () =>{
+	//window.open()//빈 윈도우창
+	//window.open("Stirng객체_주민번호.html")//url만 온것
+	//window.open("String객체_주민번호.html","_top"); //url과 target(_black가 기본)
+	//window.open("String객체_주민번호.html","String객체");//url, name(논리적이름)
+	window.open("String객체_주민번호.html","String객체","width=300 height=300")
+}
+
+const proc2=()=>{
+	
+	window.open("sub.html","윈도우 새창","width=500 height=400 top=100 left=200");
+}
+</script>
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+	<div id="result1">
+	</div>
+
+</div>
+
+<div class="box">
+
+	<h3>
+	새 창 열기<br>
+	새롭게 열린 창을 자식창이라고 한다<br>
+	자식창에서 원래 창(부모창)을 가리키는 속성 : opener<br>
+	자식창에서 입력받은 내용을 부모창에서 출력한다<br>
+	</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+	<div id="result2">
+	</div>
+
+</div>
+
+</body>
+</html>

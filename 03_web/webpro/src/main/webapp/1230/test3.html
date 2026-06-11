@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+
+<script>
+
+function login(id, pass){ ///------------2
+	
+	setTimeout( ()=>{ //---------------------4
+		//id와 pass를 조건으로 해서 name과 tel를 select하시오
+		console.log("id와 pass를 조건으로 해서 name과 tel를 select 했어요 ");
+		const user = {uname : "김은대" , tel : "010-1234-5678"}
+	}, 2000)
+}
+
+
+/* const proc1 = ()=>{
+
+	//login을 호출하고 수행된 결과값을 출력한다
+	login("a001", "12345678");  ///-------------1
+	console.log(user.uname, user.tel) ///-----------3
+}  */
+
+//콜백함수를 이용 
+
+/* function login(id, pass, fn){
+	
+	setTimeout( ()=>{
+		//id와 pass를 조건으로 해서 name과 tel를 select하시오
+		console.log("id와 pass를 조건으로 해서 name과 tel를 select 했어요 ");
+		const user = {uname : "김은대" , tel : "010-1234-5678"}
+		
+		fn(user);
+	}, 2000);
+} */
+
+ const proc1 = ()=>{
+
+	//login을 호출하고 수행된 결과값을  콜백함수내에서 출력한다
+	// login("a001", "12345678", function(user){
+	//	console.log(user.uname, user.tel)
+	//});/
+	
+/* 	
+	login("a001", "12345678", user => {
+		console.log(user.uname, user.tel)
+	});
+	 */
+	 
+	login("a001", "12345678", ({uname, tel}) => {
+		console.log(uname, tel)
+	});
+
+}
+</script>
+
+
+</head>
+<body>
+
+
+<div class="box">
+  <h3></h3>
+  
+  <input type="button" value="확인" onclick="proc1()">
+  <br>
+  <br>
+  <div id="result1"></div>
+</div>
+
+</body>
+</html>

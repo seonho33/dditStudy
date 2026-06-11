@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/flex.css">
+
+<style type="text/css">
+
+</style>
+
+</head>
+<body>
+
+<h2>메뉴선택</h2>
+
+<form action="">
+
+<label>
+<input type="radio" name="menu" value="wrap"  checked="checked">wrap
+</label>
+
+<label>
+<input type="radio" name="menu" value="nowrap" >nowrap
+</label>
+
+<label>
+<input type="radio" name="menu" value="wrap-reverse" >wrap-reverse
+</label>
+
+</form>
+<br>
+<div id="container" class="f-container">
+	<div>1</div>
+	<div>2</div>
+	<div>3</div>
+	<div>4</div>
+	<div>5</div>
+	<div>6</div>
+</div>
+
+<script type="text/javascript">
+//메뉴 선택요소 검색
+menus = document.querySelectorAll('input[type=radio]');
+//menus는 유사배열, 배열처럼 인덱스 사용가능 menus[0],menus[1],menus[2]
+
+//부모요소 검색
+fcont = document.querySelector(".f-container");
+
+//메뉴 선택에 대한 이벤트 핸들러 작성
+for(i=0;i<menus.length;i++){
+	menus[i].onchange = function(){
+		console.log(this.value);
+		fcont.style.flexWrap=this.value;
+	} 	
+}
+
+</script>
+
+
+</body>
+</html>

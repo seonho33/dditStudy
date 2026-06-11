@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+//생성자 객체함수 정의
+function Rect(garo, sero){
+	this.garo = garo;
+	this.sero = sero;
+}
+
+//정보출력함수 정의
+const printRect = (obj, out) =>{
+	let str =	`가로 : ${obj["garo"]}<br>
+				세로 : ${obj["sero"]}<br>
+				면적 : ${obj["area"]()}<br>
+				둘레 : ${obj["circum"]()}`
+	
+	document.querySelector(out).innerHTML = str;
+}
+
+
+const proc1 =()=>{
+	//프롬프트로 받기
+/* 	let su1 = Number(prompt("첫번째 수"));
+	let su2 = Number(prompt("두번째 수..."));
+	 */
+	//객체 생성	
+	const r1 = new Rect(7,3);
+
+	
+	r1.area = function(){
+		return this.garo*this.sero;
+	}
+	r1.circum = function(){
+		return (this.garo+this.sero)*2;
+	}
+	
+	console.log(r1);
+	//정보출력함수 호출
+	printRect(r1,"#result1");
+}
+
+const proc2=()=>{
+	//객체생성
+	const r1 = new Rect(4,6);
+	console.log(r1);
+	
+	//메소드 추가 안함
+	//정보출력함수 호출
+	printRact(r1,"#result2");
+}
+
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	//생성자 객체함수 정의<br>
+	function Rect(garo, sero){<br>
+	this.garo = garo;<br>
+	this.sero = sero;<br>
+	}<br>
+	메소드 추가 - area(),circum();
+	
+	</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+
+<div class="box">
+
+	<h3>area(),circum(); 메소드 추가하지 않고, 실행하면 오류 발생</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+</body>
+</html>

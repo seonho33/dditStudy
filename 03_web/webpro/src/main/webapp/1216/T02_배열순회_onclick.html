@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+const fruits = ["사과","바나나","복숭아","참외","수박"];
+window.onload = function(){
+	out1 = document.querySelector("#result1");
+	out2 = document.querySelector("#result2");
+	out3 = document.querySelector("#result3");
+	out4 = document.querySelector("#result4");
+	out5 = document.querySelector("#result5");
+}	
+
+const proc1 = () =>{
+	//1번 방법..
+	out1.innerHTML = fruits;
+	
+	//2번 방법..
+	let str = "";
+	for(let i=0; i<fruits.length; i++){
+		str += `${i+1}번째 : ${fruits[i]} <br>`;
+	}
+	out2.innerHTML = str;
+	
+	//3번 방법
+	str = "";
+	let i=0;
+	for( let fr of fruits ){
+		i++;
+		str += `${i}번째 ${fr}<br>`;
+	}
+	out3.innerHTML = str;
+	
+	//4번 방법----제일 중요하고 가장 많이 사용한다..
+	str = "";
+	fruits.forEach(function(fr, idx){
+		str += `${idx+1}번째 : ${fr} <br>`;
+	})
+	out4.innerHTML = str;
+	
+	//5번 -4번 function을 화살표 함수로 변경
+	str = "";
+	fruits.forEach( (fr,idx) =>{
+		str += `${idx +1}번째 : ${fr}<br>`;
+	})
+	out5.innerHTML = str;
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	리터럴 배열 <br>
+	const fruits = {"사과","바나나","복숭아","참외","수박"]<br>
+	</h3>
+	<input type="button" value="확인" onclick="proc1()">
+	<br><br>
+	<div id="result1"></div>
+	<div id="result2"></div>
+	<div id="result3"></div>
+	<div id="result4"></div>
+	<div id="result5"></div>
+</div>
+</body>
+</html>

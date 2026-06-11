@@ -1,0 +1,14 @@
+//모달창 닫기
+	    wmodal.hide();
+	    //포커스 가능한 요소를 숨기려고 하면 여기서 aria-hidden 문제가 발생 
+		//모달이 닫힐때 aria-hidden="true"속성과 style="display:none" 이 추가되는데 , 
+		//숨겨지는 요소에 포커스가 남아있어서 접근성 문제가 발생한다.
+		//개발자는 aria-hidden="true" 요소가 포인팅을 받지 않도록 처리해야 합니다. 
+		//꺼질 때 포커스를 해제시킨다.- 별도의 이벤트 핸들러 작성
+		
+
+//모달이 닫힐때 포커스 문제 해결
+    document.querySelector('#wModal').addEventListener('hide.bs.modal', function(){
+		 document.querySelectorAll('#wModal *').forEach( m =>  m.blur());
+ });
+     

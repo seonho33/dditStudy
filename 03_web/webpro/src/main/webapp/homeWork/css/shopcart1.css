@@ -1,0 +1,26 @@
+@charset "UTF-8";
+.cartTable{
+	margin: 10px auto;
+}
+.cartTable th{
+	height: 50px;	
+}
+.cartTable td{
+	width: 150px;
+	text-align: center;
+}
+.cartFoodNumber{
+	display: flex;
+	justify-content: flex-end;
+}
+.cartFoodNumberInput{
+	text-align: right;
+	width: 100px;
+}
+.CalcButton{
+	display: flex;
+	justify-content: center;
+}
+.CalcButton input {
+	margin: 20px;
+}

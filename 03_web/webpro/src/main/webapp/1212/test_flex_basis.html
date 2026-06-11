@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+ <style>
+.flex-box {
+display  : flex;
+height : 100px;
+padding : 5px;
+}
+.flex-box div{
+  height : 90%;
+  margin : 5px;
+  background : #afeeee;
+}
+.item50{
+  width : 50px;
+}
+.item100{
+  width : 100px;
+}
+.item250{
+  width : 250px;
+}
+div{
+  border : 1px solid blue;
+}
+.dd1{
+  flex-basis: 100px;
+}
+.dd2{
+ flex-basis: auto;
+}
+.dd3{
+ flex-basis: 0px;
+}
+</style> 
+
+</head>
+<body>
+
+
+<h3>flex-basis: 100px; <br>
+ 각요소의 정해진 길이를 무시하고    flex-basis 값이 우선<br>
+ #d1{width : 50px;} #d2{width : 100px}; #d3{width:250px;}<br>
+  </h3>
+<div class="flex-box">
+  <div class="dd1 item50" >width:50px</div>
+  <div class="dd1 item100" >width:100px</div>
+  <div class="dd1 item250" >width:250px</div>
+</div>
+<hr>
+<h3>flex-basis: auto; 각 요소의 길이값이 우선, 각요소의 길이가 다르게 나타남<br>
+#dd1{width : 50px;} #dd2{width : 100px}; #dd3{width:250px;}<br>
+</h3>
+<div class="flex-box">
+  <div class="dd2 item50" >width:<br>50px</div>
+  <div class="dd2 item100" >width:100<br>px</div>
+  <div class="dd2 item250" >width:250px</div>
+</div>
+<hr>
+<h3>flex-basis: 0; 각 요소의 크기와 관계없이 <br>
+flex-grow 가 없을때 : 내용의 의 크기에 따라 나타남<br>
+flex-grow : 1일때  : 똑같은 크기로 나타남 <br><!-- flex: 1 1 0 -->
+#ddd1{width : 50px;} #ddd2{width : 100px}; #ddd3{width:250px;}<br>
+</h3>
+ </h3>
+<div class="flex-box">
+  <div class="dd3 item50" id="ddd1">12</div>
+  <div class="dd3 item100" id="ddd2">1234</div>
+  <div class="dd3 item250"  id="ddd3">123456</div>
+</div>
+</body>
+</html>

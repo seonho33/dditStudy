@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<properties resource="kr/or/ddit/mybatis/config/db.properties" />
+
+	<typeAliases>
+		<typeAlias type="kr.or.ddit.board.vo.BoardVO" alias="bvo"/>
+		<typeAlias type="kr.or.ddit.board.vo.ReplyVO" alias="rvo"/>
+		<typeAlias type="kr.or.ddit.member.vo.MemberVO" alias="mvo"/>
+		<typeAlias type="kr.or.ddit.member.vo.ZipVO" alias="zvo"/>
+		<typeAlias type="kr.or.ddit.board.vo.PageInfo" alias="pinfo"/>
+		<typeAlias type="kr.or.ddit.member.vo.MemberVO1" alias="mvo1"/>
+		<typeAlias type="kr.or.ddit.member.vo.UserVO" alias="uvo"/>
+		<typeAlias type="kr.or.ddit.board.vo.ReplyVO" alias="rvo"/>
+	</typeAliases>
+		
+
+	<environments default="dev1">
+		<environment id="dev1">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="kr/or/ddit/mybatis/mappers/member.xml" />
+		<mapper resource="kr/or/ddit/mybatis/mappers/board.xml" />
+		<mapper resource="kr/or/ddit/mybatis/mappers/reply.xml" />
+	</mappers>
+	
+	
+</configuration>

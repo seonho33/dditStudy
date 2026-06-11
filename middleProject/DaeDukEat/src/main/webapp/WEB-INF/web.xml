@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
+         https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <!-- ============================================================ -->
+    <!-- [WEB.XML] DaeDukEat 프로젝트 설정                            -->
+    <!-- ============================================================ -->
+    <!-- AUTHOR  : Senior Architect                                   -->
+    <!-- DATE    : 2025-01-23                                         -->
+    <!-- PURPOSE : 서블릿 매핑, 에러 페이지, 세션 설정                -->
+    <!-- ============================================================ -->
+
+    <display-name>DaeDukEat</display-name>
+    <description>DaeDukEat Reservation System</description>
+
+    <!-- ========== 인코딩 필터 (UTF-8 강제 설정) ========== -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ignore</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+     <!-- 여기서부터 추가 -->
+    <servlet>
+        <servlet-name>BotController</servlet-name>
+        <servlet-class>kr.or.ddit.admin.controller.BotController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BotController</servlet-name>
+        <url-pattern>/Bot.do</url-pattern>
+    </servlet-mapping>
+    <!-- 여기까지 추가 -->
+
+    <!-- ========== 세션 설정 ========== -->
+    <session-config>
+        <session-timeout>30</session-timeout> <!-- 30분 -->
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>false</secure> <!-- HTTPS 사용 시 true로 변경 -->
+        </cookie-config>
+    </session-config>
+
+    <!-- ========== Welcome File List ========== -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>main.do</welcome-file>
+    </welcome-file-list>
+
+    <!-- ========== 에러 페이지 매핑 ========== -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/TEST/views/store/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/TEST/views/store/error.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/TEST/views/store/error.jsp</location>
+    </error-page>
+
+    <!-- ========== MIME Type 설정 ========== -->
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>js</extension>
+        <mime-type>application/javascript</mime-type>
+    </mime-mapping>
+
+    <!-- ============================================================ -->
+    <!-- [중요] 예약 모듈은 @WebServlet으로 자동 등록됨                -->
+    <!-- ============================================================ -->
+    <!-- 
+        개별 서블릿이 @WebServlet 어노테이션을 사용하므로 
+        web.xml에 별도로 등록할 필요 없음:
+        
+        - MyReservationController     : /reservation/myReservation.do
+        - CancelReservationController : /reservation/cancel.do
+        - ViewReservationController   : /reservation/view.do
+        
+        ⚠️ 주의: 기존 FrontController 방식의 /reservation/*.do 매핑이 
+                있다면 반드시 삭제해야 충돌 방지됨
+    -->
+
+    <!-- ========== 기존 다른 서블릿 매핑 (필요시 추가) ========== -->
+    <!-- 
+        예시: 다른 모듈의 서블릿이 있다면 아래와 같이 추가
+        
+        <servlet>
+            <servlet-name>LoginController</servlet-name>
+            <servlet-class>kr.or.ddit.user.controller.LoginController</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>LoginController</servlet-name>
+            <url-pattern>/login.do</url-pattern>
+        </servlet-mapping>
+    -->
+
+</web-app>

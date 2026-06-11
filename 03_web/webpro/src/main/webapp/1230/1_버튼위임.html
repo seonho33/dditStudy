@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+</head>
+
+<body>
+<div class="box">
+	<div id="parent">
+	  	<button id="button1">버튼1</button>
+  		<button id="button2">버튼2</button>
+  		<button id="button3">버튼3</button>
+	</div>
+</div>
+</body>
+
+<script>
+/*    document.querySelector('#button1')
+     .addEventListener('click', function(event){
+	  alert(event.target.textContent)
+ })
+
+ document.querySelector('#button2')
+     .addEventListener('click', function(event){
+    	 alert(event.target.textContent)
+ })
+ 
+ document.querySelector('#button3')
+    .addEventListener('click', function(event){
+    	 alert(event.target.textContent)
+ }) 
+ */
+ 
+ //이벤트 위임 - 부모가 이벤트를 감지하고 처리한다.
+ //부모에 addEventListener하면 자식이 영향을 받는다
+document.querySelector("#parent").addEventListener('click',function(){
+	
+	console.log(event.target);
+	console.log(event.target.tagName);
+	console.log(event.target.textContent);	//innerText
+	console.log(event.target.id);
+	console.log(this);
+	if(event.target.tagName == "BUTTON"){
+	event.target.style.background = "pink";
+	}
+})
+
+/* const fn_button = () => {
+	
+buttonV = document.querySelectorAll("#parent button")
+
+buttonV.forEach(bt =>{
+	
+	bt.addEventListener('click',function(event){
+		event.target.style.background = "pink"
+	})
+})
+
+} */
+
+</script>
+
+</html>

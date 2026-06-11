@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+.box {
+  height: 30px;
+  width: 50px;
+  background-color: #1ce;
+  transform: translateX(0);
+  transition: transform 1s linear;
+}
+
+.end-state .box {
+  transform: translateX(400px);
+}
+
+.ease-out {
+  transition-timing-function: ease-out;
+}
+
+.ease-in {
+  transition-timing-function: ease-in;
+}
+
+.ease {
+  transition-timing-function: ease;
+}
+
+.ease-in-out {
+  transition-timing-function: ease-in-out;
+}
+
+section {
+  margin-top: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px dotted black;
+  width: 450px;
+}
+
+p {
+  margin: 0.3em 0;
+}
+
+button {
+  font-size: 1.4em;
+  padding: 0.5em 0.75em;
+}
+</style>
+
+
+</head>
+<body>
+<!-- transition-timing-function 이해하기
+transition-timing-function는 transition이 어떻게 발생하는지를 통제합니다.
+ 모든 transition은 기본적으로 linear 함수를 사용하는데, 이는 transition이 끝날 때까지 속성이 균등하게 변경됨을 의미합니다.
+
+.selector {
+  transition: transform 1s linear;
+
+  /* OR */
+  transition-property: transform;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}
+여기서 중요한 것은 우리가 사는 세상은 직선적인 움직임만이 다가 아니라는 것 입니다. 
+직선적인 움직임은 실제로 물체가 움직이는 방식이 아닙니다. 
+때로는 가속하고 때로는 감속도 합니다. 
+transition-timing-function을 사용하면 이 모든 것을 적용할 수 있습니다.
+
+공터에서 테니스 공을 던지는 상황을 가정하면 공은 최고속도로 던지는 사람의 손을 떠나고,
+ 공은 움직이면서 에너지를 잃고 감속하고 결국은 정지하게 됩니다. 
+ 이것을 ease-out이라고 부릅니다. 이런 움직임에는 타이밍 함수가 적용되어있습니다.
+
+.selector {
+  transition-timing-function: ease-out;
+}
+이제 차를 타고있다고 생각해 보겠습니다. 처음에는 움직이지 않고 정지해 있습니다.
+ 그 다음 가속 패달을 밟으면 차가 움직이면서 최고 속도를 향해 가속됩니다.
+  이것을 ease-in이라고 합니다. 여기에도 타이밍 함수가 적용되어있습니다.
+
+.selector {
+  transition-timing-function: ease-in;
+}
+ease-in과 ease-out이 있으니 둘을 합친 타이밍 함수도 있습니다.
+ ease-in-out 입니다. 
+ (transition이 1초 이상 지속되지 않는 한 transition에 ease-in-out을 사용하지 않는 것이 좋습니다. 
+ 어떤 물체라도 1초 안에 쉽게 가속 감속이 이루어지지 않습니다. 그냥 이상하게 보일 뿐 입니다.)
+
+.selector {
+  transition-timing-function: ease-in-out;
+} -->
+<section>
+  <p>Linear</p>
+  <div class="box linear"></div>
+</section>
+
+<section>
+  <p>Ease-in</p>
+  <div class="box ease-in"></div>
+</section>
+
+<section>
+  <p>Ease out </p>
+  <div class="box ease-out"></div>
+</section>
+
+<section>
+  <p>Ease</p>
+  <div class="box ease"></div>
+</section>
+
+<section>
+  <p>Ease in out </p>
+  <div class="box ease-in-out"></div>
+</section>
+
+<section>
+  <button>Start transition</button>
+</section>
+
+
+<Script>
+
+const button = document.querySelector('button');
+
+button.addEventListener('click', () => document.body.classList.toggle('end-state'));
+</Script>
+
+
+</body>
+</html>

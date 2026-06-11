@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public_css.css">
+<script type="text/javascript">
+const obj = {
+		name : "홍길동",
+		age : 30
+};
+
+const proc1 = () =>{
+	
+	console.log(obj)
+	
+/* 	for(let ob in obj){	//TypeError : obj is not iteratble
+}*/
+};
+
+const proc2 = () =>{
+	let	arr = [10,20,30,40,50] 
+	console.log(arr)
+
+	for(let ar in arr){
+		console.log(ar);
+	}
+};
+
+const proc3 = () =>{
+	str = "Hellw";
+	
+	str = new String("Hellw");
+	
+	console.log(str);
+	
+	for(let ss in str){
+		console.log(`${ss++} ==>>${ss}`)
+	}
+};
+
+</script>
+
+</head>
+<body>
+
+<pre>
+<div class="box">
+리터럴 객체는 이터러블이 아니다<br>
+for -of반복문을 사용할 수 없다<br>
+<input type="button" value="확인" onclick="proc1()">
+<br>
+<div id="result1"></div>
+<hr>
+배열은 이터러블이다<br>
+<input type="button" value="확인" onclick="proc2()">
+<br>
+<div id="result2"></div>
+<hr>
+String은 이터러블이다<br>
+<input type="button" value="확인" onclick="proc3()">
+<br>
+<div id="result3"></div>
+</div>
+</pre> 
+ 
+</body>
+</html>

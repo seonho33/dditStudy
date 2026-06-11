@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script>
+const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 };
+
+const proc1 = () =>{
+/* 	let str = "";
+	for(let v in myCar){
+		str+= `${myCar[v]}<br>`;
+	}
+	console.log(str) */
+	
+	
+	/* 
+	let str = "" 
+	Object.values(myCar).forEach(v=>{
+		str +=`${v}`;
+	})
+	 */
+	 
+	 
+/* 	const {make, model, year} = myCar;
+	console.log(make,model,year);	 */
+	
+	
+	let str = "";
+	const {make, model}=myCar;
+	console.log(make, model);
+	str += `make : ${make} , model : ${model}<br>`;
+	
+	document.querySelector("#result1").innerHTML = str
+	
+}	
+
+const proc2 = ()=>{
+	//myCar.year , myCar[year]
+	
+	const {year} = myCar;
+	
+	document.querySelector("#result2").innerHTML = `year : ${year}`;
+	
+}
+
+const proc3 = () =>{
+	
+	const {make, ...rest} = myCar;
+/* 	document.querySelector("#result3").innerHTML = `make : ${make}<br>`;
+	 */
+	let str = "";
+	//...rest변수는 객체 {model : "X5", year :2020}
+/* 	for(let rr in rest){
+		str += `${rr} : ${myCar[rr]}<br>`
+		document.querySelector("#result3").innerHTML =str;
+	} */
+	
+	//객체의 속성이름과 속성값들을 전체 가져오기 - 구조분해
+ 	Object.entries(rest).forEach(([ek,ev],idx)=>{
+		str = `${ek} : ${ev}<br>`
+		document.querySelector("#result3").innerHTML += str;
+	}) 
+}
+
+const proc4 = () =>{
+	
+	const users = [{name : "철수" , age : 25},
+			{name : "영희" , age : 22},
+			{name : "길동" , age : 45 }];
+	
+/* 	users.forEach((user,index) => {
+	
+		str = `${user.name} ${user["age"]}<br>`;
+		document.querySelector("#result4").innerHTML += str;
+ */
+ 	let str = "";
+	users.forEach(({name,age},index)=>{ 
+	
+		str += `${name} ${age}<br>`;
+		document.querySelector("#result4").innerHTML = str;
+	})
+
+	users.forEach(user => {
+		str = `${user.name} ${user.age} <br>`
+	})
+	
+	users.forEach(({name,age})=>{
+		str = `${name} ${age} <br>`
+	})
+}
+
+const proc5 = () =>{
+	
+	const users = [{name : "철수" , age : 25},
+				{name : "영희" , age : 22},
+				{name : "길동" , age : 45}];
+
+	//함수호출
+	//printUser(users);
+	
+/* 	userPrint(users[0]);
+ 	userPrint(users[1]);
+	userPrint(users[2]); 
+ */
+	for(i=0; i<users.length; i++){
+	userPrint(users[i])
+ }
+}
+
+const userPrint = ({name,age})=>{
+	str = `${name} ${age} <br>`;
+	document.querySelector("#result5").innerHTML += str;
+};
+
+
+const printUser = (person) =>{
+	str = "";
+	person.forEach((p,index)=>{
+		str = `${p.name}, ${p['age']}<br>`
+	});
+
+	person.forEach(({name,age},index)=>{
+		str = `${name} ${age} <br>`;
+	});
+	
+	str="";
+	person.forEach(({name,age})=>{
+		str += `${name} ${age} <br>`;
+	});
+	
+	document.querySelector("#result5").innerHTML = str;
+}
+
+</script>
+</head>
+<body>
+<pre>
+<h2>구조 분해 할당 </h2>
+배열이나 객체를  분해해서 각각의 값을 개별적인  변수에 할당하는 표현식 
+</pre>
+<input type="button" value="일부만 make, model" onclick="proc1()">
+<input type="button" value="일부만 year" onclick="proc2()">
+<input type="button" value="일부만 ...rest" onclick="proc3()">
+<input type="button" value="객체 배열" onclick="proc4()">
+<input type="button" value="함수의매개변수" onclick="proc5()">
+
+<br><br>
+<div class="box">
+	<div id="result1"></div>
+	<div id="result2"></div>
+	<div id="result3"></div>
+	<div id="result4"></div>
+	<div id="result5"></div>
+</div>
+</body>
+</html>

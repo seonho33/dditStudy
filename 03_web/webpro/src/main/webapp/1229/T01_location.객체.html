@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<style>
+span{
+  font-size : 1.5rem;
+  font-weight : bold;
+  color : blue;
+}
+</style>
+
+<script>
+const proc1 = () =>{
+	
+	let disp = `href : ${decodeURI(location.href)}<br>`
+	 disp += `href : ${location.href}<br>`
+	 disp += `host  : ${location.host}<br>` 
+	 disp += `hostname  : ${location.hostname}<br>`
+	 disp += `port  : ${location.port}<br>`
+	 disp += `protocol  : ${location.protocol}<br>`
+    
+	 document.querySelector('#result1').innerHTML = disp;
+}
+
+const proc2 = () =>{
+	
+	location.href = "http://localhost/webpro/1226/T03_random객체.html"
+//	location.href = "http://localhost/webpro/Insert.do"
+}
+
+const fnAssign =() =>{
+	location.assign("../1226/T04_window객체.html")
+}
+
+const fnReplace =() =>{
+	location.replace("../1226/T04_window객체.html")
+}
+
+const fnRelad =() =>{
+	
+	//랜덤으로 문자열을 발생
+	arr = ["hello","사랑은-늘 도망가","우리드의 브루스","별빛같은 나의 사랑아","다시 만날 수 있을까",
+			"천국보다 아름다운" , "온기","hone","happy new year"];
+	
+	//랜덤문자열을 result2에 출력하고 1초뒤에 다시 원래문서로 되돌아온다..=새로고침의 효과 =reload
+
+		i= Math.floor(Math.random()*arr.length);
+	
+		document.querySelector("#result2").innerHTML="<h1>"+arr[i]+"</h1>";
+		document.querySelector("#result2").style.color ="red";
+		
+	setTimeout(function(){
+		location.reload();
+	},1000)
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+	
+  <h2>location객체-URL정보를 가짐 <br>
+   </h2>
+  <input type="button" value="확인" onclick="proc1()">
+  
+  <br> 
+  ※ 인코딩과 디코딩<br> 
+ 인코딩 ; 문자를 컴퓨터에 저장하거나 통신에 사용할 목적으로 부호화.<br> 
+ 웹에서 통신시 한글 같은 유니코드 문자가 오작동을 일으킬 수 있으므로.<br> 
+ <br>
+ 디코딩 ; 인코딩과 반대로 문자를 원래대로 되돌리는 것. decodeURI(location.href)<br> 
+   <br>
+  <div id="result1"></div>
+  <br>
+</div>
+<div class="box">
+  <h2>문서이동하기</h2>
+  <h3>1. button 함수호출 -<span>onclick="proc2()"</span> </h3>
+  <input type="button"  value="1.이동" onclick="proc2()">
+  
+  <h3>2. button 서버로전송 -<span>onclick="location.href='href.jsp?id=a001'"</span></h3>
+  <input type="button"  value="1.이동" onclick="location.href='hrefsend.jsp?id=a001'">
+  <br>
+  
+  <h3> 3. href에서 다른 화일지정  <span>href="timeout_interval.html"</span></h3>
+  <a href="../1226/T05_setTimeout.html">이동</a>
+  
+  <h3> 4.  href 에서 script의 함수호출  <span>href="javascript:proc2()"</span></h3>
+  <a href="javascript:proc2()">이동</a>
+  
+  <h3>5.  a태그 onclick=script함수호출  <span>onclick="proc2()"</span> </h3>
+  <a href="#" onclick="proc2()">이동</a>
+    
+   <h3>6.  a태그 onclick=서버로 보내기<span> onclick="location.href='hrefsend.jsp?id=a001'"</span></h3> 
+   <a href="#"  onclick="location.href='hrefsend.jsp?id=a001'">서버로get</a>
+</div>
+
+<div class="box">
+
+  <h3>location객체 <br>
+  assign() : 새로운 문서로드 , 히스토리 남김, 뒤로가기 가능 <br>
+  replace() :새로운 문서 대체 히스토리 남기지 않음 , 뒤로가기 불가능 <br> 
+  reload() : 현재 문서를 다시 로드-</h3>
+  <input type="button" value="assign" onclick="fnAssign()">
+  <input type="button"  value="replace" onclick="fnReplace()">
+  <input type="button"  value="reload" onclick="fnRelad()">
+  <br><br>
+  <div id="result2" ></div>
+ </div>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+자바스크립트 사용법..
+
+세자리마다 , 찍기
+multi = 12345 이렇게 찍힐때,
+multi = multi.toLoacaleString(); 이라고 다시 선언해주면
+세자리마다 , 가 찍힌다(출력장소에 multi.toLocaleString();)이라고
+적어도 ,가 찍혀서 출려고딘다.
+
+소수이하 자리수 지정
+divide = 1.1234512314 이런식으로 출력될 때, 
+divide = divide.toFixed(2) 이라고 선언해주면
+괄호안의 숫자만큼만 나온다, 출력장소에서 선언해도 똑같이 나온다...
+
+----날짜 Date객체에서
+toLocaleString() = 날짜와 시간
+toLocaleDateString() = 날짜만
+toLocaleTimeString() = 시간만
+
+
+스크립트에서 html요소 찾기, 검색하기, 접근하기
+
+id를 이용하는 방법
+(변수)a =		document.getElementById('id이름')
+	 a =	document.querySelector('#id이름')
+		
+tag 이름을 이용하는 방법
+b=	document.getElementsByTagName('Tag이름')		>> HTMLCollection을 리턴
+b=	document.querySelector('Tag이름')
+b=	document.querySelectorAll('Tag이름')			>> NodeList 를 리턴
+class 이름을 이용하는 방법
+c=	document.getElementsByClassName('Class이름') >> HTMLCollection을 리턴
+c=	document.querySelector('.class이름')
+c=	document.querySelectorAll('.class이름')		>> NodeList 를 리턴
+
+b1, b3 은 복수개의 값을 가지고있고 유사배열, b1[0],b1[1],b3[0]등 사용
+
+/// NodeList는 forEach 문을 사용할 수 있다.
+	HTMLCollection 은 사용할 수 없다......
+	
+	배열요소.forEach(function(배열각요소, 인덱스){})
+	b3.forEach(function(item, [idx]){
+		item.onchange = function(){}	
+})
+
+---------------이벤트 핸들러 작성--------------------
+이벤트는 무언가 일어났다는 신호 - onclick, onmouseover, onmouseout, onchange, onkeydown, onkeyup
+이벤트에 반응하려면 이벤트가 발생했을때 시행되는 함수인
+핸들러를 할당해야한다
+핸들러는 사용자의 행동에 어떻게 반응할지를
+자바스크립트 코드로 표현 한 것
+
+function 함수이름(){ }
+
+----------------html 요소의 값을 가져오기 -----------------
+value		: input 요소, textarea, select-option 에서 값을 가져올 때 사용
+innerHTML	: div, p, span 에서 값을 가져올 떄 사용
+innerText(textContent) : div, p, span, 에서 값을 가져올 때 사용
+
+----------------html 요소의 값을 출력하기 -----------------
+value		: input 요소, textarea, select-option 에서 값을 출력할 때 사용
+innerHTML	: div, p, span, ... 에서 값을 출력할 때 사용 //	HTML 텍스트가 포함되어있을때..
+innerText(textContent) : div, p, span, 에서 값을 출력할 때 사용
+
+-----------------입력 패턴(한자리만)------------------------------
+[a-z]
+[A-Z]
+[0-9]
+[a-zA-Z0-9]	: 순서는 중요하지 않다
+[a-z][0-9]	: 순서가 생긴다 : 소문자 a~z까지 하나 + 숫자 0~9까지 하나
+[a-z][A-Z]	: 소문자 알파벳 이후 대문자 알파벳
+\d			: 숫자 한자리
+
+---------------입력패턴의 횟수지정-------------------------
+ + 			: 앞의 입력패턴 한자리 이상 ex)  [a-z]+ 
+ [a-zA-Z0-9]+ :숫서 상관없이 한자리 이상가능
+ *			: 0자리 이상(오지 않아도 가능)	ex) [a-z]+[a-zA-Z0-9]* : 소문자 알파벳 한자리 이상과 순서상관없이 0자리 이상
+ [a-z][a-zA-Z0-9]* : 알파벳 소문자 한자리와 순서상관없이 0자리 이상이 온다...
+ {2}{2,4}	: 괄호 안의 횟수만큼만 나와야함, 2,4 라고 적혀있으면 2or 4번만 나와야함
+ ^X : 문자열 시작이 X여야함
+ X$ : 문자열 종료가 X여야함
+ X|y : x또는 y를 찾습니다
+ x{2} : 2번반복
+ [xy] : x또는 y를 찾는다
+ [^xy]: []안의 표시는 not을 의미한다
+ \^ : 이스케이프역슬레쉬
+ 
+ 
+ -------------전화번호의 패턴---------------------------
+ 010-[0-9]{4}-[0-9]{4}
+ -------------아이디 패턴-----------------------------
+ [a-z][0-9]{3}
+ [a-z][A-Za-z0-9]+
+ -------------------------------------------------------
+ html의 각 요소들 관계
+ -------------------------------------------------------
+--------------------형제
+nextElementSibling
+nextSibling	아래쪽			공백도 포함
+
+previous 위쪽
+previousElementSibling
+previousSibling
+
+
+--------------------부모
+parentElement	
+parentNode				공백,엔터,주석,... 도 포함
+
+
+========================================
+<body>
+	각 여러가지 요소 div, span input type=radio
+</body>
+
+<script>
+	html 각 요소에 대한 검색이 필요
+</script>
+
+=========================================순서가 바뀌면...
+<script>
+	window.onload = function(){
+	
+	html 각 요소에 대한 검색이 필요
+	
+	}
+	
+	---or---(둘다 써도 상관없지만 DOMcontentLoaded 가 사용됨)
+	
+	document.addEventListener('DOMContentLoaded',function(){
+	html 각 요소에 대한 검색이 필요
+	})
+	
+</script>
+
+<body>
+	각 여러가지 요소 div, span input type=radio
+</body>
+
+----------------------------------------------------------
+변수 선언
+함수내에서 - let var const 를 사용하면 지역변수이다...
+함수내에서 - let var const 를 사용하지 않고 선언하면 전역변수이다...
+
+let fcont	<<
+var fcont	<<
+const fcont << 지역변수이다..
+
+fcont << 전역변수이다.. 
+-->함수 밖에서 선언되는 모든 변수는 전역변수이다...
+let a; var a; const a=10;
+a; b; .... >전역변수들
+-----------------------------------------------------------
+함수 선언식 - 함수이름 사용
+function proc1(){}
+
+호출 시 : proc1();
+---------
+함수 표현식 - 이름없는 function 을 변수에 대입하는 방식
+const proc1 = function(){}
+
+---es6 에서 화살표함수로 변경
+let proc1 = () => { }
+호출시 : proc1()
+
+-----------------------------------------
+백틱을 이용한 템플릿 리터럴
+한 문장에 문자열과 변수가 번갈아 나오면 문자열과 변수 사이에 + 기호로
+문장을 연결하는데 복잡해 보인다.. 
+
+let str = "첫번째 정수" + su1 + "<br>"
+
+백틱 예시 -` ` 안에 문장을 쓰고, 변수에는 ${변수명}
+(""와 + 기호가 없다)
+==> let str = `첫번째 정수 ${su1} <br>`
+
+---------------------------------------------

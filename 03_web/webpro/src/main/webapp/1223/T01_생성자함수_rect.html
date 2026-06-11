@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+
+//생성자 객체함수 정의
+function Rect(garo, sero){
+	this.garo = garo;
+	this.sero = sero;
+	
+	this.area = function(){
+		
+		
+		return this.garo*this.sero;
+	};
+	this.circum = function(){
+
+		return (this.garo+this.sero)*2;
+	};
+}
+
+//정보 출력함수를 정의한다
+const printRect = (obj, out) =>{
+	let str =	`가로 : ${obj["garo"]}<br>
+				세로 : ${obj["sero"]}<br>
+				면적 : ${obj["area"]()}<br>
+				둘레 : ${obj["circum"]()}`
+	
+	document.querySelector(out).innerHTML = str;
+}
+
+//정보 출력함수를 호출한다
+const proc1 = () =>{
+	
+	//객체 생성
+	const r1 = new Rect(3,5);
+	
+	printRect(r1,"#result1")
+}
+
+const proc2 =() =>{
+	
+	//프롬프트로 입력
+	let su1 = Number(prompt("가로입력"));
+	let su2 = Number(prompt("세로입력"));
+	
+	//객체 생성
+	const r1 = new Rect(su1,su2);
+	
+	//정보출력함수 호출
+	printRect(r1,"#result2")
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+</body>
+</html>

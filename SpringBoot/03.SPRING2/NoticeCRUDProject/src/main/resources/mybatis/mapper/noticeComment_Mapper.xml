@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.ICommentMapper">
+
+	<insert id="noticeInsertComment" parameterType="kr.or.ddit.vo.NoticeCommentVO" useGeneratedKeys="true">
+		<selectKey keyProperty="cmtNo" resultType="int" order="BEFORE">
+			select seq_noticecomment.nextval from dual		
+		</selectKey>
+		insert into noticecomment(
+			cmt_no, bo_no, cmt_writer, cmt_content, cmt_group, cmt_date, cmt_status
+		)values(
+			#{cmtNo},#{boNo},#{cmtWriter},#{cmtContent},#{cmtNo},SYSDATE,'N'
+		)
+	</insert>
+
+	<select id="selectNoticeCommentList" parameterType="int" resultType="kr.or.ddit.vo.NoticeCommentVO">
+		select
+			cmt_no,	bo_no,	cmt_writer, 
+			cmt_content,	cmt_group,	cmt_ord, 
+			cmt_depth,		cmt_date,	cmt_status,
+			(select mem_profileimg
+			 from noticemember nm
+			 where	nc.cmt_writer = nm.mem_id) as mem_profileimg
+		from	noticecomment nc
+		where	bo_no = #{boNo}
+		order by cmt_group asc, cmt_ord asc
+	</select>
+	
+	<!--
+		cmt_group : 대댓글을 달기위한 댓글의 group 번호를 이용합니다. 댓글 하위의 대댓을로 묶기위해.
+		cmt_ord : 현재 순서는 그룹번호와 일치하는 순서의 max값에 + 1
+		cmt_depth : 댓글의 깊이는 댓글 번호와 일치하는 깊이 + 1 
+	 -->
+	<insert id="noticeInsertSubComment" parameterType="kr.or.ddit.vo.NoticeCommentVO">
+		insert into noticecomment(
+			cmt_no, bo_no, cmt_writer, cmt_content, cmt_group, cmt_ord, cmt_depth, cmt_date, cmt_status
+		)values(
+			seq_noticecomment.nextval,#{boNo},#{cmtWriter},#{cmtContent},
+			(select cmt_group from noticecomment where cmt_no=#{cmtNo}),
+			(select max(cmt_ord) from noticecomment where cmt_group=
+				(select cmt_group from noticecomment where cmt_no = #{cmtNo}))+1,
+			(select cmt_depth from noticecomment where cmt_no = #{cmtNo})+1, SYSDATE, 'N'
+		)
+	</insert>
+
+	<update id="noticeUpdateComment" parameterType="kr.or.ddit.vo.NoticeCommentVO">
+		update 	noticecomment
+		set		
+			cmt_content = #{cmtContent},
+			cmt_date	= sysdate
+		where
+			cmt_no =#{cmtNo}
+			and bo_no = #{boNo}
+	</update>
+	
+	<update id="noticeDeleteComment" parameterType="int">
+		update 	noticecomment
+		set		cmt_status = 'Y'
+		where	cmt_no = #{cmtNo}
+	
+	</update>
+	
+</mapper>

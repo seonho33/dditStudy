@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form action="form전송2.jsp" method="post">
+	
+	아이디<input type="text" name="id" value="a001"><br>
+	비밀번호<input type="password" name="pass"><br><br>
+	
+		<input type="hidden" name="age" value="052">
+	
+	성별<input type="radio" name="gender" value="남성" checked="checked">남성
+	   <input type="radio" name="gender" value="여성" checked="checked">여성
+	<br>
+	첨부파일<input type="file" name="file"> 
+	<br><br>
+	좋아하는 음식
+	<br>
+	<input type = "checkbox" name="like" value="볶음스" checked="checked">볶음밥
+	<input type = "checkbox" name="like" value="갈비스" checked="checked">갈비탕
+	<input type = "checkbox" name="like" value="된장스" checked="checked">된장찌개
+	<input type = "checkbox" name="like" value="불고기" checked="checked">불고기
+	<input type = "checkbox" name="like" value="피자" checked="checked">피자
+	<input type = "checkbox" name="like" value="치킨" checked="checked">치킨
+	<input type = "checkbox" name="like" value="햄버거" checked="checked">햄버거
+	
+	<br>
+	<br>
+	<input type = "submit" value="전송">
+	<input type = "reset">
+</form>
+
+</body>
+</html>

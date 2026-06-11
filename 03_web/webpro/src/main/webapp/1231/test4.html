@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+function login(userid, fn){
+	setTimeout( ()=>{
+		console.log("userId가 a001인 데이터의 name을 가져오기")
+		const vname = "김은대"
+		
+		//이 결과값을 클라이언트로 응답보내기 위해서 fn으로 받은 콜백함수를 호출해야한다
+		fn(vname);
+	},3000);
+}
+
+
+function addToCart(prod,fn){
+	setTimeout(()=>{
+		fn(prod);
+		console.log()
+	},1000)	
+}
+
+const makePayment = (cardNum,item,fn)=>{
+	setTimeout(()=>{
+		
+		fn(cardNum,item);
+	}, 2000)
+}
+
+//이런식으로 만들면 순서를 보장할 수 없다(비동기로 만들면)
+const proc1 =()=>{
+ 	login("a001",function(userName){
+		console.log(userName,"님 환영합니다.");
+	})
+	
+	addToCart("딸기",function(item){
+		console.log(item,"을 장바구니에 담았습니다.")
+	})
+	
+	makePayment("123412341234", "딸기", function(cno,prod){
+		console.log(`${cno} 번호로 ${prod}를 결제 했습니다. `)
+	})
+	 
+}
+
+const proc2 = () =>{
+	//비동기 프로그램의 요청에 대한 응답을 순서대로 하려면
+	//전 단계 요청의 콜백 함수내에서 다음 처리를 수행한다
+	login("a001",function(userName){
+		console.log(userName,"님 환영합니다.");
+		
+		addToCart("딸기",function(item){
+			console.log(item,"을 장바구니에 담았습니다.")
+			
+			makePayment("123412341234", "딸기", function(cno,prod){
+				console.log(`${cno} 번호로 ${prod}를 결제 했습니다. `)
+			
+/* 				//결제 후 리뷰쓰기
+				review(function(){
+				
+					//쿠폰 받기
+					getCoupon(function(){
+						//이런식으로 처리하면 기능 추가할때마다 
+						//콜백함수가 추가된다
+						//그래서 콜백 지옥이 된다
+					})
+				})
+*/
+			
+			})
+		})
+	})
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인-무순서" id="btn1" onclick="proc1()">
+	<input type="button" value="확인-순서보장" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+	<div id="result1"></div>
+	<div id="result1"></div>
+
+</div>
+
+</body>
+</html>

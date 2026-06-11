@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script>
+
+/*   function main(){  //--------------2
+	setTimeout( () =>{  //--------------4
+		console.log("게시판 리스트 가져오기");
+	},2000)
+}
+const proc1 = () =>{///-------------------1
+	main();
+	console.log("게시판 리스트 출력"); //--------3
+} 
+  */
+ 
+
+function main(fn){ //---------------2
+	//fn은 main함수 호출시에 전달받은 function()이다 
+	//fn은 비동기 실행중에 호출해야한다...
+	setTimeout( () =>{  //-----------------3
+		console.log("게시판 리스트 가져오기");
+		
+		fn(); //-------------4
+	},2000)
+	//비동기 실행 도중에 fn함수를 호출한다 
+}
+
+const proc1 = () =>{ ///---------------1
+	
+	main(function(){
+		console.log("게시판 리스트 출력");//------------5
+	})
+} 
+
+</script>
+</head>
+<body>
+
+
+<div class="box">
+  <h3></h3>
+  
+  <input type="button" value="확인" onclick="proc1()">
+  <br>
+  <br>
+  <div id="result1"></div>
+</div>
+
+</body>
+</html>

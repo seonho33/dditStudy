@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin">
+
+<select id="adminBanlList" resultType="aubvo">
+SELECT
+  u.user_id        AS userId,
+  u.name           AS name,
+  u.division       AS division,
+  u.block_yn       AS blockYn,
+  b.block_reason   AS blockReason,
+  b.block_date     AS blockDate,
+  b.block_end_date AS blockEndDate,
+  s.store_name     AS storeName,
+  s.create_date    AS createDate,
+  s.status         AS status
+FROM users u
+
+LEFT JOIN (
+  SELECT user_id, block_reason, block_date, block_end_date
+  FROM (
+    SELECT b.*,
+           ROW_NUMBER() OVER(PARTITION BY b.user_id ORDER BY b.block_date DESC) rn
+    FROM blacklist b
+  )
+  WHERE rn = 1
+) b ON b.user_id = u.user_id
+
+LEFT JOIN (
+  SELECT user_id, store_name, create_date, status
+  FROM (
+    SELECT s.*,
+           ROW_NUMBER() OVER(PARTITION BY s.user_id ORDER BY s.create_date DESC) rn
+    FROM store s
+    WHERE TRIM(s.status) = '승인'
+  )
+  WHERE rn = 1
+) s ON s.user_id = u.user_id
+
+WHERE TRIM(u.division) != '관리자'   <!-- ✅ 추가: 관리자 제외 -->
+  AND (
+        (TRIM(u.division) != '점주')
+        OR (TRIM(u.division) = '점주' AND s.user_id IS NOT NULL)
+      )
+ORDER BY
+  CASE
+    WHEN TRIM(u.division) = '점주' THEN 0
+    WHEN TRIM(u.division) = '일반회원' THEN 1
+    ELSE 9
+  END,
+  u.name,
+  u.user_id
+</select>
+
+
+	
+  <!-- 블랙리스트 이력 INSERT -->
+  <insert id="insertBlacklist" parameterType="blvo">
+    INSERT INTO blacklist (
+        blacklist_id,
+        user_id,
+        block_reason,
+        block_date,
+        block_end_date
+    ) VALUES (
+        blacklist_seq.NEXTVAL,
+        #{userId},
+        #{blockReason},
+        SYSDATE,
+        #{blockEndDate}
+    )
+  </insert>
+
+  <!-- 사용자 차단 상태 변경 -->
+  <update id="updateUserBlockYn" parameterType="map">
+    UPDATE users
+       SET block_yn = #{blockYn}
+     WHERE user_id = #{userId}
+  </update>
+  
+  <select id="ownerApplyList" resultType="oavo">
+  SELECT
+    u.user_id AS userId,
+    u.name    AS name,
+    u.division AS division,
+    s.store_name AS storeName,
+    s.create_date AS createDate,
+    s.status AS status
+  FROM users u
+  JOIN store s ON s.user_id = u.user_id
+  WHERE TRIM(s.status) = '승인대기'
+  ORDER BY s.create_date DESC
+</select>
+  
+<update id="updateStoreStatus">
+  UPDATE store
+     SET status = #{status}
+   WHERE user_id = #{userId}
+</update>
+  
+ <!-- 공지사항 리스트: 상단고정(Y) 우선 + 최신순 -->
+  <select id="getNoticeList" resultType="noticeVO">
+    SELECT
+      notice_no       AS noticeNo,
+      notice_title    AS noticeTitle,
+      notice_content  AS noticeContent,
+      hit_count       AS hitCount,
+      top_yn          AS topYn,
+      create_date     AS createDate,
+      update_date     AS updateDate,
+      user_id         AS userId
+    FROM notice
+    ORDER BY
+      CASE WHEN top_yn = 'Y' THEN 0 ELSE 1 END,
+      create_date DESC
+  </select>
+
+  <!-- 미답변 QNA: answer_content가 NULL 또는 공백인 것 -->
+  <select id="getUnansweredQnaList" resultType="qnaVO">
+    SELECT
+      qna_id          AS qnaId,
+      qna_title       AS qnaTitle,
+      qna_content     AS qnaContent,
+      answer_content  AS answerContent,
+      status_yn       AS statusYn,
+      secret_yn       AS secretYn,
+      create_date     AS createDate,
+      answer_date     AS answerDate,
+      user_id         AS userId
+    FROM qna
+    WHERE answer_content IS NULL OR TRIM(answer_content) = ''
+    ORDER BY create_date DESC
+  </select>
+
+  
+<insert id="insertNotice" parameterType="map">
+  <selectKey keyProperty="noticeNo" resultType="int" order="BEFORE">
+    SELECT notice_seq.NEXTVAL FROM dual
+  </selectKey>
+
+  INSERT INTO notice (
+    notice_no,
+    notice_title,
+    notice_content,
+    hit_count,
+    create_date,
+    update_date,
+    user_id
+  ) VALUES (
+    #{noticeNo},
+    #{noticeTitle},
+    #{noticeContent},
+    0,
+    SYSTIMESTAMP,
+    SYSTIMESTAMP,
+    #{userId}
+  )
+</insert>
+  
+  
+<delete id="deleteNotice" parameterType="map">
+ 		 DELETE FROM notice WHERE notice_no = #{noticeNo}
+</delete>
+  
+<update id="updateNotice" parameterType="noticeVO">
+    UPDATE NOTICE
+       SET NOTICE_TITLE   = #{noticeTitle}
+         , NOTICE_CONTENT = #{noticeContent}
+         , UPDATE_DATE    = SYSDATE
+     WHERE NOTICE_NO      = #{noticeNo}
+</update>
+
+  <!-- 관리자 답변 등록(UPDATE) -->
+  <update id="updateQnaAnswer" parameterType="map">
+    UPDATE QNA
+       SET ANSWER_CONTENT = #{answerContent}
+         , ANSWER_DATE    = SYSDATE
+         , STATUS_YN      = '완료'
+     WHERE QNA_ID         = #{qnaId}
+  </update>
+  
+<select id="selectBotList" resultType="botvo">
+    SELECT
+      bot_id           AS botId,
+      category_name    AS categoryName,
+      question_keyword AS questionKeyword,
+      answer_content   AS answerContent,
+      active_yn        AS activeYn,
+      user_id          AS userId
+    FROM BOT
+    ORDER BY bot_id DESC
+</select>
+
+<select id="selectBanInfo" parameterType="string" resultType="aubvo">
+SELECT
+  u.user_id        AS userId,
+  u.name           AS name,
+  u.division       AS division,
+  u.block_yn       AS blockYn,
+
+  b.block_reason   AS blockReason,
+  b.block_date     AS blockDate,
+  b.block_end_date AS blockEndDate
+FROM users u
+LEFT JOIN (
+  SELECT user_id, block_reason, block_date, block_end_date
+  FROM (
+    SELECT b.*,
+           ROW_NUMBER() OVER(PARTITION BY b.user_id ORDER BY b.block_date DESC) rn
+    FROM blacklist b
+  )
+  WHERE rn = 1
+) b ON b.user_id = u.user_id
+WHERE u.user_id = #{userId}
+</select>
+
+  
+</mapper>

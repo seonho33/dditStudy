@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!--  flex-grow값 설정전과 설정후 실행 비교   -->
+
+<style>
+.flex-box {
+display  : flex;
+height : 100px;
+padding : 5px;
+
+}
+.flex-box div{
+  height : 90%;
+  margin : 5px;
+  background : #afeeee;
+}
+
+.item50{
+  width : 50px;
+ /*  flex-grow : 3; */
+}
+.item100{
+  width : 100px;
+ /* // flex-grow : 2; */
+  
+}
+.item250{
+  width : 250px;
+ /* //flex-grow : 1; */
+}
+div{
+  border : 1px solid blue;
+}
+.dd1{
+  flex-basis: 100px;
+}
+.dd2{
+ flex-basis: auto;
+ }
+
+.dd3{
+ flex-basis: 0px;
+}
+ #d1, #dd1, #ddd1{
+ flex-grow : 3;
+}
+#d2, #dd2,  #ddd2 {
+ flex-grow : 2;
+}
+#d3, #ddd3, #ddd3{
+ flex-grow : 1;
+}
+ 
+span{
+ color : red;
+}
+</style>
+</head>
+<body>
+<!-- flex-grow값 설정전과 설정후 실행 비교  -->
+
+<h3>flex-basis: 100px; <br>
+ 각요소의 정해진 길이를 무시하고    flex-basis 값이 우선<br>
+ #d1{width : 50px;} #d2{width : 100px}; #d3{width:250px;}<br>
+ ** flex-grow값을  다르게 설정 했을 경우 - 여백의 비율로 증가<br> 
+ #d1{ <span>flex-grow : 3</span>}
+ #d2{ <span>flex-grow : 2</span>}
+ #d3{ <span>flex-grow : 1</span>}
+  </h3>
+<div class="flex-box">
+  <div class="dd1 item50" id="d1">width:50px</div>
+  <div class="dd1 item100" id="d2">width:100px</div>
+  <div class="dd1 item250" id="d3">width:250px</div>
+</div>
+<hr>
+<h3>flex-basis: auto; 각 요소의 길이값이 우선, 각요소의 길이가 다르게 나타남<br>
+#dd1{width : 50px;} #dd2{width : 100px}; #dd3{width:250px;}<br>
+#dd1{ <span>flex-grow : 3</span>}
+#dd2{ <span>flex-grow : 2</span>}
+#dd3{ <span>flex-grow : 1</span>}
+</h3>
+<div class="flex-box">
+  <div class="dd2 item50" id="dd1">width:<br>50px</div>
+  <div class="dd2 item100" id="dd2">width:100<br>px</div>
+  <div class="dd2 item250" id="dd3">width:250px</div>
+</div>
+<hr>
+<h3>flex-basis: 0; 각 요소의 크기와 관계없이 <br>
+flex-grow 가 없을때 : 내용의 의 크기에 따라 나타남/flex-grow가 1일때 똑같은 크기<br>
+flex-grow : 각각 3, 2, 1 일때  <br>
+#ddd1{width : 50px;} #ddd2{width : 100px}; #ddd3{width:250px;}<br>
+#ddd1{ <span>flex-grow : 3</span>}
+#ddd2{ <span>flex-grow : 2</span>}
+#ddd3{ <span>flex-grow : 1</span>}</h3>
+ </h3>
+<div class="flex-box">
+  <div class="dd3 item50" id="ddd1">12</div>
+  <div class="dd3 item100" id="ddd2">1234</div>
+  <div class="dd3 item250"  id="ddd3">123456</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+    ============================================================
+    [MyBatis Mapper] Reservation & Notification Queries
+    ============================================================
+    NAMESPACE : reservation (IReservationDAO와 1:1 매핑)
+    AUTHOR    : Senior Architect
+    DATE      : 2025-01-28 (최종 수정)
+    ============================================================
+-->
+
+<mapper namespace="reservation">
+
+    <!-- ========== ResultMap 정의 ========== -->
+    
+    <!--
+        기본 예약 정보 매핑
+        DB 컬럼(Snake_Case) → Java 필드(CamelCase)
+    -->
+    <resultMap id="reservationMap" type="kr.or.ddit.store.vo.ReservationVO">
+        <id     property="reservId"     column="RESERV_ID"/>
+        <result property="guestCount"   column="GUEST_COUNT"/>
+        <result property="reservTime"   column="RESERV_TIME"/>
+        <result property="reservStatus" column="RESERV_STATUS"/>
+        <result property="note"         column="NOTE"/>
+        <result property="createDate"   column="CREATE_DATE"/>
+        <result property="amount"       column="AMOUNT"/>
+        <result property="userId"       column="USER_ID"/>
+        <result property="storeId"      column="STORE_ID"/>
+        <result property="storePicture" column="STORE_PICTURE"/>  <!-- pdf가게이미지 -->
+        
+        
+        <!-- JOIN 확장 필드 (STORE) -->
+        <result property="storeName"    column="STORE_NAME"/>
+        <result property="storeAddr"    column="STORE_ADDR"/>
+        <result property="storePhone"   column="STORE_PHONE"/>
+        
+        <!-- JOIN 확장 필드 (USERS + MEMBER) -->
+        <result property="userName"     column="USER_NAME"/>
+        <result property="userNo"       column="USER_NO"/>
+        
+        <!-- JOIN 확장 필드 (PAYMENT) -->
+        <result property="payStatus"    column="PAY_STATUS"/>
+    </resultMap>
+
+    <!-- ========== SQL Fragments (재사용) ========== -->
+    
+    <!--
+        예약 + 가게 정보 JOIN (기본)
+        USAGE: <include refid="baseJoinSelect"/>
+    -->
+    <sql id="baseJoinSelect">
+        SELECT 
+            R.RESERV_ID,
+            R.GUEST_COUNT,
+            R.RESERV_TIME,
+            R.RESERV_STATUS,
+            R.NOTE,
+            R.CREATE_DATE,
+            R.AMOUNT,
+            R.USER_ID,
+            R.STORE_ID,
+            S.STORE_NAME,
+            S.STORE_ADDR,
+            S.STORE_PHONE
+        FROM RESERVATION R
+        INNER JOIN STORE S ON R.STORE_ID = S.STORE_ID
+    </sql>
+
+    <!-- ========== SELECT Queries ========== -->
+    
+    <!--
+        [1] 활성 예약 목록 조회
+        CONDITION: RESERV_STATUS IN ('대기', '승인')
+        ORDER BY : CREATE_DATE DESC (최신순)
+        PARAMS   : userId (String)
+    -->
+    <select id="selectActiveReservations" parameterType="string" resultMap="reservationMap">
+        <include refid="baseJoinSelect"/>
+        WHERE R.USER_ID = #{userId}
+          AND R.RESERV_STATUS IN ('대기', '승인')
+        ORDER BY R.CREATE_DATE DESC
+    </select>
+
+    <!--
+        [2] 최근 예약 이력 조회 (알림용)
+        LIMIT    : 최대 10건
+        ORDER BY : CREATE_DATE DESC
+        PARAMS   : userId (String)
+        NOTE     : Oracle 12c+ FETCH FIRST 문법 사용
+    -->
+    <select id="selectRecentReservations" parameterType="string" resultMap="reservationMap">
+        <include refid="baseJoinSelect"/>
+        WHERE R.USER_ID = #{userId}
+        ORDER BY R.CREATE_DATE DESC
+        FETCH FIRST 10 ROWS ONLY
+    </select>
+
+    <!--
+        [3] 예약 상세 조회 (결제 정보 포함)
+        JOIN     : RESERVATION + STORE + PAYMENT (LEFT)
+        PARAMS   : reservId (Long)
+    -->
+    <select id="selectReservationById" parameterType="long" resultMap="reservationMap">
+        SELECT 
+            R.RESERV_ID,
+            R.GUEST_COUNT,
+            R.RESERV_TIME,
+            R.RESERV_STATUS,
+            R.NOTE,
+            R.CREATE_DATE,
+            R.AMOUNT,
+            R.USER_ID,
+            R.STORE_ID,
+            S.STORE_NAME,
+            S.STORE_ADDR,
+            S.STORE_PHONE,
+            S.STORE_PICTURE,   <!-- ✅ 추가 -->
+            P.PAY_STATUS
+        FROM RESERVATION R
+        INNER JOIN STORE S ON R.STORE_ID = S.STORE_ID
+        LEFT JOIN PAYMENT P ON R.RESERV_ID = P.RESERV_ID
+        WHERE R.RESERV_ID = #{reservId}
+    </select>
+
+    <!-- ========== UPDATE Queries ========== -->
+    
+    <!--
+        [4] 예약 상태 변경
+        UPDATE   : RESERVATION.RESERV_STATUS
+        PARAMS   : Map {reservId, newStatus}
+    -->
+    <update id="updateReservationStatus" parameterType="map">
+        UPDATE RESERVATION
+        SET RESERV_STATUS = #{newStatus}
+        WHERE RESERV_ID = #{reservId}
+    </update>
+
+    <!--
+        [5] 예약 취소
+        UPDATE   : RESERVATION.RESERV_STATUS = '취소'
+        PARAMS   : reservId (Long)
+        NOTE     : REFUND 테이블 처리는 Service Layer에서 별도 수행
+    -->
+    <update id="cancelReservation" parameterType="long">
+        UPDATE RESERVATION
+        SET RESERV_STATUS = '취소'
+        WHERE RESERV_ID = #{reservId}
+          AND RESERV_STATUS IN ('대기', '승인')
+    </update>
+
+    <!-- ========== 🆕 점주용 예약 관리 쿼리 ========== -->
+    
+    <!--
+        [6] 특정 가게의 모든 예약 조회 (회원 정보 포함)
+        @param storeId (String) - 가게 ID
+        @return List<ReservationVO>
+        @join RESERVATION + STORE + USERS + MEMBER
+    -->
+    <select id="selectReservationsByStore" parameterType="string" resultMap="reservationMap">
+        SELECT 
+            R.RESERV_ID,
+            R.GUEST_COUNT,
+            R.RESERV_TIME,
+            R.RESERV_STATUS,
+            R.NOTE,
+            R.CREATE_DATE,
+            R.AMOUNT,
+            R.USER_ID,
+            R.STORE_ID,
+            S.STORE_NAME,
+            S.STORE_ADDR,
+            S.STORE_PHONE,
+            U.NAME AS USER_NAME,
+            M.USER_NO
+        FROM RESERVATION R
+        INNER JOIN STORE S ON R.STORE_ID = S.STORE_ID
+        INNER JOIN USERS U ON R.USER_ID = U.USER_ID
+        INNER JOIN MEMBER M ON R.USER_ID = M.USER_ID
+        WHERE R.STORE_ID = #{storeId}
+        ORDER BY R.CREATE_DATE DESC
+    </select>
+    
+    <!--
+        [7] 특정 상태의 예약 건수 조회
+        @param storeId (String) - 가게 ID
+        @param status (String) - 조회할 상태 ("대기", "승인", "거절")
+        @return int
+    -->
+    <select id="countReservationsByStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM RESERVATION
+        WHERE STORE_ID = #{storeId}
+          AND RESERV_STATUS = #{status}
+    </select>
+
+    <!-- ========== 🆕 [8] 예약된 시간대 조회 (2026-01-28 추가) ========== -->
+    
+    <!--
+        [목적]
+        - 가게 상세 페이지에서 예약 가능한 시간을 표시하기 위해
+        - 특정 날짜에 이미 예약된 시간대를 조회
+        
+        [파라미터]
+        - storeId (String)   : 가게 ID
+        - reservDate (String): 예약 날짜 (YYYY-MM-DD 형식)
+        
+        [반환값]
+        - List<String>: 예약된 시간 리스트 (HH:MM 포맷)
+        - 예시: ["10:00", "14:00", "18:00"]
+        
+        [로직]
+        1. RESERV_TIME 컬럼에서 날짜 부분(1~10자) 추출하여 파라미터와 비교
+        2. RESERV_TIME 컬럼에서 시간 부분(12~16자) 추출 (HH:MM)
+        3. 취소/노쇼 상태는 제외 (다시 예약 가능)
+        4. DISTINCT로 중복 제거
+        5. 시간순 정렬
+        
+        [RESERV_TIME 컬럼 구조]
+        - 형식: "YYYY-MM-DD HH:MM" (VARCHAR2)
+        - 예시: "2026-01-30 14:00"
+        - SUBSTR(RESERV_TIME, 1, 10)  → "2026-01-30"
+        - SUBSTR(RESERV_TIME, 12, 5)  → "14:00"
+    -->
+    <select id="getBookedTimes" parameterType="map" resultType="string">
+        SELECT DISTINCT SUBSTR(RESERV_TIME, 12, 5) AS TIME_SLOT
+        FROM RESERVATION
+        WHERE STORE_ID = #{storeId}
+          AND SUBSTR(RESERV_TIME, 1, 10) = #{reservDate}
+          AND RESERV_STATUS NOT IN ('취소', '노쇼')
+        ORDER BY TIME_SLOT
+    </select>
+    
+<!-- [9] 내 예약인지 확인 (보안/오작동 방지) -->
+<select id="isMyReservation" parameterType="map" resultType="int">
+  SELECT COUNT(*)
+  FROM RESERVATION
+  WHERE RESERV_ID = #{reservId}
+    AND USER_ID = #{userId}
+</select>
+
+<!-- [10] 결제 상태 취소 처리 -->
+<update id="cancelPayment" parameterType="long">
+  UPDATE PAYMENT
+  SET PAY_STATUS = '취소'
+  WHERE RESERV_ID = #{reservId}
+    AND PAY_STATUS != '취소'
+</update>
+
+
+</mapper>

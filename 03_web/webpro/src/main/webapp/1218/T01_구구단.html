@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+const proc1 = () => {
+		let str = "";
+
+	while(true){
+		
+		//입력
+		gugu = prompt("구구단입력");
+		
+		//누적변수
+		str += `<br>***${gugu}단***<br>`;
+		for(i=1; i<=9; i++){
+			str += `${gugu} * ${i} = ${gugu*i}<br>`;
+		}
+	
+		document.querySelector("#result1").innerHTML = str;
+
+		cont = confirm("계속하시겠습니까? 확인/취소")
+		
+		if(!cont) break;		
+	}
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+</body>
+</html>

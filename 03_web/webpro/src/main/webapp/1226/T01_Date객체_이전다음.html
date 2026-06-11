@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+//오늘의 날짜 생성 | new date
+today = new Date();
+let cnt = 0;
+
+//span 태그에 출력
+document.addEventListener("DOMContentLoaded",function(){
+	spanTag = document.querySelector("#text");
+	spanTag.innerText = today.toLocaleDateString();
+})
+
+const proc1 =(target) =>{
+	//target : 이전 다음 클릭한 버튼을 this 파라미터로 받은 변수
+	btnStr = target.value;		//이전 또는 다음 문자가 들어감
+	console.log(btnStr);
+	//1일의 millisec
+	onetime = 1*1000*60*60*24;
+	//오늘의 millisec
+	totime = today.getTime();
+	
+	if(btnStr =="이전"){
+		cnt --;
+	}else if(btnStr =="다음"){
+		cnt ++;
+	}
+	
+	//총 millisec를 가지고 다시 Date객체를 생성
+	newDay = new Date(totime+(cnt*onetime))
+	//newDay의 값을 span 태그에 출력
+	
+	spanTag.innerText = newDay.toLocaleDateString();
+	
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	span 태그에 오늘 날짜를 출력한다<br>
+	이전다음 버튼에 대항 이벤트 핸들러 작성<br>
+	현재 span 태그의 값을 가져와서 하루의 값을 더하거나 뺀다<br>
+	하루의 값을 더하거나 뺀 값을 다시 span 태그에 출력<br>
+	</h3>
+
+	<input type="button" value="이전" onclick="proc1(this)">
+	<span id="text"></span>
+
+	<input type="button" value="다음" onclick="proc1(this)">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+
+<script>
+
+/*  let vname=null;
+function getData(userId){
+	
+	setTimeout(()=>{
+		console.log("서버에서 데이타 받아오기 - userId가 a001인 데이타의 이름 가져오기");
+		vname = "김은대";
+	},2000)
+}
+
+
+const proc1 = () =>{
+	
+	getData("a001");
+	console.log("결과데이타 " , vname);
+	
+}  */
+ 
+ 
+//콜백함수로 처리 
+ function getData(userId, fn){
+	
+	setTimeout(()=>{
+		console.log("서버에서 데이타 받아오기 - userId가 a001인 데이타의 이름 가져오기");
+		let vname = "김은대";
+		
+		fn(vname);
+	},2000)
+	
+}
+
+const proc1 = () =>{
+	
+	getData("a001", function(data){
+		console.log("결과데이타 " , data);
+	})
+	
+}
+
+ 
+</script>
+</head>
+<body>
+
+
+<div class="box">
+  <h3></h3>
+  
+  <input type="button" value="확인" onclick="proc1()">
+  <br>
+  <br>
+  <div id="result1"></div>
+</div>
+
+</body>
+</html>

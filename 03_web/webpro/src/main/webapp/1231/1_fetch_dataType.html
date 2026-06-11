@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public.css">
+
+<script type="text/javascript">
+
+const proc1 = () =>{
+	fetch("http://localhost/webpro/1231/obj.jsp")
+	.then(res=>{
+		console.log(res);	//Responese 객체
+		
+		if(res.ok){
+			return res.json();	
+			//서버에서 text기반의 String데이터인 json형식의
+			//데이터를 받아서 javascript객체로 역직렬화하는 과정
+		}
+	})
+	.then(data=>{
+		//data = javascript 객체로 역직렬화한 데이터
+		console.log(data)
+		//{name:'홍길동',addr:'대전',tel:'010-1234-1234'}
+		
+		//출력
+		adata = Object.entries(data);	//배열로 리턴
+		console.log(adata);
+		let str = "";		
+		
+		adata.forEach( item =>{
+			str += `${item[0]} : ${item[1]} <br>`
+		})
+		
+		document.querySelector("#result1").innerHTML=str;
+		
+	}).catch(err =>{
+		console.log(err);
+	})
+}
+
+const proc2 = () =>{
+	
+	fetch("http://localhost/webpro/1231/arr.jsp")
+	.then(res=> res.json())
+	.then(data=>{
+		//["홍길동","개나리","진달래","무궁화","삼천리","금수강산"]
+		let str = "<ul>";
+		data.forEach(item=>{
+			str += `<li>${item}</li>`;
+		})
+		str +="</ul>";
+		document.querySelector("#result2").innerHTML = str;
+	})
+	.catch(err=>console.log(err));
+	
+	
+	
+}
+
+const proc3 = () =>{
+	
+//	fetch("서블릿 실행") > service >DAO > mapper>db처리
+//	db처리 결과를 dao -> service ->controller 서블릿으로 전달
+//	controller에서 view 페이지로 이동 -> 응답데이터 json데이터 생성
+//	생성된 응답 데이터는 비동기(fetch) them 함수의 콜백function
+//  단 데이터를 직접 받는게 아니고 Response 객체로 받아서 
+//	json() 메소드로 역직렬화 해서 javascript 객체로 변환 후 출력
+//
+
+
+	fetch("http://localhost/webpro/1231/obj_arr.jsp")
+	.then(res => res.json())
+	.then(data=>{
+		//[{name...},{name...},...]
+		
+		let code = "";
+		
+		data.forEach((item,idx)=>{
+			code += `****${idx}번째 데이터****<br>
+					이름 : ${item['name']}<br>
+					주소 : ${item['addr']}<br>
+					전화번호 : ${item['tel']}<br><br>`
+		})
+		
+		document.querySelector("#result3").innerHTML = code;
+	})
+	.catch(err=>console.log(err))
+}
+
+
+</script>
+
+<style>
+.result{
+ display: flex;
+ flex-direction:  row;
+}
+.result div{
+  flex : 25%;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	  버튼 클릭하면 <br>
+	  1. 각 해당  자바스크립트 함수를 호출하여 <br>
+	  2. 서버프로그램(servlet, jsp)을 실행 - get방식   <br>
+	  3. 서버프로그램내에서 db연결하여 CRUD처리 하고 처리결과로 응답 데이타를 생성한다 <br>
+	  4. Response객체를 then()의 콜백함수로 받는다 <br>
+	  5. Response를 객체를 통해서 응답데이터를 얻는다<br>
+	  6. 응답 데이터로 출력내용을 작성하여  출력<br>
+	</h3>
+	
+	
+	<input type="button" value="obj" onclick="proc1()">
+	<input type="button" value="arr" onclick="proc2()">
+	<input type="button" value="obj_arr" onclick="proc3()">
+	
+	<br><br>
+
+   <div class = "result">
+	    <div id="result1"></div>
+	    <div id="result2"></div>
+	    <div id="result3"></div>
+	
+   </div>    
+    
+</div>
+
+
+
+</body>
+</html>
+
+
+
+

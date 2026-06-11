@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.test2.mapper.ITestMapper2">
+
+<insert id="register" parameterType="kr.or.ddit.vo.crud.CrudMember">
+	<selectKey keyProperty="userNo" order="BEFORE" resultType="int">
+		select seq_member.nextval from dual
+	</selectKey>
+
+insert into	member (
+	USER_NO, 
+	USER_ID, 
+	USER_PW, 
+	USER_NAME
+)values(
+	#{userNo},
+	#{userId},
+	#{userPw},
+	#{userName}
+)
+
+</insert>
+
+<select id="getList" resultType="kr.or.ddit.vo.crud.CrudMember">
+select	USER_NO, 
+		USER_ID, 
+		USER_PW, 
+		USER_NAME,
+		REG_DATE,
+		UPD_DATE
+from	member
+</select>
+
+<delete id="deleteMember" parameterType="int">
+	delete
+	from	member
+	where	user_no=#{userNo}
+</delete>
+
+<delete id="deleteMemberAuth" parameterType="int">
+	delete
+	from	member_auth
+	where	user_no=#{userNo}
+</delete>
+
+<resultMap type="kr.or.ddit.vo.crud.CrudMember" id="memberMap">
+	<id column="user_no" property="userNo"/>
+	<result column="user_id" property="userId"/>
+	<result column="user_pw" property="userPw"/>
+	<result column="user_name" property="userName"/>
+	<result column="reg_date" property="regDate"/>
+	<result column="upd_date" property="updDate"/>
+	<result column="enabled" property="enabled"/>
+	<collection property="" resultMap="memberAuthList" />
+</resultMap>
+
+<resultMap type="kr.or.ddit.vo.crud.CrudMemberAuth" id="memberAuthList">
+	<result column="user_no" property="userNo"/>
+	<result column="auth" property="auth"/>
+</resultMap>
+
+<select id="getMember">
+	select	m.user_no,
+			m.user_id,
+			m.user_pw,
+			m.user_name,
+			m.reg_date,
+			m.upd_date,
+			m.enabled,
+			ma.auth
+	from	member m
+	left join member_auth ma
+	on(m.user_no = ma.user_no)			
+	where	m.user_no = #{userNo}
+</select>
+
+
+</mapper>

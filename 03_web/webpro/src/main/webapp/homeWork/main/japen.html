@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/mystyle.css">
+<script src="../js/japen.js"></script>
+
+<style type="text/css">
+</style>
+
+
+
+</head>
+<body>
+<div class="main-food">
+	<div class="card" onclick="cart('j1')">
+		<img alt="김치찌개.jpg" src="../images/japen/돈부리.jpg">
+		<div class="food-name">돈부리</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('j2')">
+		<img alt="불고기.jpg" src="../images/japen/돈코츠라멘.jpg">
+		<div class="food-name">돈코츠라멘</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('j3')">
+		<img alt="비빔밥.jpg" src="../images/japen/초밥.jpg">
+		<div class="food-name">초밥</div>
+		<div class="food-price">10,000</div>
+	</div>
+</div>
+
+<form class="cartData" action="shopcart.html" method="post">
+	<input type="hidden" name="food-name" id="food-name">
+	<input type="hidden" name="food-price" id="food-price">
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style type="text/css">
+div {
+	border: 2px solid orange;
+	margin: 10px;
+	padding: 10px;
+}
+p:first-child{
+	background: pink;
+}
+p:nth-child(2n) {
+	background: silver;	
+}
+p:nth-child(2n+1) {
+	color : red;
+}
+table {
+	border: 4px double green;
+}
+td {
+	width: 100px;
+	height: 40px;
+	text-align: center;
+}
+
+table tr:first-child {
+	background-color: #fad9a0;
+}
+table > tbody > tr:nth-child(2n-1) {
+	background-color: pink;	
+}	
+
+</style>
+
+</head>
+<body>
+
+<div>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+</div>
+
+<div>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+<p>무궁화 꽃이 피었습니다</p>
+</div>
+
+<table border="1">
+	<tr>
+		<th>제목1</th>
+		<th>제목2</th>
+		<th>제목3</th>
+		<th>제목4</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>2</td>
+		<td>3</td>
+		<td>4</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>2</td>
+		<td>3</td>
+		<td>4</td>
+	</tr>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.free.mapper.IFreeMapper">
+
+<sql id="searchWord">
+	<if test="searchWord !=null and searchType == 'title'">
+		and (free_title like '%'||#{searchWord}||'%')	
+	</if>
+	<if test="searchWord !=null and searchType == 'writer'">
+		and (free_writer like '%'||#{searchWord}||'%')	
+	</if>
+</sql>
+
+
+<insert id="insertFreeBoard" parameterType="freeVO" useGeneratedKeys="true">
+	<selectKey keyProperty="freeNo" resultType="int" order="BEFORE"> 
+		select seq_free.nextval from dual
+	</selectKey>
+	insert into free(
+		FREE_NO,
+		FREE_TITLE,
+		FREE_CONTENT,
+		FREE_WRITER,
+		FREE_DATE
+	)values(
+		#{freeNo},
+		#{freeTitle},
+		#{freeContent},
+		#{freeWriter},
+		sysdate
+	)
+</insert>
+
+<select id="selectFreeBoard" parameterType="int" resultType="freeVO">
+	select	*
+	from	free
+	where	free_No=#{freeNo}
+</select>
+
+<update id="incrementHit" parameterType="int">
+	update	free
+	set		free_hit = free_hit + 1
+	where	free_no = #{freeNo}
+</update>
+
+<delete id="deleteFreeBoard" parameterType="int">
+	delete
+	from	free
+	where	free_no = #{freeNo}
+</delete>
+
+<update id="updateFreeBoard" parameterType="freeVO">
+	update	free
+	set		
+			free_Title = #{freeTitle},
+			free_Content = #{freeContent},
+			free_date = sysdate
+	where	free_no = #{freeNo}
+</update>
+
+<select id="selectFreeBoardList" parameterType="paginationInfoVO" resultType="FreeVO">
+	select	*
+	from	free
+
+</select>
+<!-- <select id="selectFreeBoardList" parameterType="paginationInfoVO" resultType="FreeVO">
+	select *
+	from(
+		select
+				row_number() over(order by free_no desc) rnum,
+				free.*
+		from	free
+		where	1=1
+		<include refid="searchWord" />
+	)b
+	<![CDATA[
+		where b.rnum >= #{startRow} and b.rnum <= #{endRow}
+	]]>
+</select> -->
+
+<select id="selectFreeBoardCount" parameterType="paginationInfoVO">
+	select	count(free_no)
+	from	free
+	where	1=1
+	<include refid="searchWord"/>
+</select>
+
+</mapper> 
+ 

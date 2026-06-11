@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link  rel="stylesheet" href="../css/public_css.css">
+
+<style type="text/css">
+span{
+  color : red;
+  font-size : 1.2rem;
+}
+</style>
+
+<script type="text/javascript">
+const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 };
+
+const proc1 = ()=>{
+	for(let car in myCar){
+	str = `${car}  ${myCar[car]}<br>`;
+	
+	document.querySelector("#result1").innerHTML += str;
+	}
+}
+
+const proc2 =() =>{
+	//객체의 key들만 모아서 배열로 리턴...
+	
+	let keyStr = Object.keys(myCar);
+	
+	let str = "";
+/* 	for(let key in keyStr){
+		str = `${car}  ${myCar[car]}<br>`;
+		
+		document.querySelector("#result1").innerHTML += str;
+	} */
+
+	keyStr.forEach((key, idx) => {
+		str += `${idx} : ${key} <br>`;
+		document.querySelector("#result2").innerHTML = str;
+	})
+}
+
+const proc3 = () =>{
+	let valueStr = Object.values(myCar);
+	
+	let str ="";
+	
+	valueStr.forEach((v,idx)=>{
+		str = `${idx} : ${v}<br>`;
+		document.querySelector("#result3").innerHTML += str;
+	})
+}
+
+const proc4 = () =>{
+	let str = "";
+	let entries = Object.entries(myCar);
+	entries.forEach((ent,idx)=>{
+			str += `${ent[0]} : ${ent[1]}<br>`;
+			
+	})
+			document.querySelector("#result4").innerHTML = str;
+}
+
+const proc5 = () =>{
+		const entries = Object.entries(myCar);
+		let str = "";
+		
+		entries.forEach(([entK,entV],idx)=>{
+			str += `${idx}. ${entK} : ${entV} <br>`
+		})
+			document.querySelector("#result5").innerHTML = str;
+}
+
+</script>
+
+
+</head>
+<body>
+<div class="box">
+
+  <h3>1. 객체 속성과 값<br>
+   const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 };<br>
+  for ~ in
+  </h3>
+  <input type="button" value="확인" onclick="proc1()">
+  <br><br>
+  1_리터럴객체순환반복f_form.html
+  <div id="result1"></div>
+</div>
+
+<!-- <div class="box">
+
+  <h3>객체 속성과 값<br>
+  const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 };<br>
+   for ~ of :  <span>오류   myCar is not iterable</span><br>
+     객체 리터럴은  iterable객체가 아님 
+  </h3>
+  <input type="button" value="확인" onclick="proc11()">
+  <br><br>
+  
+  <div id="result11"></div>
+</div> -->
+
+<div class="box">
+
+  <h3>2. 객체 속성과 값<br>
+   const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 }; <br>
+  <span>Object.keys(myCar)</span> - 객체의 <span>key들만 추출</span>하여 배열로 리턴 
+  </h3>
+  <input type="button" value="확인" onclick="proc2()">
+  <br><br>
+  
+  <div id="result2"></div>
+</div>
+
+<div class="box">
+
+  <h3>3. 객체 속성과 값<br>
+  const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 };<br>
+  <span>Object.values(myCar)</span> - 객체의 <span>value들만 추출</span>하여 배열로 리턴 
+  </h3>
+  <input type="button" value="확인" onclick="proc3()">
+  <br><br>
+  
+  <div id="result3"></div>
+</div>
+
+<div class="box">
+
+  <h3>4. 객체 속성과 값<br>
+  const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 }; <br>
+  <span>Object.entries(myCar)</span>-객체의 <span>key와 value들을 추출</span>하여 배열로 리턴 
+  </h3>
+  <input type="button" value="확인" onclick="proc4()">
+  <br><br>
+  
+  <div id="result4"></div>
+</div>
+
+
+<div class="box">
+
+  <h3>4. 객체 속성과 값 - 구조분해 <br>
+  구조분해 : 배열이나 객체를 분해해서 각각의 값을 개별적인 변수에 할당하는 표현식 <br>
+  const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 }; <br>
+  <span>Object.entries(myCar)</span>-객체의 <span>key와 value들을 추출</span>하여 배열로 리턴 
+  </h3>
+  <input type="button" value="확인" onclick="proc5()">
+  <br><br>
+  
+  <div id="result5"></div>
+</div>
+
+
+
+
+</body>
+</html>

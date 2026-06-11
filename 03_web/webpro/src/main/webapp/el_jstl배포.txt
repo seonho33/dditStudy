@@ -1,0 +1,182 @@
+el  jstl 은 jsp의 페이지의 자바코드를 줄여서
+더 쉽게 웹페이지를 작성하도록 돕는 기술
+
+el(Expression Language)은 데이타를 더 간결하게 표현(출력)하기 위 한 언어이고
+<%=  %>   ${}
+
+jstl(java Pages Standard Tag)은 자바 서버페이지 표준 태그 라이브러리
+ 반복문, 조건문 포멧팅 등 자주 사용되는 기능을 미리 만들어 놓은 태그 모음 
+
+
+EL  JSP 가 기본으로 제공해주지만,
+
+1. 변수 선언 2. 조건문 3. 반복문 
+이런 기능들을 태그로 만들어, 편하게 사용하라고 라이브러리로 만들어 둔게 JSTL 이다. 
+
+ 코드의 유지보수성을 높이고 JSP 페이지에서 자바 로직을 분리해 보다 깔끔한 구현을 가능하게 함
+ JSP 페이지는 스크립틀릿 없이도 동작하며, 유지보수성이 높아집니다.
+
+
+설명:
+1.  JSTL core 라이브러리를 사용하기 위한 선언----------
+- 지시자 설정 필수 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
+2. controller에서 저장한 값 꺼내기--------------  
+String res = request.getAttribute("result")
+MemberVO   vo = session.getAttribute("loginok")
+
+sessionScope.loginok
+requestScope.result 
+
+
+3.변수선언
+<c:set var="mvo" value="${sessionScope.loginok}"> </c:set>
+var : 변수이름 ( var 로만 사용 가능 ) 
+value : 넣을 값. ( 숫자일 경우도 "  " 쌍따움표만 가능하다. 자동형변환 해준다. ) 
+
+: 변수 제거  
+ <c:remove var="id" /> 
+
+JSTL변수 JSTL에서 가져다 쓸 수 있다 
+<c:set var="pay" value="300"/>
+<c:set var="editpay" value="${ pay+100 }"/>
+
+
+
+4. 출력
+${mvo.mem_id}
+${sessionScope.loginok.mem_id}: 
+
+
+5 . controller에서 저장한 값 꺼내서 변수에 대입
+request.setAttribute("bookList")  
+book = request.getAttribute("bookList")
+<c:set var="bookList" value="${requestScope.bookList}" />
+
+6. if----------------
+<c:if test="조건"></c:if>
+<c:if test="${not empty bookList}"></c:if>
+
+<c:if test="${vo.endPage < vo.totalPage}">
+        <li class="page-item">
+            <a id="next" class="page-link">Next</a>
+       </li>
+ </c:if>
+
+ 7. if-else 문----
+<c:choose>
+   <c:when test="조건"> </c:when>>
+   <c:otherwise></c:otherwise>
+<c:choose
+------
+ <c:choose>
+  <%--  loginok가 null이면 로그인 폼을 출력 --%>
+    <c:when test="${res == null}">
+
+    </c:when>
+</c:choose>
+--------
+<c:choose>
+  <%--  loginok가 null이면 로그인 폼을 출력 --%>
+    <c:when test="${not empty res}}">
+        <form  id="flogin" >
+        </form>
+    </c:when>
+</c:choose>
+------
+
+8. 반복1
+<c:forEach var="book" items="${bookList}">
+        ${book.book_no}   
+	${book.book_title}       
+  </c:forEach>
+
+8. 반복2와 if~else-----------
+ <c:forEach var="i" begin="${vo.startPage}" end="${vo.endPage}">
+    <c:choose>
+             <c:when test="${i == cpage}">
+                     ${i}
+            </c:when> 
+           <c:otherwise>
+                      ${i}
+            </c:otherwise>
+        </c:choose>
+</c:forEach>
+
+
+꺼내기 변수에 저장
+<c:set var="vo" value="${requestScope.PageVO}" />
+ <c:set var="cpage" value="${requestScope.cpage}" /> 
+
+
+---------------------------------------
+기본적으로  <% %> 자바변수를  EL ${ } 에서 사용하려면 
+JSTL 중개 가 필요
+
+Java => JSTL   : JSTL 은 Java 값을 바로 가져올 수 있고,
+
+JSTL => EL   : JSTL이 가져온 Java값을 EL은 바로 사용할 수 있다. 
+
+자바 변수/객체 를 JSTL 을 통해 EL 로 가져와 사용 
+
+ 
+자바
+<% String nick = "BackCoder";  %>
+
+Java값   을 JSTL 로 
+<c:set var="id2" value="<%=nick%>"/>   
+
+JSTL 애서 EL로
+${ id2 }  
+${ id2.toUpperCase() } : Java 변수 가져오면 Java 메소드 사용 가능  
+
+ ------------------------------------------------------------------------
+JSTL 의 var 변수에는 value 값으로 객체, ArrayList 등 모든 Type 을 다 넣을 수 있다. 
+
+ <% HashMap<String, memberDTO> dtomap = new HashMap<>(); %> 
+
+<c:set var="dto" value="<%=dtomap%>"/>
+
+
+ JSTL변수 당연히 JSTL에서 가져다 쓸 수 있다 
+<c:set var="pay" value="300"/>
+<c:set var="editpay" value="${ pay+100 }"/>
+
+---------------------------------------------------------------------
+
+컨트롤러에서 이미 저장 됨
+List<BookBO> list = service- dao - mapper를 통해  db에서 리스트 셀렉트;
+request.setAttribute("boardList", list);
+
+
+view  jsp에서  꺼내서 사용- 출력
+<%
+ List<BookVO>  blist  = (List<BookBO>) request.getAttribute("boardList") 
+ for(int i=0; i<blist.size(); i++){
+     BookVO  vo = blist.get(i);
+%>
+
+     <div><%=  vo.getTitle() %></div>
+     <div><%=  vo.getName() %></div>
+<%
+}
+%>
+------------------------------------------------------
+request.getAttribute(boardList)로  꺼내서 스크립틀릿 변수(blist)에 담을 필요가 없습니다.
+JSTL/EL은 ${boardList} 로 바로 접근할 수 있습니다.
+
+<c:forEach var="book" items="${bookList}">
+        <div>${book.book_no}  </div>
+	 <div>${book.book_title}  </div>     
+  </c:forEach>
+
+
+
+
+
+
+
+
+

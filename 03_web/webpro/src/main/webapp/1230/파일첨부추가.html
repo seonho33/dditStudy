@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public_css.css">
+
+<script type="text/javascript">
+
+window.onload = () =>{
+	//btn1을 검색 - 이벤트 핸들러 작성
+	btn = document.querySelector("#btn1");
+	box = document.querySelector(".box");
+	
+	count = 0;
+	
+	btn.addEventListener('click',function(){
+		count ++;
+		//p태그 생성
+		ptag = document.createElement('p');
+		ptag.innerHTML = `<input type="file" class="file" name="file">
+							<input type="button" class="btnfile" value="삭제${count}">`
+		box.appendChild(ptag);
+	})
+	
+	//삭제 버튼에 대한 이벤트
+ 	box.addEventListener('click',function(ev){
+				
+		if(ev.target.closest('input')) ev.target.closest('p').remove();
+
+ 	})// << 새롭게 생성된 요소라서 부모를 이용한 이벤트 위임방식으로 해야한다 	
+	
+}
+
+</script>
+
+</head>
+<body>
+
+
+<div class="box">
+
+	<h3>
+	</h3>
+	<input type="text" id="name" name="name">
+	<br>
+	<input type="file" id="file" name="file">
+	<input type="button" value="추가" id="btn1">
+	
+  
+</div>
+</body>
+</html>

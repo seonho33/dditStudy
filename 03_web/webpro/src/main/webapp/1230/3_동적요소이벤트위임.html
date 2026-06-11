@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>이벤트 위임 예제</title>
+  <link rel="stylesheet" href="../css/public_css.css">
+  <style>
+    .dd, .aa { border: 1px solid green; padding: 5px; margin: 5px; cursor: pointer; }
+    .dd p { margin: 2; }
+    #container{
+      border: 3px solid blue;
+      margin: 5px;
+    }
+    
+  </style>
+  <script type="text/javascript">
+  let idx = 0;
+  
+  window.onload = () =>{
+	  btn = document.querySelector("#addBtn");
+	  btn.addEventListener('click',function(){
+		  console.log(this);
+		  console.log(event.target);
+		  
+		  newDiv = document.createElement('div');
+		  newDiv.className = "dd";
+		  //ptag = document.createElement('p');
+		  newDiv.innerHTML = `<p>기존 dd 내부 p(${++idx})</p>`
+		  
+		  newDiv.style.border = "3px solid green"
+		  document.querySelector("#container").appendChild(newDiv);
+	  })
+	  
+	  
+	  //p태그에 이벤트핸들러 작성
+/* 	  ddp = document.querySelectorAll('.dd p');
+	  ddp.forEach(dp =>{
+		dp.addEventListener('click',function(){
+		  dp.style.background = "pink";
+	  	})
+	  }) */
+	  //.dd를 검색
+	  // 이미 만들어져있었던 기본의 .dd에만 이벤트 핸들러가 적용된다
+	  // 새롭게 만들어진 .dd는 이벤트 핸들러가 적용되지 않는다.
+	  // 그래서 새롭게 만들어진 요소는 이벤트 위임방식을 이용해야 적용된다
+/* 	  dd=document.querySelectorAll('.dd'); //NodeList 리턴 forEach 사용가능
+	  
+	  //배열로 변경
+	  arrdd = Array.from(dd)//= arrdd = [...dd]
+	  
+	  arrdd.forEach(arr =>{
+		  arr.addEventListener('click', function(){
+			  //.dd내부의 p태그를 검색..
+			  arr.querySelectorAll('p').forEach(item =>{
+				  item.style.background="red"
+			  })
+		  })
+	  }) */
+	  //-----------------이벤트 위임방식 - 처리 -#contatiner 에 위임
+	  // 기존의 .dd나 새롭게 생긴 .dd 모두 이벤트 핸들러 실행
+	  // 새롭게 생성된 요소는 반드시 이벤트위임 방식으로 처리해야한다
+	  cont = document.querySelector("#container");
+	  
+	  cont.addEventListener('click', function(ev){
+		  vdd = ev.target.closest('.dd');
+		  console.log(vdd);
+		  if(vdd){
+			//.dd 의 자식요소 p태그
+			[...vdd.children].forEach(item =>{
+				item.style.background = "red";
+			})
+		  }
+	  })
+  }
+  </script>
+  
+</head>
+<body>
+   <br><br>
+<div class="box">
+   <button id="addBtn">.dd 추가하기</button>
+   <br>
+   
+  <div id="container">
+    <div class="dd">
+       <p>기존 dd 내부 p1</p>
+       <p>기존 dd 내부 p2</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

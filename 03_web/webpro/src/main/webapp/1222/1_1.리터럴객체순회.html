@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public.css">
+
+<script>
+const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 };
+
+</script>
+
+</head>
+<body>
+
+<h3>const myCar = { make : "BMW" ,  model : "X5"  , year : 2020 }</h3>
+
+<div class="box">
+
+	<h3>
+	 `make :${myCar['make']} <br>
+			 model : ${myCar['model']}<br>
+			 year :${myCar['year']}  `
+	</h3>
+	
+	<input type="button" value="확인" onclick="proc1()">
+	
+	<br><br>
+
+    <div id="result1"></div>
+    
+</div>
+
+<div class="box">
+
+	<h3>
+	반복문이용 : k변수는 객체의 key를 나타냄<br>
+	 for(let k  in myCar){ <br>
+	    str += ${k} :  ${myCar[k]} <br>
+	  }<br>
+	</h3>
+	
+	<input type="button" value="확인" onclick="proc2()">
+	
+	<br><br>
+
+    <div id="result2"></div>
+    
+</div>
+
+
+</body>
+</html>

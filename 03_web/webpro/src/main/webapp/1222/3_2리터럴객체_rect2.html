@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+
+const rect = {
+	garo : 5,
+	sero : 4,
+}
+
+
+
+const proc1=()=>{
+	
+	rect.area = function(){
+		return this.garo*this.sero;
+	}
+	
+	rect.circum = function(){
+		return (this.garo + this.sero)*2
+	};
+
+	//정보출력 함수 호출
+	printObj("#result1");
+}
+
+const printObj = (out) =>{
+	let str = "";
+	Object.entries(rect).forEach(([entK,entV]) =>{
+//str += `${entK} : ${entV}<br>` ////메소드일경우 메소드코드가 직접 출력된다		
+		console.log(typeof entV);
+		//alert(typeof entV);
+		if(entV instanceof Function){
+			//entV에 대입된 값이 Function 타입이면 entV의 값이 아니라
+			//메소드를 호출한다.
+			//함수는 key값이 함수이름.. Value값은 계산식
+			str +=`${entK} : ${rect[entK]()}<br>`
+		}else{
+			str +=`${entK} : ${entV}<br>`
+		}
+		
+	});
+	document.querySelector(out).innerHTML = str;
+}
+
+const proc2=()=>{
+	
+	rect.garo = Number(prompt("가로 입력"));
+	rect.sero = Number(prompt("세로 입력"));
+	
+	rect.area = function(){
+		return this.garo*this.sero;
+	};
+	rect.circum = function(){
+		return (this.garo + this.sero)*2;
+	};
+	
+	//정보 출력함수 호출
+	printObj("#result2")
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>const rect = { <br>
+	garo : 5, <br>
+	sero : 4, <br>
+}<br>
+메소드를 추가한 후 사용
+객체는 생성 후에도 속성이나 메소드를 동적으로 추가 할 수 있다
+</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+<div class="box">
+
+	<h3>입력받은 객체 정보출력</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+</body>
+</html>

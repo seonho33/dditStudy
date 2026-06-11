@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hotel">
+<!-- 	
+	 테이블 존재 여부 확인 (Oracle 기준)
+    <select id="checkTableExist" resultType="int">
+        SELECT COUNT(*) 
+        FROM user_tables
+        WHERE table_name = 'MYHOTEL'
+    </select>
+
+    테이블 생성
+    <update id="createTable">
+        CREATE TABLE MYHOTEL (
+            HOTEL_ID VARCHAR2(10) PRIMARY KEY,
+            HOTEL_NAME VARCHAR2(50),
+            REG_DT DATE DEFAULT SYSDATE
+        )
+    </update>
+	 -->
+	
+<!--
+	이 영역에 SQL문에 맞는 태그를 사용하여 SQL문을 기술한다.
+	
+	사용할 수 있는 기본적인 태그들
+	
+	<insert> ~~~ </insert>
+	<update> ~~~ </update>
+	<delete> ~~~ </delete>
+	<select> ~~~ </select>
+	
+	위 태그에서 사용되는 속성들
+	1) id : 해당 태그를 호출할 때 namespace 속성과 연결하여 사용하는 쿼리 ID값
+	
+	2) parameterType : SQL문에 사용할 데이터가 들어있는 객체타입을 지정한다.
+				(보통 VO클래스, 자바의 기본자료형이름 등이 사용된다.)
+				(typeAlias 로 지정한 별명을 사용할 수 있다.)
+				
+	3) resultType : select문을 실행한 결과를 담을 객체타입을 지정한다.
+				(보통 VO클래스, 자바의 기본자료형이름 등이 사용된다.)
+				(typeAlias 로 지정한 별명을 사용할 수 있다.)
+	
+	4) resultMap : 결과 레코드컬럼명과 VO객체의 property명이 다를 경우에
+				   적절한 매핑을 위한 정보 제공을 위해 사용한다.
+
+  -->
+	
+	<insert id="checkIn">
+		INSERT INTO MYHOTEL 
+		(HOTEL_ID,HOTEL_NAME) 
+		VALUES (#{hotelId},#{hotelName})
+		
+	</insert>
+	
+	<delete id="checkOut">
+		DELETE FROM MYHOTEL
+		WHERE hotel_id = #{hotelId}
+	</delete>	
+	
+	<select id="checkHotel" resultType="int">
+		SELECT	COUNT(*) AS CNT FROM MYHOTEL 
+		WHERE	HOTEL_ID = #{hotelId}
+	</select>
+	
+	<resultMap type="hv" id="hotelMap">
+		<result column="hotel_id" property="hotelId" />
+		<result column="hotel_name" property="hotelName" />
+		<result column="reg_dt" property="regDt" />
+	</resultMap>
+
+	<select id="searchHotel" resultMap="hotelMap">
+		SELECT	* 
+		FROM	MYHOTEL
+		<where>
+			<if test='hotelId !=null and hotelId != ""'>
+				and hotel_Id = #{hotelId}
+			</if> 
+			<if test='hotelName !=null and hotelName !=""'>
+				and hotel_Name = #{hotelName}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getAllHotel" resultMap="hotelMap">
+		SELECT	* 
+		FROM	MYHOTEL
+	</select>
+
+	<select id="checkTable" resultType="int">
+		SELECT COUNT(*) 
+   	 	FROM USER_TABLES 
+   	 	WHERE TABLE_NAME = 'MYHOTEL'
+	</select>
+	<update id="createTable">
+	    CREATE TABLE MYHOTEL (
+        HOTEL_ID VARCHAR2(10),
+        HOTEL_NAME VARCHAR2(10) NOT NULL,
+        REG_DT DATE DEFAULT SYSDATE,
+    	CONSTRAINT PK_MYHOTEL PRIMARY KEY(HOTEL_ID))
+	</update>
+	
+</mapper>

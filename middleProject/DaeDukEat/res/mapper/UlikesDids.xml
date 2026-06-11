@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userLikesDids">
+
+    <!-- ❤️ 좋아요 -->
+    <insert id="insertUserLike">
+        INSERT INTO USER_LIKES (USER_ID, STORE_ID)
+        VALUES (#{userId}, #{storeId})
+    </insert>
+
+    <delete id="deleteUserLike">
+        DELETE FROM USER_LIKES
+        WHERE USER_ID = #{userId}
+        AND STORE_ID = #{storeId}
+    </delete>
+    
+    <!-- ✅ 좋아요 존재 여부 확인 (추가) -->
+    <select id="checkUserLike" resultType="int">
+        SELECT COUNT(*)
+        FROM USER_LIKES
+        WHERE USER_ID = #{userId}
+        AND STORE_ID = #{storeId}
+    </select>
+    
+    <!-- ========================================
+     ✅ 새로 추가: LIKES_COUNT 업데이트 쿼리
+     USER_LIKES 테이블의 실제 데이터 개수를 세어서
+     STORE 테이블의 LIKES_COUNT를 업데이트
+     ======================================== -->
+    <update id="updateLikesCount" parameterType="string">
+        UPDATE STORE
+        SET LIKES_COUNT = (
+            SELECT COUNT(*)
+            FROM USER_LIKES
+            WHERE STORE_ID = #{storeId}
+        )
+        WHERE STORE_ID = #{storeId}
+    </update>
+
+
+    <!-- ⭐ 찜 -->
+    <insert id="insertDibs">
+        INSERT INTO DIDS (USER_ID, STORE_ID)
+        VALUES (#{userId}, #{storeId})
+    </insert>
+
+    <delete id="deleteDibs">
+        DELETE FROM DIDS
+        WHERE USER_ID = #{userId}
+        AND STORE_ID = #{storeId}
+    </delete>
+
+    <!-- ✅ 찜 존재 여부 확인 (추가) -->
+    <select id="checkDibs" resultType="int">
+        SELECT COUNT(*)
+        FROM DIDS
+        WHERE USER_ID = #{userId}
+        AND STORE_ID = #{storeId}
+    </select>
+	
+	 <!-- ========================================
+         ✅ 새로 추가: DIBS_COUNT 업데이트 쿼리
+         DIDS 테이블의 실제 데이터 개수를 세어서
+         STORE 테이블의 DIBS_COUNT를 업데이트
+         ======================================== -->
+    <update id="updateDibsCount" parameterType="string">
+        UPDATE STORE
+        SET DIBS_COUNT = (
+            SELECT COUNT(*)
+            FROM DIDS
+            WHERE STORE_ID = #{storeId}
+        )
+        WHERE STORE_ID = #{storeId}
+    </update>
+
+
+</mapper>

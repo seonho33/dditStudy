@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+div {
+	border: 1px dotted orange;
+	margin: 2px;
+	padding: 2px;
+	border-radius: 20px;
+	box-sizing: border-box;
+}
+#header, #footer{
+	widows: 98%;
+	height: 100px;
+	background: pink;
+}
+
+#aside, #content{
+	height: 500px;
+}
+#aside{
+	width: calc(29% - 5px);
+	float : left;
+	background: skyblue;
+}
+#content{
+	width : calc(70% - 1%);
+	float : right;
+	background: orange;
+}
+#footer {
+	clear: both;
+}
+
+
+</style>
+</head>
+<body>
+
+<div id="header"></div>
+<div id="aside"></div>
+<div id="content"></div>
+<div id="footer"></div>
+
+</body>
+</html>

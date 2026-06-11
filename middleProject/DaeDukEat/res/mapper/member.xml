@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+		
+<!--
+   이 영역에 SQL문에 맞는 태그를 사용하여 SQL문을 기술한다.
+   
+   사용할 수 있는 기본적인 태그들
+   
+   <insert> ~~ </insert>
+   <update> ~~ </update>
+   <delete> ~~ </delete>
+   <select> ~~ </select>
+   
+   위 태그에서 사용된는 속성들
+   1) id :  해당 태그를 호출할 때 namespace 속성과 연결하여 사용하는 쿼리ID값
+   
+   2)parameterType : SQL문에 사용할 데이터가 들어있는 객체타입을 지정한다.
+      (보통 VO클래스, 자바의 기본자료형이름 등이 사용된다.)
+      (typeAlias로 지정한 별명을 사용할 수 있다.)
+      
+   3)resultType : selec문을 실행한 결과를 담을 객체타입을 지정한다.
+              (보통 VO클래스, 자바의 기본자료형이름 등이 사용된다.)
+               (typeAlias로 지정한 별명을 사용할 수 있다.)
+              
+   4)resultMap : 결과 레코드 컬럼명과 VO객체의 property명이 다를 경우에 
+                 절절한 매핑을 위한 정보 제공을 위해 사용한다.             
+                
+-->
+
+  <insert id="insertUser" parameterType="uvo">
+      INSERT INTO users (USER_ID, PASSWORD, NAME)
+      VALUES (#{userId}, #{password}, #{name})
+   </insert>
+
+   
+<insert id="insertMember" parameterType="mvo">
+  INSERT INTO member (USER_ID, USER_BIR, USER_MAIL, USER_NO)
+  VALUES (#{userId},
+          #{userBir},
+          #{userMail},
+          #{userNo})
+</insert>
+ 
+ <select id="checkUser" parameterType="String" resultType="int">
+	
+	 select count(*) 
+	 from users
+	 where USER_ID = #{userId}
+	<!-- checkUser->uvo : null -->
+ </select>
+   
+	
+  <select id="SelectUser" parameterType="String" resultType="uvo">
+	
+	 select USER_ID,
+	           NAME
+	     FROM USERS  
+	 WHERE USER_ID = #{user_id}      
+
+    </select>
+   
+    <select id="SelectMember" parameterType="String" resultType="mvo" >
+	
+	 select  USER_BIR, 
+	         USER_MAIL,
+	         USER_NO, 
+	         PROFILE_IMG
+	    FROM MEMBER   
+	 WHERE USER_ID = #{user_id}       
+    
+    </select>	
+      
+<select id="checkPass" parameterType="map" resultType="int">
+    select count(*)
+    from users
+    WHERE USER_ID = #{user_id}
+     AND  PASSWORD = #{password}
+</select>      
+      
+<update id="updateUser" parameterType="uvo">
+    UPDATE users
+    SET NAME = #{name}
+    <if test="password != null and password != ''">
+        , PASSWORD = #{password}
+    </if>
+    WHERE USER_ID = #{userId}
+</update>
+
+<update id="updateMem" parameterType="mvo">
+    UPDATE member
+    SET USER_MAIL = #{userMail}
+    <if test="profileImg != null and profileImg != ''">
+        , PROFILE_IMG = #{profileImg}
+    </if>
+    WHERE USER_ID = #{userId}
+</update>
+
+
+    <!--추가: User + Member 조인 쿼리 (UserMemberVO 반환) -->
+    <select id="loginUserMember" parameterType="uvo" resultType="umvo">
+        SELECT u.USER_ID,
+               u.PASSWORD,
+               u.NAME,
+               u.DIVISION,
+               u.BLOCK_YN,
+               u.USE_YN,
+               m.USER_MAIL,
+               m.USER_NO,
+               m.PROFILE_IMG
+        FROM USERS u
+        LEFT JOIN MEMBER m ON u.USER_ID = m.USER_ID
+        WHERE u.USER_ID = #{userId}
+          AND u.PASSWORD = #{password}
+          AND u.USE_YN = 'Y'
+    </select>
+    
+  
+    
+<!--      delete from member -->
+<!--      where user_id = #{userId} -->
+    <update id="deleteUser" parameterType="String">
+    	UPDATE USERS
+    	SET    USE_YN = 'N'
+    	WHERE  USER_ID = #{userId}
+    </update>
+   
+   
+
+    <select id="getReviewCount" parameterType="string" resultType="int">
+    SELECT COUNT(*) 
+    FROM USER_REVIEW R
+    JOIN RESERVATION RES ON R.RESERV_ID = RES.RESERV_ID
+    WHERE RES.USER_ID = #{userId}
+   </select>
+
+    <select id="getCouponCount" parameterType="string" resultType="int">
+        SELECT COUNT(*) 
+        FROM COUPONHAM 
+        WHERE USER_ID = #{userId} 
+          AND USE_YN = 'N'
+    </select>
+    
+
+    
+   
+
+
+ 
+<!--  에러나서 일단 막아놨어요
+  <select id="getMember" resultMap="memMap">
+	
+	 select * from member
+	 where MEMBER = #{member}
+
+  </select>
+
+ -->
+
+
+<!-- <select id="getAllMember" resultType="kr.or.ddit.member.vo.MemberVO">
+	
+	select mem_id as memId,
+	       mem_name as memName,
+	       mem_tel as memTel,
+	       mem_addr as memAddr,
+	       reg_dt as regDt
+	       from mymember
+  </select>
+
+
+
+
+  <select id="searchMember" resultMap="memMap">
+
+   select * from mymember  
+   <where>
+	   <if test='memId != null and memId !="" '>
+		   and mem_id = #{memId}
+	   </if>
+	   
+	     <if test='memName != null and memName !="" '>
+		   and mem_name = #{memName}
+	   </if>
+	   
+	     <if test='memTel != null and memTel !="" '>
+		   and mem_tel = #{memTel}
+	   </if>
+	   
+	     <if test='memAddr != null and memAddr !="" '>
+		   and mem_addr like '%' || #{memAddr} || '%'
+	   </if>
+	   
+	   
+	   
+   </where>
+</select> 
+ -->
+
+
+</mapper>

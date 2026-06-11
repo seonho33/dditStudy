@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+</head>
+<script type="text/javascript">
+
+const original = [10,20,30,40,50];
+
+//1번째 박스에 들어가는 이벤트요소
+document.addEventListener("DOMContentLoaded",() =>{
+
+	let clickB = document.querySelector("#btn1");
+	
+	clickB.addEventListener("click",()=>{
+		
+		copy1 = [ ...original];
+		copy1.splice(2,1);
+		
+		let str = `original : ${original} <br>
+				   copy1 : ${copy1}<br>`;
+		//id=result1
+		result1.innerHTML = str;
+			
+	})
+	
+})
+
+//2번째 박스에 들어가는 이벤트요소
+document.addEventListener("DOMContentLoaded",()=>{
+	let clickB2 = document.querySelector("#btn2");
+
+	clickB2.addEventListener("click",()=>{
+		const index = 2;
+		
+		const copy2 = [...original.slice(0,index),...original.slice(index+1)];
+		console.log(original);
+		
+		let str = `original : ${original} <br>
+				   copy2 : ${copy2}<br>`;
+		
+		document.querySelector("#result2").innerHTML = str; 
+		
+	})
+})
+
+
+</script>
+
+<body>
+
+<div class="box">
+
+	<h3>
+	const original = [10,20,30,40,50];<br>
+	copy1 = [ ...original];<br>
+	copy1.splice(2,1);<br>
+	
+	</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3>
+	
+	const original = [10,20,30,40,50];<br>
+	const index = 2;<br>
+	const copy2 = [...original.slice(0,index),...original.slice(index+1)];<br>
+	console.log(original);<br>
+	
+	
+	
+	</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+class Account{
+	
+	constructor({name,balance}){
+		this.name = name
+		this.balance = balance
+	};
+	
+	//정보출력메서드
+	static infoValue(...users){
+		let str = "";
+		users.forEach(({name,balance},idx)=>{
+			str += `${name} ${balance}<br>`
+			
+		})
+	
+		return str;
+	}
+	
+	static sumBalance(...obj){
+		let sum =0;
+		obj.forEach(({balance})=>{
+			sum += balance;
+		})
+		return sum;
+	}
+	
+}
+
+const proc1 = () =>{
+	acc1 = new Account({name : "홍길동", balance : 1000});
+	acc2 = new Account({name : "도선호", balance : 4000});
+	acc3 = new Account({name : "성춘향", balance : 3000});
+	acc4 = new Account({name : "일지매", balance : 2000});
+
+	//정보 출력 static 메서드로 만들기..
+	result=Account.infoValue(acc1,acc2,acc3,acc4);
+	result2=Account.sumBalance(acc1,acc2,acc3,acc4);
+	
+	document.querySelector("#result1").innerHTML = result + "<br>";
+	
+	document.querySelector("#result1").innerHTML += result2;
+	//balance의 총 합 구하기 static 메서드로 만들기
+}
+
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+</body>
+</html>

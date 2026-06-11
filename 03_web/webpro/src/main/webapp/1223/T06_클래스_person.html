@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+class Person{
+	
+	constructor(obj){	//obj = { name : "홍길동", tel : "010", age:34}
+		this.name = obj.name;
+		this.tel = obj.tel;
+		this.age = obj.age;
+	}
+
+	static sumAge(...people){ //Rest Parameter 나머지 매개변수, 배열
+		//함수 호출시 값들의 수가 정해져있지 않다...
+		
+		let sum =0;
+		for(let i=0;i<people.length;i++){
+			sum += people[i].age;
+		}
+		
+		sum = 0;
+		people.forEach(obj=>{
+			sum += obj["age"];
+		})
+		
+		return sum;
+	}
+}
+
+
+const proc1 = () =>{
+	p1= new Person({name:"홍길동", tel : "010-7371", age :30});
+	p2= new Person({name:"홍도화", tel : "010-7322", age :32});
+	p3= new Person({name:"일지매", tel : "010-7333", age :31});
+
+	str = Person.sumAge(p1,p2,p3);
+	
+	document.querySelector("#result1").innerHTML = str;
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+</body>
+</html>

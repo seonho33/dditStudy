@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.ddit.reservation.dao.IReservationDAO">
+
+    <!-- ========================================
+         [ResultMap]
+         ======================================== -->
+    <resultMap id="reservationMap" type="reservationVO">
+        <id property="reservId" column="RESERV_ID"/>
+        <result property="guestCount" column="GUEST_COUNT"/>
+        <result property="reservTime" column="RESERV_TIME"/>
+        <result property="reservStatus" column="RESERV_STATUS"/>
+        <result property="note" column="NOTE"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="amount" column="AMOUNT"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="storeId" column="STORE_ID"/>
+        <!-- JOIN 필드 -->
+        <result property="storeName" column="STORE_NAME"/>
+        <result property="userName" column="USER_NAME"/>
+    </resultMap>
+
+    <resultMap id="storeMap" type="store">
+        <id property="storeId" column="STORE_ID"/>
+        <result property="storeName" column="STORE_NAME"/>
+        <result property="deposit" column="DEPOSIT"/>
+    </resultMap>
+
+    <!-- ========================================
+         [기존 쿼리] 점주 예약 관리용
+         ======================================== -->
+    
+    <!-- 가게별 예약 목록 조회 -->
+    <select id="selectReservationsByStore" parameterType="string" resultMap="reservationMap">
+        SELECT 
+            R.RESERV_ID, R.GUEST_COUNT, R.RESERV_TIME, R.RESERV_STATUS,
+            R.NOTE, R.CREATE_DATE, R.AMOUNT, R.USER_ID, R.STORE_ID,
+            S.STORE_NAME,
+            U.NAME AS USER_NAME
+        FROM RESERVATION R
+        LEFT JOIN STORE S ON R.STORE_ID = S.STORE_ID
+        LEFT JOIN USERS U ON R.USER_ID = U.USER_ID
+        WHERE R.STORE_ID = #{storeId}
+        ORDER BY R.CREATE_DATE DESC
+    </select>
+    	
+    <!-- 상태별 예약 개수 조회 -->
+    <select id="countReservationsByStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM RESERVATION
+        WHERE STORE_ID = #{storeId}
+        AND RESERV_STATUS = #{status}
+    </select>
+    	
+    <!-- 예약 상태 변경 -->
+    <update id="updateReservationStatus" parameterType="map">
+        UPDATE RESERVATION
+        SET RESERV_STATUS = #{newStatus}
+        WHERE RESERV_ID = #{reservId}
+    </update>
+
+    <!-- ========================================
+         [신규 쿼리] 결제 연동용
+         ======================================== -->
+    
+    <!-- 예약 정보 등록 -->
+    <insert id="insertReservation" parameterType="reservationVO">
+        <selectKey keyProperty="reservId" resultType="long" order="BEFORE">
+            SELECT SEQ_RESERVATION.NEXTVAL FROM DUAL
+        </selectKey>
+        
+        INSERT INTO RESERVATION (
+            RESERV_ID, GUEST_COUNT, RESERV_TIME,
+            NOTE, AMOUNT, USER_ID, STORE_ID
+        ) VALUES (
+            #{reservId}, #{guestCount}, #{reservTime},
+            #{note, jdbcType=VARCHAR}, #{amount}, #{userId}, #{storeId}
+        )
+    </insert>
+    
+    <!-- 가게 정보 조회 -->
+    <select id="selectStoreById" parameterType="string" resultMap="storeMap">
+        SELECT STORE_ID, STORE_NAME, DEPOSIT,STORE_PICTURE
+        FROM STORE
+        WHERE STORE_ID = #{storeId}
+    </select>
+    
+    <!-- 예약 ID로 예약 조회 -->
+    <select id="selectReservationById" parameterType="long" resultMap="reservationMap">
+        SELECT * FROM RESERVATION
+        WHERE RESERV_ID = #{reservId}
+    </select>
+    
+    <select id="countActiveSlot" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM RESERVATION
+    WHERE STORE_ID = #{storeId}
+      AND RESERV_TIME = #{reservTime}
+      AND RESERV_STATUS IN ('대기', '승인')
+</select>
+    
+
+</mapper>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+div {
+	border: 2px dotted orange;
+	margin: 20px;
+	padding: 10px;
+}
+
+</style>
+
+</head>
+<body>
+버튼을 클릭하면 두개의 수를 입력받아서 덧셈을 하고 출력한다.. <br>
+<input type="button" value="확인" name="cheak" onclick="proc1()">
+<br><br>
+출력장소 
+<div id="d1">
+
+</div>
+
+버튼을 클릭하면 두개의 수를 입력받아서 곱셈을 하고 출력한다.. <br>
+<input type="button" value="확인" name="cheak" onclick="proc2()">
+<br><br>
+출력장소 
+<div id="d2">
+
+</div>
+
+버튼을 클릭하면 두개의 수를 입력받아서 나눗셈을 하고 출력한다.. <br>
+<input type="button" value="확인" name="cheak" onclick="proc3()">
+<br><br>
+출력장소 
+<div id="d3">
+
+</div>
+
+<script type="text/javascript">
+
+const proc2 = () =>{
+	let su1 = parseInt(prompt("첫번째 수 입력","정수를 입력하십시오."));
+	let su2 = Number(prompt("두번째 수 입력","정수를 입력하십시오."));
+	console.log(su1+su2);
+	
+	let plus = su1+su2;
+	let minus = su1-su2;
+	let multi = su1*su2;
+	let divide = su1/su2;
+	
+	multi = multi.toLocaleString();
+	divide = divide.toFixed(2);
+	//출력장소 검색
+	d2=document.querySelector("#d2");
+	
+	//출려구내용작성
+/* 	let sum = "첫번째 수 : " +su1 + "<br>";
+	sum += "두번째 수 : " + su2 + "<br>";
+	sum += "두수의 합 : " + (su1+su2)+"<br>";
+	sum += "두수의 곱 : " + (su1*su2)+"<br>";
+	sum += "두수의 제 : " + (su1/su2)+"<br>"; */
+
+	let sum = `첫번째 수 : ${su1} <br>
+			   두번째 수 : ${su2} <br>
+			   두수의 합 : ${plus} <br>
+			   두수의 곱 : ${multi} <br>
+			   두수의 제 : ${divide}`;
+	
+	//출력
+	d2.innerHTML = sum;
+}
+
+</script>
+
+</body>
+</html>

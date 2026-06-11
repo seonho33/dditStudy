@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<script type="text/javascript">
+	today = new Date();
+const proc1 = () =>{
+	today2 = new Date(2000);
+	today3 = new Date("2020.1.14")
+	today4 = new Date(2020,1-1,14);
+	
+	console.log(today);
+	console.log(today2);
+	console.log(today3);
+	console.log(today4);
+	
+	today1 = today.toLocaleString();
+	today2 = today2.toLocaleString();
+	today3 = today3.toLocaleString();
+	today4 = today4.toLocaleString();
+	
+	console.log(today1);
+	console.log(today2);
+	console.log(today3);
+	console.log(today4);
+	
+	let str = `${today1}<br>
+			${today2}<br>
+			${today3}<br>
+			${today4}<br>`;
+			
+	document.querySelector("#result1").innerHTML = str;
+}
+
+const proc2 = () =>{
+	let day = today.getDay();
+	console.log(day);
+	
+	switch(day){
+	case 0:
+		res = "일요일"
+		break;
+	case 1:
+		res = "월요일"
+		break;
+	case 2:
+		res = "화요일"
+		break;
+	case 3:
+		res = "수요일"
+		break;
+	case 4:
+		res = "목요일"
+		break;
+	case 5:
+		res = "금요일"
+		break;
+	case 6:
+		res = "토요일"
+		break;
+	}
+	document.querySelector("#result2").innerHTML =`오늘은 ${today.toLocaleDateString()} <br> ${res} 입니다.`;	
+}
+
+const proc3 = () => {
+	const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', "토요일"];
+	console.log(today.getDay());
+	let res = days[today.getDay()];
+	let str = `오늘은 ${today.toLocaleDateString()}<br> ${days[today.getDay()]}입니다.`
+	document.querySelector("#result3").innerHTML = str;
+}
+
+</script>
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	today1 = new Date().getFullYear();<br>
+	today2 = new Date(2000);<br>
+	today3 = new Date("2020.1.14");<br>
+	today4 = new Date(2020,1-1,14);<br>
+	
+	</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+	<div id="result1">
+	</div>
+</div>
+
+<div class="box">
+
+	<h3>
+	요일구하기 -getDay(): 0(일요일)~6(토요일) - 배열이용하기
+	if~else 나 또는 witch~case를 이용해서 비교
+	</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3>
+	</h3>
+
+	<input type="button" value="확인" id="btn3" onclick="proc3()">
+
+	<br><br>
+
+		<div id="result3">
+		</div>
+
+</div>
+
+</body>
+</html>

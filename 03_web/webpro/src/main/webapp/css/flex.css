@@ -1,0 +1,243 @@
+        @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            background-color: #fafafa; 
+            margin: 0; 
+        }
+        
+        .b-grade-font { 
+            font-family: 'Black Han Sans', sans-serif; 
+        }
+        
+        .input-base {
+            width: 100%; 
+            background-color: #f9fafb; 
+            border: 2px solid #f3f4f6;
+            border-radius: 9999px; 
+            padding: 0.8rem 1.5rem; 
+            font-weight: 700;
+            transition: all 0.3s ease; 
+            outline: none;
+        }
+        
+        .input-base:focus {
+            border-color: #f97316; 
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+        }
+        
+        .max-container { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1.25rem 0;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.25rem;
+        }
+
+        .header-logo {
+            font-size: 2.25rem;
+            font-family: 'Black Han Sans', sans-serif;
+            color: #f97316;
+        }
+
+        /* Main Form Container */
+        .form-container {
+            background-color: white;
+            border-radius: 50px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 3rem;
+            border: 2px solid #f3f4f6;
+        }
+
+        .form-title {
+            font-size: 3rem;
+            font-family: 'Black Han Sans', sans-serif;
+            color: #f97316;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.05em;
+            text-align: center;
+        }
+
+        .form-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        /* Form Field Styles */
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 900;
+            color: #6b7280;
+            margin-left: 1.25rem;
+        }
+
+        .field-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .field-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Button Styles */
+        .btn-check {
+            min-width: 110px;
+            background-color: #f97316;
+            color: white;
+            border-radius: 9999px;
+            font-weight: 700;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            padding: 0.8rem 1.5rem;
+        }
+
+        .btn-check:hover {
+            background-color: #ea580c;
+        }
+
+        .btn-check:active {
+            transform: scale(0.95);
+        }
+
+        .btn-submit {
+            flex: 2;
+            padding: 1rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            font-family: 'Black Han Sans', sans-serif;
+            color: white;
+            background-color: #f97316;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-bottom: 4px solid #c2410c;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: #ea580c;
+            transform: scale(1.02);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            font-family: 'Black Han Sans', sans-serif;
+            color: #9ca3af;
+            background-color: #f3f4f6;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e5e7eb;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            padding-top: 2rem;
+        }
+
+        /* Email Field Styles */
+        .email-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 768px) {
+            .email-row {
+                flex-wrap: nowrap;
+            }
+        }
+
+        .email-part1 {
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .email-part1 {
+                width: 33.333%;
+            }
+        }
+
+        .email-separator {
+            font-weight: 700;
+            color: #9ca3af;
+        }
+
+        .email-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .email-select-wrapper {
+                width: 66.667%;
+            }
+        }
+
+        .email-select {
+            appearance: none;
+            cursor: pointer;
+            padding-right: 2.5rem;
+        }
+
+        .select-icon {
+            position: absolute;
+            right: 1.25rem;
+            top: 1rem;
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
+        .email-direct {
+            margin-top: 0.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }

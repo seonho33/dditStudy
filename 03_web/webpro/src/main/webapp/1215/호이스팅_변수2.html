@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<input type="button" value="프로1" onclick="proc1()">
+<input type="button" value="프로2" onclick="proc2()">
+
+<script type="text/javascript">
+
+/* const proc1 = function(){
+	console.log(10);
+}
+
+const proc2 = function(){
+	console.log(20);	
+}
+ */
+
+ const proc1 =() =>{
+	 console.log(10);
+	
+	 //함수 호출
+	 fn_sum(30,80);
+	 console.log ("sum= " + sum)	//sum이 지역변수일때는 에러가 발생하지만 전역변수 일때는 에러가 발생하지 않음...
+ }
+
+ 	
+ 
+ const fn_sum = (x,y)=>{
+	 //let이 붙어있으면 지역변수, 다른곳에서 사용할 수 없다.
+	//sum = x + y;
+	 //let이 붙어있지 않으므로 전역변수.. 다른곳에서 사용할 수 있다.
+	 sum = x+y;
+ }
+ 
+ 
+ const proc2 = ()=>{
+	 console.log(20);
+	 
+	 const sum = fn_add(34,66);
+	 console.log("sum= " + sum);
+ }
+ 
+ const fn_add=(a,b) =>{
+	 /* let sum = a+b;
+ */
+ 	let sum1;
+ 	sum1 = a+b;
+/* 	const sum = a+b; 
+ */	
+	//지역변수일 경우 다른 함수에서 사용하기 위해서 return 한다..
+	return sum1;
+ }
+</script>
+
+
+</body>
+</html>

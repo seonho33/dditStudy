@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.ddit.admin.dao.IBotDao">
+
+  <!-- 공통 컬럼 매핑 (선택) -->
+  <resultMap id="botMap" type="kr.or.ddit.admin.vo.BotVO">
+    <id     property="botId"          column="BOT_ID"/>
+    <result property="categoryName"   column="CATEGORY_NAME"/>
+    <result property="questionKeyword" column="QUESTION_KEYWORD"/>
+    <result property="answerContent"  column="ANSWER_CONTENT"/>
+    <result property="activeYn"       column="ACTIVE_YN"/>
+    <result property="userId"         column="USER_ID"/>
+  </resultMap>
+
+  <!-- =======================================================
+       [관리자] 전체 목록 (활성/비활성 포함)
+       - 관리 화면에서는 전체 보여주고 토글/삭제 등 할 수 있게
+       ======================================================= -->
+  <select id="selectBotList" resultMap="botMap">
+    SELECT
+      BOT_ID,
+      CATEGORY_NAME, 
+      QUESTION_KEYWORD, 
+      ANSWER_CONTENT, 
+      ACTIVE_YN, 
+      USER_ID
+    FROM BOT
+    ORDER BY BOT_ID DESC
+  </select>
+
+  <!-- =======================================================
+       [챗봇] 활성만 조회
+       ======================================================= -->
+  <select id="selectActiveBotList" resultMap="botMap">
+    SELECT
+      BOT_ID, CATEGORY_NAME, QUESTION_KEYWORD, ANSWER_CONTENT, ACTIVE_YN, USER_ID
+    FROM BOT
+    WHERE ACTIVE_YN = 'Y'
+    ORDER BY BOT_ID DESC
+  </select>
+
+  <!-- =======================================================
+       [관리자] 등록
+       - BOT_ID: 시퀀스
+       - ACTIVE_YN: DEFAULT 'Y'
+       - USER_ID: 세션에서 받은 값
+       ======================================================= -->
+  <insert id="insertBot" parameterType="kr.or.ddit.admin.vo.BotVO">
+    INSERT INTO BOT (
+      BOT_ID,
+      CATEGORY_NAME,
+      QUESTION_KEYWORD,
+      ANSWER_CONTENT,
+      USER_ID
+    ) VALUES (
+      BOT_SEQ.NEXTVAL,
+      #{categoryName},
+      #{questionKeyword},
+      #{answerContent},
+      #{userId}
+    )
+  </insert>
+
+  <!-- =======================================================
+       [관리자] 수정
+       - botId 기준으로 내용 수정
+       ======================================================= -->
+  <update id="updateBot" parameterType="kr.or.ddit.admin.vo.BotVO">
+    UPDATE BOT
+    SET
+      CATEGORY_NAME     = #{categoryName},
+      QUESTION_KEYWORD  = #{questionKeyword},
+      ANSWER_CONTENT    = #{answerContent}
+    WHERE BOT_ID = #{botId}
+  </update>
+
+  <!-- =======================================================
+       [관리자] 삭제 (물리 삭제)
+       - 원하면 아래 대신 activeYn='N'으로 소프트 삭제로 바꿀 수 있음
+       ======================================================= -->
+  <delete id="deleteBot" parameterType="int">
+    DELETE FROM BOT
+    WHERE BOT_ID = #{botId}
+  </delete>
+
+<!-- 현재 active_yn 조회 -->
+<select id="selectActiveYnById" parameterType="int" resultType="string">
+  SELECT ACTIVE_YN
+  FROM BOT
+  WHERE BOT_ID = #{botId}
+</select>
+
+<!-- active_yn 업데이트 -->
+<update id="updateActiveYn" parameterType="map">
+  UPDATE BOT
+  SET ACTIVE_YN = #{activeYn}
+  WHERE BOT_ID = #{botId}
+</update>
+
+
+  <!-- =======================================================
+       [챗봇] 키워드로 룰 매칭 (1차 룰)
+       - parameterType은 java.lang.String로
+       - MyBatis에서 #{keyword} 하나 받는 형태로 통일
+       ======================================================= -->
+  <select id="selectBotByKeyword" parameterType="java.lang.String" resultMap="botMap">
+    SELECT
+      BOT_ID, CATEGORY_NAME, QUESTION_KEYWORD, ANSWER_CONTENT, ACTIVE_YN, USER_ID
+    FROM BOT
+    WHERE ACTIVE_YN = 'Y'
+      AND QUESTION_KEYWORD IS NOT NULL
+      AND QUESTION_KEYWORD LIKE '%' || #{value} || '%'
+    ORDER BY BOT_ID DESC
+  </select>
+  
+    <select id="selectActiveBots" resultType="botvo">
+    SELECT bot_id       AS botId,
+           category_name AS categoryName,
+           question_keyword AS questionKeyword,
+           answer_content AS answerContent,
+           active_yn    AS activeYn,
+           user_id      AS userId
+    FROM bot
+    WHERE active_yn = 'Y'
+  </select>
+
+  <!-- ✅ 식당검색 Top3 (예시: 가게명/카테고리/주소/이미지/평점) -->
+<select id="searchStoreTop3" parameterType="string" resultType="map">
+  SELECT *
+  FROM (
+    SELECT
+      s.store_id    AS storeId,
+      s.store_name  AS storeName,
+      s.store_addr  AS storeAddr,
+      s.store_picture AS storePicture,
+      s.dibs_count  AS dibsCount,
+      s.rating      AS rating
+    FROM store s
+    WHERE s.store_name LIKE '%' || #{keyword} || '%'
+      AND s.status = '승인'  <!-- 너희 승인 컬럼 있으면 -->
+    ORDER BY s.dibs_count DESC, s.rating DESC, s.store_id DESC
+  )
+  WHERE ROWNUM &lt;= 3
+</select>
+
+  <!-- ✅ 메뉴검색 Top3 (예시: 메뉴명/가격/가게명/이미지) -->
+<select id="searchMenuTop3" parameterType="string" resultType="map">
+  SELECT *
+  FROM (
+    SELECT
+      s.store_id    AS storeId,
+      s.store_name  AS storeName,
+      s.store_addr  AS storeAddr,
+      s.store_picture AS storePicture,
+      s.dibs_count  AS dibsCount,
+      s.rating      AS rating,
+      m.menu_id     AS menuId,
+      m.menu_name   AS menuName,
+      m.menu_price  AS menuPrice,
+      m.menu_picture AS menuPicture
+    FROM menu m
+    JOIN store s ON s.store_id = m.store_id
+    WHERE m.menu_name LIKE '%' || #{keyword} || '%'
+      AND s.status = '승인'
+    ORDER BY s.dibs_count DESC, s.rating DESC, m.menu_price ASC
+  )
+  WHERE ROWNUM &lt;= 3
+</select>
+
+<select id="searchStoreByCategoryTop3" parameterType="string" resultType="map">
+  <![CDATA[
+    SELECT *
+    FROM (
+      SELECT
+        s.STORE_ID      AS STOREID,
+        s.STORE_NAME    AS STORENAME,
+        s.STORE_ADDR    AS STOREADDR,
+        s.STORE_PICTURE AS STOREPICTURE,
+        s.CATEGORY      AS CATEGORY,
+        s.RATING        AS RATING,
+        s.LIKES_COUNT   AS LIKESCOUNT
+      FROM STORE s
+      WHERE s.CATEGORY = #{categoryName}
+      ORDER BY s.LIKES_COUNT DESC
+    )
+    WHERE ROWNUM <= 3
+  ]]>
+</select>
+
+<select id="searchStoreByMenuKeywordTop3" parameterType="string" resultType="map">
+  <![CDATA[
+    SELECT *
+    FROM (
+      SELECT DISTINCT
+        s.STORE_ID      AS STOREID,
+        s.STORE_NAME    AS STORENAME,
+        s.STORE_ADDR    AS STOREADDR,
+        s.STORE_PICTURE AS STOREPICTURE,
+        s.CATEGORY      AS CATEGORY,
+        s.RATING        AS RATING,
+        s.LIKES_COUNT   AS LIKESCOUNT
+      FROM STORE s
+      JOIN MENU m ON m.STORE_ID = s.STORE_ID
+      WHERE m.MENU_NAME LIKE '%' || #{keyword} || '%'
+      ORDER BY s.LIKES_COUNT DESC
+    )
+    WHERE ROWNUM <= 3
+  ]]>
+</select>
+
+
+
+
+  <!-- 2) 메뉴명으로 메뉴 Top3 (좋아요순 = 가게 좋아요 기준) -->
+  <select id="searchMenuByNameTop3" parameterType="string" resultType="map">
+    SELECT *
+    FROM (
+      SELECT
+        m.menu_id        AS menuId,
+        m.menu_name      AS menuName,
+        m.menu_price     AS menuPrice,
+        m.menu_picture   AS menuPicture,
+
+        s.store_id       AS storeId,
+        s.store_name     AS storeName,
+        s.store_addr     AS storeAddr,
+        s.category       AS category,
+        s.likes_count    AS likesCount,
+        s.store_picture  AS storePicture
+      FROM menu m
+      JOIN store s ON m.store_id = s.store_id
+      WHERE m.menu_name LIKE '%' || #{keyword} || '%'
+      ORDER BY s.likes_count DESC, s.rating DESC, s.review_count DESC
+    )
+    WHERE ROWNUM &lt;= 3
+  </select>
+
+<select id="searchStoreTop3ByMenuName"
+        parameterType="string"
+        resultType="map">
+  <![CDATA[
+    SELECT *
+    FROM (
+      SELECT DISTINCT
+        s.STORE_ID       AS STOREID,
+        s.STORE_NAME     AS STORENAME,
+        s.STORE_ADDR     AS STOREADDR,
+        s.STORE_PICTURE  AS STOREPICTURE,
+        s.CATEGORY       AS CATEGORY,
+        s.RATING         AS RATING,
+        s.LIKES_COUNT    AS LIKESCOUNT
+      FROM STORE s
+      JOIN MENU m ON m.STORE_ID = s.STORE_ID
+      WHERE m.MENU_NAME LIKE '%' || #{keyword} || '%'
+      ORDER BY s.LIKES_COUNT DESC
+    )
+    WHERE ROWNUM <= 3
+  ]]>
+</select>
+
+
+
+</mapper>

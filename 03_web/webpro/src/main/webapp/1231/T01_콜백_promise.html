@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public.css">
+	
+<script type="text/javascript">
+	
+function login(userid){
+	return new Promise(function(resolve,reject){
+		
+	setTimeout( ()=>{
+		console.log("userId가 a001인 데이터의 name을 가져오기")
+		const vname = "도선호";
+		
+		//결과값을 클라이언트로 응답 보내기 위해서 성공시 resolve()호출
+		//실패시 reject()함수를 호출
+		if(vname) resolve(vname);
+		else reject(new Error('로그인 실패'))
+		
+	},1000);
+	
+	})
+}
+	
+/* 
+promi = login("a001");
+promi.then(function(data){
+	console.log(data, "님 환영합니다")
+}).catch(function(err){
+	console.log(err);
+}) 
+*/
+	
+function addToCart(prod){
+	return new Promise(function(resolve,reject){
+		setTimeout(()=>{
+			if(prod) resolve(prod);
+			else reject(new Error("장바구니가 비어있습니다"))
+		},1000)
+	})
+}
+/* 
+addToCart()
+.then((item) =>{
+	console.log(item, "를 장바구니에 담았습니다");
+})
+.catch((err)=>{
+	console.log(err);
+})
+ */
+const makePayment = (cardNum,item)=>{
+	return new Promise((resolve,reject)=>{
+	setTimeout(()=>{
+		if(cardNum.length != 12){
+			reject(new Error("카드번호 오류 ...."));	
+			return;
+		}
+		if(!item){
+			reject(new Error("상품이 없어요"));
+			return;
+		}
+	
+		//결과값 생성
+		data = { cno : cardNum, prod : item }//리터럴객체
+		resolve(data);
+	}, 1000)
+	})
+}
+
+/*
+makePayment('123412341234',"딸기")
+.then((obj)=>{
+	console.log(obj.cno,obj.prod,`${obj['cno']}번호로 ${obj['prod']}를 결제했습니다.`);
+})
+.catch((err)=>{
+	console.log(err);
+})
+*/
+	
+const proc1=()=>{
+	login("a001")
+	.then((data)=>{
+		console.log(data,"님 환영합니다.")
+		
+		return addToCart("딸기");
+	})
+	.then((item)=>{
+		//장바구니 처리
+		console.log(item, "를 장바구니에 담았습니다");
+
+		//그다음 작업을 실행
+		return makePayment("123412341234",item);
+	})
+	.then(({cno,prod})=>{	//구조분해
+		//결제 처리
+		console.log(`${cno} 카드번호로 ${prod}를 결제했습니다.`);
+		
+	})
+	.catch((err)=>{
+		console.log(err)
+	})
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+	<div id="result1">
+	</div>
+
+</div>
+
+</body>
+</html>

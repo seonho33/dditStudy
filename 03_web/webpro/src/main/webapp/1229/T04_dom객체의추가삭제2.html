@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+
+
+arr = ["hello","사랑은-늘 도망가","우리들의 브루스","별빛같은 나의 사랑아","다시 만날 수 있을까",
+		"천국보다 아름다운" , "온기", "hone", "happy new year"];
+	
+const proc1 = () =>{
+	
+
+	//랜덤발생
+	let idx = Math.floor(Math.random()*arr.length);
+	
+	//p태그 생성
+	let ptag = document.createElement("p");
+	
+	//textNode생성 - 배열문자선택
+	let pText = document.createTextNode(arr[idx]);
+	
+	//textNode를 p태그에 추가하기
+	ptag.appendChild(pText);
+	
+	//p태그를 result1에 추가
+	document.querySelector("#result1").appendChild(ptag);
+}
+	
+const proc1Del = () =>{
+	
+	//부모요소를 검색
+	result = document.querySelector("#result1")
+	//첫번째 또는 마지막
+	lastC = result.firstChild;
+	
+	result.removeChild(lastC);
+}
+
+const proc2 = () =>{
+
+	//랜덤발생
+	let idx = Math.floor(Math.random()*arr.length);
+	
+	//p태그 생성
+	let ptag = document.createElement("p");
+	
+	//textNode생성 - 배열문자선택
+	let pText = document.createTextNode(arr[idx]);
+	
+	//삭제버튼 생성
+	let dtag = document.createElement("input")
+	dtag.type = "button"
+	dtag.value = "삭제"
+	dtag.onclick = function(){
+//		alert(this);
+//		클릭한 삭제버튼(this)을 기준으로 부모를 찾는다 = parentNode, parentElement
+//		this.closest('p').remove();
+		this.parentNode.remove();
+	
+	}
+	
+	//textNode를 p태그에 추가하기
+	ptag.appendChild(pText);
+	
+	//삭제버튼을 p태그에 추가
+	ptag.appendChild(dtag);
+	
+	//p태그를 result1에 추가
+	document.querySelector("#result2").appendChild(ptag);
+	
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="추가" onclick="proc1()">
+	<input type="button" value="삭제" onclick="proc1Del()">
+
+	<br><br>
+
+	<div id="result1"></div>
+
+</div>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="추가" onclick="proc2()">
+
+	<br><br>
+
+	<div id="result2"></div>
+
+</div>
+
+</body>
+</html>

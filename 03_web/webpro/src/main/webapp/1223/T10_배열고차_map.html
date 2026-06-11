@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<script type="text/javascript">
+
+const year = [1976, 1997, 2002, 1995, 1985];
+
+today = new Date().getFullYear();
+
+const proc1 =()=>{
+	//배열요소를 이용하여 나이를 구하기
+/* 	const ages=[];
+	for(i=0;i<year.length;i++){
+		age = 2025 - year[i];
+		ages.push(age);
+	}
+	console.log(ages); */
+/* 	const ages = year.map(y=>{
+		return 2025-y;
+	})
+	document.querySelector("#result1").innerHTML=ages; */
+	
+	const ages = year.map(y=>{
+		return today - y;
+	})
+	document.querySelector("#result1").innerHTML=ages;
+
+}
+
+const proc2 = ()=>{
+	const ages = year.map(y=>2025-y)
+	document.querySelector("#result2").innerHTML=ages;
+}
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	const year = [1976, 1997, 2002, 1995, 1985];<br>
+	map을 이용하여 나이구하기<br>
+	</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3>
+	const year = [1976, 1997, 2002, 1995, 1985];<br>
+	map을 이용하여 나이구하기<br>
+	코딩시 줄을 바꾸지 않고 한줄로 표현={},return,; 을 생략해서..<br>
+	</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+</body>
+</html>

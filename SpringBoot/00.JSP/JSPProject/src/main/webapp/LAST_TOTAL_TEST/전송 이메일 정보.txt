@@ -1,0 +1,10 @@
+# TotalTest 제출
+메일명 : 날짜_TotalTest_반명_이름  (ex, 20260224_TotalTest_304_조현준)
+기간 : 26.02.24(화) ~ 26(목) 22:00시까지
+
+# 셋팅
+- java 폴더에 있는 패키지 2개(dao, vo)는 kr.or.ddit.ch17 패키지 하위로 넣어주세요.
+- fileIcon 폴더는 /resources/images 폴더에 넣어주세요.
+
+- wh-guswns123@hanmail.net 여기로 전송해주세요.
+- 메일 전송 시, 특이사항 및 어려운점이 있거나 공부하면서 궁금한것들 있으면 함께 코멘트 남겨주세요.

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로 맛잘러 영달봇</title>
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #fff5eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            width: 950px; /* 창 크기 확장 */
+            height: 90vh;
+            background-color: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(255, 126, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid #ff7e00;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff9d00, #ff5e00);
+            color: white;
+            padding: 35px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            letter-spacing: -1px;
+        }
+        .header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        #chat-window {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            background-color: #ffffff;
+        }
+        .message {
+            max-width: 85%;
+            padding: 22px 28px;
+            border-radius: 25px;
+            font-size: 1.25rem; /* 글자 크기 상향 */
+            line-height: 1.8;
+            word-break: keep-all;
+        }
+        .bot {
+            background-color: #fff0e0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            color: #444;
+            border: 1px solid #ffe0c0;
+        }
+        .user {
+            background-color: #ff7e00;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        /* 맛집 카드 스타일 */
+        .res-card {
+            margin-top: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            border-left: 6px solid #ff7e00;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .res-name {
+            font-weight: 800;
+            color: #ff5e00;
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .link-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 18px;
+            background-color: #ff7e00;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .link-btn:hover { background-color: #e66a00; }
+
+        .input-area {
+            padding: 35px;
+            background-color: #fff9f5;
+            border-top: 1px solid #ffe0c0;
+            display: flex;
+            gap: 20px;
+        }
+        input {
+            flex: 1;
+            padding: 22px;
+            border: 2px solid #ffdec0;
+            border-radius: 18px;
+            outline: none;
+            font-size: 1.3rem;
+        }
+        input:focus { border-color: #ff7e00; }
+        button {
+            padding: 0 45px;
+            background-color: #ff7e00;
+            color: white;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="header">
+        <h1>프로 맛잘러 영달봇 🤖</h1>
+        <p>대덕인재개발원 근처 찐맛집만 골라드려요</p>
+    </div>
+    <div id="chat-window">
+        <div class="message bot">
+            반갑습니다! <b>프로 맛잘러 영달봇</b>입니다. 🍊<br>
+            무엇이든 물어보세요. 원하시는 메뉴나 카테고리를 말씀해 주시면 바로 찾아드릴게요!
+        </div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="맛집을 찾아보세요... (예: 오늘 삼겹살 당기는데 어디가 좋아?)" onkeypress="if(event.keyCode==13) sendMessage()">
+        <button onclick="sendMessage()">맛집찾기</button>
+    </div>
+</div>
+
+<script>
+    // 대덕인재개발원(대전 오류동/문화동) 인근 실제 데이터베이스
+    const restaurantDB = {
+        "한식": [
+            {name: "한영식당", review: "백종원의 3대천왕에 나온 닭볶음탕 성지! 감자가 정말 맛있어요.", link: "https://map.naver.com/v5/search/오류동한영식당"},
+            {name: "오류옥천냉면", review: "현지인들이 즐겨찾는 냉면과 수육 맛집입니다. 국물이 정말 깔끔해요.", link: "https://map.naver.com/v5/search/오류옥천냉면"},
+            {name: "단지네", review: "낙지볶음과 콩나물국밥이 일품인 곳, 매콤한 거 당길 때 추천해요.", link: "https://map.naver.com/v5/search/오류동단지네"}
+        ],
+        "일식": [
+            {name: "백소정 오류점", review: "마제소바와 돈카츠 구성이 알차고 아주 깔끔하게 나와요.", link: "https://map.naver.com/v5/search/백소정오류점"},
+            {name: "다도해", review: "신선한 회와 초밥을 즐길 수 있는 가성비 횟집입니다.", link: "https://map.naver.com/v5/search/오류동다도해"},
+            {name: "미소야", review: "다양한 일식 메뉴를 부담 없이 즐기기 좋은 정석 같은 곳이죠.", link: "https://map.naver.com/v5/search/미소야오류점"}
+        ],
+        "중식": [
+            {name: "칭차이플러스", review: "항아리짬뽕이 유명해요. 양도 푸짐하고 불맛이 제대로입니다.", link: "https://map.naver.com/v5/search/칭차이플러스"},
+            {name: "대성관", review: "오래된 노포 느낌의 중식당으로 간짜장이 특히 인기가 많습니다.", link: "https://map.naver.com/v5/search/오류동대성관"},
+            {name: "미스터비나가사키짬뽕", review: "진한 국물 맛이 일품인 나가사키 짬뽕 전문점입니다.", link: "https://map.naver.com/v5/search/미스터비나가사키"}
+        ],
+        "양식": [
+            {name: "쿠우쿠우 대전점", review: "다양한 초밥뿐만 아니라 파스타, 피자 등 양식 메뉴도 즐기기 좋아요.", link: "https://map.naver.com/v5/search/쿠우쿠우대전점"},
+            {name: "서가앤쿡", review: "목살 스테이크 샐러드와 파스타의 정석, 모임하기 최고입니다.", link: "https://map.naver.com/v5/search/서가앤쿡대전세이점"},
+            {name: "잇츠(EATS)", review: "분위기 좋은 레스토랑에서 즐기는 파스타와 리조또 맛집입니다.", link: "https://map.naver.com/v5/search/오류동잇츠"}
+        ],
+        "고기": [
+            {name: "공주칼국수쭈꾸미", review: "매콤한 쭈꾸미 구이와 칼국수의 조합은 대전의 진리입니다.", link: "https://map.naver.com/v5/search/오류동공주칼국수"},
+            {name: "돈수정", review: "삼겹살과 목살이 정말 신선하고 사장님이 친절하셔서 기분 좋아지는 곳이에요.", link: "https://map.naver.com/v5/search/오류동돈수정"},
+            {name: "백미원", review: "양꼬치와 꿔바로우가 당길 때 가는 대덕인 근처 찐 맛집!", link: "https://map.naver.com/v5/search/오류동백미원"}
+        ],
+        "카페": [
+            {name: "커피인터뷰", review: "분위기가 너무 예뻐서 사진 찍기 좋고 커피 향도 훌륭합니다.", link: "https://map.naver.com/v5/search/커피인터뷰"},
+            {name: "투썸플레이스 오류점", review: "카공하거나 조용히 이야기 나누기 좋은 넓은 매장입니다.", link: "https://map.naver.com/v5/search/투썸플레이스오류점"},
+            {name: "스타벅스 대전오류점", review: "대덕인재개발원 바로 인근에서 가장 편하게 갈 수 있는 곳이죠.", link: "https://map.naver.com/v5/search/스타벅스대전오류점"}
+        ]
+    };
+
+    // 키워드 매핑 (사용자가 '삼겹살'이라 해도 '고기' 카테고리를 찾도록)
+    const keywordMap = {
+        "한식": ["한식", "밥", "한영식당", "국밥", "찌개"],
+        "일식": ["일식", "초밥", "소바", "돈카츠", "회"],
+        "중식": ["중식", "짜장", "짬뽕", "중국집", "탕수육"],
+        "양식": ["양식", "파스타", "스테이크", "피자"],
+        "고기": ["고기", "삼겹살", "쭈꾸미", "구이", "양꼬치"],
+        "카페": ["카페", "커피", "디저트", "차", "후식"]
+    };
+
+    function sendMessage() {
+        const inputField = document.getElementById('user-input');
+        const userText = inputField.value.trim();
+        if (userText === "") return;
+
+        addMessage(userText, 'user');
+        inputField.value = "";
+
+        setTimeout(() => {
+            let foundCategory = null;
+            
+            // 키워드 맵을 순회하며 입력된 문장에 키워드가 있는지 확인
+            for (let category in keywordMap) {
+                if (keywordMap[category].some(keyword => userText.includes(keyword))) {
+                    foundCategory = category;
+                    break;
+                }
+            }
+
+            let botResponse = "";
+            if (foundCategory) {
+                const results = restaurantDB[foundCategory];
+                botResponse = `프로 맛잘러 <b>영달이</b>가 요청하신 <b>"${foundCategory}"</b> 맛집을 싹 긁어왔어요! 🍊<br><br>`;
+                
+                botResponse += `<div class="res-card"><span class="res-name">🥇 ${results[0].name}</span> ${results[0].review} <br><a href="${results[0].link}" target="_blank" class="link-btn">지도 보기</a></div>`;
+                botResponse += `<div class="res-card"><span class="res-name">🥈 ${results[1].name}</span> ${results[1].review} <br><a href="${results[1].link}" target="_blank" class="link-btn">지도 보기</a></div>`;
+                botResponse += `<div class="res-card"><span class="res-name">🥉 ${results[2].name}</span> ${results[2].review} <br><a href="${results[2].link}" target="_blank" class="link-btn">지도 보기</a></div>`;
+                
+                botResponse += `<br>영달봇의 정보가 도움이 되셨나요? 맛있게 드시고 열공하세요!`;
+            } else {
+                botResponse = "음... 무슨 말씀인지 잘 모르겠어요. 😅 <br><b>한식, 일식, 중식, 양식, 고기, 카페</b> 중에서 물어봐 주시면 영달이가 바로 알려드릴게요!";
+            }
+            addMessage(botResponse, 'bot');
+        }, 700);
+    }
+
+    function addMessage(text, sender) {
+        const chatWindow = document.getElementById('chat-window');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+        msgDiv.innerHTML = text;
+        chatWindow.appendChild(msgDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight; 
+    }
+</script>
+
+</body>
+</html>

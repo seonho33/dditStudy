@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Store Detail 전용 Mapper (기존 Mapper와 완전 분리)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+파일명: res/mapper/StoreDetailMapper.xml
+네임스페이스: 독립 패키지 사용
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-->
+<mapper namespace="kr.or.ddit.store.detail.dao.IStoreDetailDAO">
+
+    <!-- ━━━━━━━ ResultMap ━━━━━━━ -->
+ <resultMap id="storeDetailMap" type="kr.or.ddit.store.detail.vo.StoreDetailVO">
+    <id property="storeId" column="STORE_ID"/>
+    <result property="storeName" column="STORE_NAME"/>
+    <result property="storeAddr" column="STORE_ADDR"/>
+    <result property="storeAddr2" column="STORE_ADDR2"/>
+    <result property="storePhone" column="STORE_PHONE"/>
+    <result property="category" column="CATEGORY"/>
+    <result property="storeContent" column="STORE_CONTENT"/>
+    <result property="operationHours" column="OPERATION_HOURS"/>
+    <result property="createDate" column="CREATE_DATE"/>
+    <result property="rating" column="RATING"/>
+    <result property="dibsCount" column="DIBS_COUNT"/>
+    <result property="reviewCount" column="REVIEW_COUNT"/>
+    <result property="status" column="STATUS"/>
+    <result property="bizNo" column="BIZ_NO"/>
+    <result property="ownerEmail" column="OWNER_EMAIL"/>
+    <result property="deposit" column="DEPOSIT"/>
+    <result property="userId" column="USER_ID"/>
+    <result property="storePicture" column="STORE_PICTURE"/>
+</resultMap>
+    
+<!--     <resultMap id="storePictureMap" type="kr.or.ddit.store.detail.vo.StorePictureVO">
+        <id property="sPictureId" column="S_PICTURE_ID"/>
+        <result property="storeId" column="STORE_ID"/>
+        <result property="sPicture" column="S_PICTURE"/>
+    </resultMap> -->
+    
+    <resultMap id="reviewDetailMap" type="kr.or.ddit.store.detail.vo.ReviewDetailVO">
+        <id property="reservId" column="RESERV_ID"/>
+        <result property="review" column="REVIEW"/>
+        <result property="reviewPicture" column="REVIEW_PICTURE"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="rating" column="RATING"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="profileImg" column="PROFILE_IMG"/>
+        <result property="ceoReview" column="CEO_REVIEW"/>
+        <result property="ceoReviewDate" column="CEO_REVIEW_DATE"/>
+    </resultMap>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 1. 가게 기본 정보 (좌표 포함)                  -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <select id="selectStoreById" parameterType="string" resultMap="storeDetailMap">
+    SELECT 
+        STORE_ID, STORE_NAME, STORE_ADDR, STORE_ADDR2,
+        STORE_PHONE, CATEGORY, STORE_CONTENT, OPERATION_HOURS,
+        CREATE_DATE, RATING, DIBS_COUNT, REVIEW_COUNT,
+        STATUS, BIZ_NO, OWNER_EMAIL, DEPOSIT, USER_ID,
+        STORE_PICTURE
+    FROM STORE
+    WHERE STORE_ID = #{storeId}
+      AND STATUS = '승인'
+</select>
+    
+<!-- 
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    2. 가게 사진 리스트                           
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    <select id="selectStorePictures" parameterType="string" resultMap="storePictureMap">
+        SELECT S_PICTURE_ID, STORE_ID, S_PICTURE
+        FROM STORE_PICTURE
+        WHERE STORE_ID = #{storeId}
+        ORDER BY S_PICTURE_ID ASC
+    </select>
+ -->
+ 
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 3. 메뉴 리스트                                 -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <select id="selectMenuList" parameterType="string" resultType="menuVO">
+        SELECT 
+            MENU_ID AS menuId,
+            MENU_NAME AS menuName,
+            MENU_PRICE AS menuPrice,
+            MENU_PICTURE AS menuPicture
+        FROM MENU
+        WHERE STORE_ID = #{storeId}
+        ORDER BY MENU_ID ASC
+    </select>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 4. 리뷰 + 사장님 답글 (3-Way JOIN)            -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<select id="selectReviewsWithCeoReply" parameterType="string" resultMap="reviewDetailMap">
+    SELECT 
+        ur.RESERV_ID,
+        ur.REVIEW,
+        ur.REVIEW_PICTURE,
+        ur.CREATE_DATE,
+        ur.RATING,
+        u.NAME AS USER_NAME,
+        m.PROFILE_IMG,
+        cr.REVIEW AS CEO_REVIEW,
+        cr.CREATE_DATE AS CEO_REVIEW_DATE
+    FROM USER_REVIEW ur
+    INNER JOIN RESERVATION r ON ur.RESERV_ID = r.RESERV_ID
+    INNER JOIN USERS u ON r.USER_ID = u.USER_ID
+    LEFT JOIN MEMBER m ON r.USER_ID = m.USER_ID
+    LEFT JOIN CEO_REVIEW cr ON ur.RESERV_ID = cr.RESERV_ID
+    WHERE r.STORE_ID = #{storeId}
+      AND ur.STATUS = '정상'
+    ORDER BY ur.CREATE_DATE DESC
+</select>
+
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 5. 휴무일 리스트                              -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <select id="selectStoreHolidays" parameterType="string" resultType="string">
+        SELECT WEEKDAY
+        FROM STORE_HOLIDAY
+        WHERE STORE_ID = #{storeId}
+    </select>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 6. 좋아요 여부                                -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <select id="checkUserLike" resultType="int">
+        SELECT COUNT(*) 
+        FROM USER_LIKES
+        WHERE USER_ID = #{userId}
+          AND STORE_ID = #{storeId}
+    </select>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 7. 찜 여부                                    -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <select id="checkUserBookmark" resultType="int">
+        SELECT COUNT(*) 
+        FROM DIDS
+        WHERE USER_ID = #{userId}
+          AND STORE_ID = #{storeId}
+    </select>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 8. 예약된 시간대 조회 (기존 RESERVATION 읽기)  -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- ✅ VARCHAR2 타입이므로 문자열 비교 -->
+    <select id="getBookedTimes" resultType="string">
+        SELECT SUBSTR(RESERV_TIME, 12, 5) AS TIME
+        FROM RESERVATION
+        WHERE STORE_ID = #{storeId}
+          AND SUBSTR(RESERV_TIME, 1, 10) = #{date}
+          AND RESERV_STATUS IN ('대기', '승인')
+    </select>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 9. 좋아요 추가                                -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <insert id="insertUserLike">
+        INSERT INTO USER_LIKES (USER_ID, STORE_ID)
+        VALUES (#{userId}, #{storeId})
+    </insert>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 10. 좋아요 삭제                               -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <delete id="deleteUserLike">
+        DELETE FROM USER_LIKES
+        WHERE USER_ID = #{userId}
+          AND STORE_ID = #{storeId}
+    </delete>
+    
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 11. 좋아요 수 업데이트                            -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <update id="updateUserLikeCount">
+        UPDATE STORE
+        SET LIKES_COUNT = LIKES_COUNT + #{delta}
+        WHERE STORE_ID = #{storeId}
+    </update>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 12. 찜 추가                                   -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <insert id="insertDids">
+        INSERT INTO DIDS (USER_ID, STORE_ID)
+        VALUES (#{userId}, #{storeId})
+    </insert>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 13. 찜 삭제                                   -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <delete id="deleteDids">
+        DELETE FROM DIDS
+        WHERE USER_ID = #{userId}
+          AND STORE_ID = #{storeId}
+    </delete>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- 14. 찜 수 업데이트                            -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <update id="updateDibsCount">
+        UPDATE STORE
+        SET DIBS_COUNT = DIBS_COUNT + #{delta}
+        WHERE STORE_ID = #{storeId}
+    </update>
+    
+
+</mapper>

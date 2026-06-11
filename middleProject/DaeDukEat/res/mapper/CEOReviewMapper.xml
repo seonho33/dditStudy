@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.ddit.review.dao.ICEOReviewDAO">
+
+    <!-- ResultMap: 복합 조인 결과 매핑 -->
+    <resultMap id="CEOreviewDetailMap" type="kr.or.ddit.review.vo.CEOReviewDetailVO">
+        <id property="reservId" column="RESERV_ID"/>
+        <result property="userReview" column="USER_REVIEW"/>
+        <result property="reviewPicture" column="REVIEW_PICTURE"/>
+        <result property="userReviewDate" column="USER_REVIEW_DATE"/>
+        <result property="rating" column="RATING"/>
+        <result property="status" column="STATUS"/>
+        
+        <result property="userId" column="USER_ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="reservTime" column="RESERV_TIME"/>
+        
+        <result property="ceoReview" column="CEO_REVIEW"/>
+        <result property="ceoReviewDate" column="CEO_REVIEW_DATE"/>
+    </resultMap>
+
+    <!-- 
+        특정 가게의 전체 리뷰 조회 (고객 정보 + 사장 답글 포함)
+        @param storeId 가게ID
+        @return List<ReviewDetailVO>
+    -->
+<select id="selectReviewsByStore" parameterType="string" resultMap="CEOreviewDetailMap">
+    SELECT 
+        ur.RESERV_ID,
+        ur.REVIEW AS USER_REVIEW,
+        ur.REVIEW_PICTURE,
+        TO_CHAR(ur.CREATE_DATE, 'YYYY.MM.DD') AS USER_REVIEW_DATE,
+        ur.RATING,
+        ur.STATUS,
+        
+        r.USER_ID,
+        u.NAME AS USER_NAME,
+        TO_CHAR(TO_DATE(r.RESERV_TIME, 'YYYY-MM-DD HH24:MI'), 'YYYY.MM.DD') AS RESERV_TIME,
+        
+        cr.REVIEW AS CEO_REVIEW,
+        TO_CHAR(cr.CREATE_DATE, 'YYYY.MM.DD HH24:MI') AS CEO_REVIEW_DATE
+    FROM 
+        USER_REVIEW ur
+    INNER JOIN 
+        RESERVATION r ON ur.RESERV_ID = r.RESERV_ID
+    INNER JOIN
+        USERS u ON r.USER_ID = u.USER_ID
+    LEFT JOIN 
+        MEMBER m ON r.USER_ID = m.USER_ID
+    LEFT JOIN 
+        CEO_REVIEW cr ON ur.RESERV_ID = cr.RESERV_ID
+    WHERE 
+        r.STORE_ID = #{value}
+        AND ur.STATUS = '정상'
+    ORDER BY 
+        ur.CREATE_DATE DESC
+</select>
+
+<select id="checkCeoReplyExists" parameterType="long" resultType="int">
+    SELECT COUNT(*) 
+    FROM CEO_REVIEW 
+    WHERE RESERV_ID = #{value}
+</select>
+
+
+    <!-- 
+        사장 답글 등록
+        @param ceoReview CeoReviewVO
+    -->
+    <insert id="insertCeoReply" parameterType="kr.or.ddit.review.vo.CeoReviewVO">
+        INSERT INTO CEO_REVIEW (
+            RESERV_ID, 
+            REVIEW, 
+            CREATE_DATE
+        ) VALUES (
+            #{reservId}, 
+            #{review}, 
+            SYSDATE
+        )
+    </insert>
+
+    <!-- 
+        사장 답글 수정
+        @param ceoReview CeoReviewVO
+    -->
+    <update id="updateCeoReply" parameterType="kr.or.ddit.review.vo.CeoReviewVO">
+        UPDATE CEO_REVIEW
+        SET 
+            REVIEW = #{review},
+            UPDATE_DATE = SYSDATE
+        WHERE 
+            RESERV_ID = #{reservId}
+    </update>
+
+</mapper>

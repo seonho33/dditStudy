@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public_css.css">
+
+<script type="text/javascript">
+const arr = ["바나나", "사과","복숭아","참외","사과", "자두","딸기" ,"사과"];
+
+const proc1 =()=>{
+	
+	//찾는 과일 입력
+	let item = prompt("찾는 과일을 입력하십시오.");
+	
+	//입력한 과일이 arr배열에 있으면 몇번째에 있는지를 찾는다.
+	idx = arr.indexOf(item);
+	
+	//출력내용
+	str = `찾는 과일 : ${item}<br>`
+	if(idx==-1){
+		str+= "없습니다";
+	}else{
+		str+=`${idx}번째 있습니다.`
+	}
+	
+	document.querySelector("#result1").innerHTML=str;
+	//
+};
+
+const proc2 = () =>{
+	
+	//찾는 과일 입력
+	let item = prompt("찾는 과일을 입력하십시오.");
+	
+	//입력한 과일이 arr배열에 있으면 몇번째에 있는지를 찾는다.
+	idx = arr.lastIndexOf(item);
+	
+	//출력내용
+	str = `찾는 과일 : ${item}<br>`
+	if(idx==-1){
+		str += "없습니다";
+	}else{
+		str +=`${idx}번째 있습니다.`
+	}
+	
+	document.querySelector("#result2").innerHTML=str;
+	//
+}
+
+const proc3 = () => {
+	
+	let item = prompt("찾는 과일 입력")	
+	
+	//찾는 시작 위치
+	let start = 0;
+	
+	//출력 내용변수
+	let str = `찾는 과일 : ${item}<br>`
+	
+	while(true){
+		idx = arr.indexOf(item,start);
+		if(idx == -1){
+			break;
+		}else{
+			str += `${idx}번째 `
+			start = idx +1;
+		}
+	}
+	if(start ==0){
+		str += "없습니다.";
+	}else{
+		str += "있습니다.";
+	}
+	document.querySelector("#result3").innerHTML = str;
+}
+
+const proc4 =()=>{
+	
+	//시작위치 변수
+	let start = 0;
+	
+	//출력 변수
+	let str = "";
+	
+	let sw = false;
+	
+	//입력
+	let item = prompt("찾는 과일 입력");
+	
+	str += `찾는 과일 : ${item} <br>`;
+	
+	arr.forEach(function(fr,index){
+		if(fr == item){
+			str += `${index}번째 `
+			sw = true;
+		}
+	})
+	
+	if(!sw){
+		str += `없습니다.`
+	}else{
+		str += `있습니다.`
+	}
+	
+	document.querySelector("#result4").innerHTML = str;
+}
+
+const proc5 = () => {
+	
+	//배열에 저장, 마지막 요소로 추가 -push(a,b,c,...)
+	
+	let str = `원래배열 : ${arr}<br>`;
+/* 	str = "원래배열 : " + arr + "<br>"; */
+
+	let item = prompt("추가할 과일 입력");
+	arr.push(item);
+	
+	str +=`추가후 배열 : ${arr}<br>`;
+	
+	document.getElementById("result5").innerHTML = str;
+	
+}
+
+const proc6 = () => {
+	let str = `원래배열 : ${arr}<br>`;
+	if(arr.length==0){
+		str=`배열이 없습니다.`;
+	}else{
+		
+	
+	//꺼내기, 제거하기, 제거한 과일을 res변수로 받는다
+	res = arr.pop();
+	
+	str += "arr.pop() : " + res + "<br>";
+	str += `pop후배열 : ${arr}<br>`;
+	}
+	document.querySelector("#result6").innerHTML = str;
+}
+
+const proc7 = () =>{
+	
+	narr = arr.slice(1,5); //1~4까지 요소를 추출한다
+	
+	let str = "원래배열 " + arr + "<br>";
+	str += `arr.slice(1,5) : ${narr}<br>`;
+	str += `arr.slic(1,5) 후의 원본배열 : <br> ${arr} <br>`;
+	
+	
+	a=arr.slice(1);	//1~끝까지
+	b=arr.slice(-2);//끝에서 1개
+	console.log(a);
+	console.log("끝에서 2개를 가져옴 : "+b);
+	
+	new1 = arr.slice();	//배열복사-깊은복사
+	new2 = arr;			//주소복사-얕은복사
+	arr[2]	= 100;
+	
+	str += `변경된배열 : ${arr}<br> ${new1} <br> ${new2}<br>`;
+	
+	document.querySelector("#result7").innerHTML = str;
+}
+
+const proc8 = () => {
+	
+	let str = "원래배열 : " + arr + "<br>";
+	str =`원래배열 : ${arr}<br>`;
+	
+/* 	arr.splice(1,2,"개나리","진달래"); //2개 삭제하고 2개 추가 */
+ 	arr.splice(1,0,"개나리","진달래"); //2개 추가 
+/* 	arr.splice(1,2);	//2개 삭제 */	
+	str +=`arr.splice(1,0,"개나리","진달래") 후 배열 : ${arr}<br>`;
+
+	document.querySelector("#result8").innerHTML = str;
+}
+
+const proc9 = () => {
+	
+	arr1 = [12,34,56,48,75];
+	arr2 = [10,20,30,40,50];
+	
+	let str = `arr1 => ${arr1} <br>
+			   arr2 => ${arr2} <br>`;
+			   
+	newArr = arr1.concat(arr2);
+	newArr2 = arr2.concat(arr1);
+	
+	str += `arr1.concat(arr2) : ${newArr}<br>`;
+	str += `arr2.concat(arr1) : ${newArr2}<br>`;
+	
+	document.querySelector("#result9").innerHTML = str;
+}
+
+const proc10 = () => {
+	
+	let str = `arr.length : ${arr.length}<br>`
+	
+	res = arr.join("/");		//join 의 파라미터를 생략할 수 있다.. 생략하면 배열요소 사이에 ,가 들어감
+							//join 의 파라미터를 "/" 로 넣으면 배열요소 사이에 /가 들어간다...
+	str += `arr.join("/") : ${res.length}<br>`;
+	
+	let arrStr = arr.join("/");
+	str += `arrStr : ${arrStr}<br>`;
+	
+	out = "";
+	
+	for(i=0;i<arrStr.length;i++){
+		out += `${arrStr[i]}<br>`
+	}
+	
+	document.getElementById("result10").innerHTML = str;
+	document.getElementById("result10").innerHTML += out;
+	
+}
+
+</script>
+
+<style>
+#btn3, #btn4{
+   width : 130px;
+}
+</style>
+
+</head>
+<body>
+
+
+<div class="box">
+
+	<h3>
+	indexOf(item, start)  :item의 위치를 찾는다 , start는 시작인덱스를 설정 <br>
+	lastIndexOf(item, start) item의 위치를 찾는다 , start는 시작인덱스를 설정  <br>
+	찾는 item이 없으면 -1을 리턴 <br>
+	사과를 모두 찾기 : start변수가 필요  <br>
+	</h3>
+	
+	<input type="button" value="indexOf" onclick="proc1()">
+	<input type="button" value="lastindexOf" onclick="proc2()">
+	<input type="button" id=btn3 value="중복과일찾기-while" onclick="proc3()">
+	<input type="button" id="btn4" value="중복과일찾기-forEach" onclick="proc4()">
+	<br><br>
+
+    <div id="result1"></div>
+    <div id="result2"></div>
+    <div id="result3"></div>
+    <div id="result4"></div>
+</div>
+
+
+<div class="box">
+
+	<h3>
+	push(a,b,c....) : 마지막요소로 추가 <br>
+	pop() :마지막 요소 제거 해서 반환
+	 <br>
+	</h3>
+	
+	<input type="button" value="push" onclick="proc5()">
+	<input type="button" value="pop" onclick="proc6()">
+	
+	<br><br>
+
+    <div id="result5"></div>
+    <div id="result6"></div>
+   
+</div>
+
+
+<div class="box">
+
+	<h3>
+	slice(start, end) : start ~ end-1 까지 요소 추출 새로운 배열 생성 <br>
+	a = arr.slice(1);  //1 ~끝 까지<br>
+	b = arr.slice(-1); //끝에서 요소 한개 <br>
+	배열복사 arr.slice() <br>
+	깊은복사 : 배열요소복사 - 한쪽이 변경되어도 다른쪽에 영향을 주지 않는다. <br>
+	얕은복사 : 주소복사 - 한쪽이 변경되면 다른쪽에 영향을 준다. <br>
+	
+	
+	 <br>
+	</h3>
+	
+	<input type="button" value="slice" onclick="proc7()">
+	<br><br>
+
+    <div id="result7"></div>
+   
+   
+</div>
+
+
+<div class="box">
+
+	<h3>
+	splice(index, n,a,b,c....)index위치에서 n개를 삭제하고 a,b,c요소를 삽입<br>
+	splice(index, 0, a,b,c....) n=0일때는 삭제 하지 않는다  a,b,c요소를 삽입<br>
+	splice(index, n) : index위치에서 n개를 삭제
+	 <br>
+	 
+	<!-- arr1 = [1,4];<br>
+	arr2 = [2,3];<br>
+	<br>
+	arr1.splice(1, 0, arr2);<br>
+	console.log(arr1);  //arr2가 묶음으로 처리  1 [2,3] 4<br>
+	<br>
+	arr1.splice(1, 0, ...arr2);<br> -- 배열이 풀려서 저장된다..
+	console.log(arr1);  //1,2,3,4<br>
+	 -->
+	</h3>
+	
+	<input type="button" value="splice" onclick="proc8()">
+	
+	<br><br>
+
+   
+    <div id="result8"></div>
+   
+</div>
+
+
+
+
+<div class="box">
+
+	<h3>
+	arr1 = [12,34,56,48,75];<br>
+	arr2 = [10,20,30,40,50];<br>
+	arr3 =arr1.concat(arr2);<br>
+	<br>
+	<!-- 스프레드 문법을 이용하여 두개의 배열을 concat 수행<br>
+	arr3 = [...arr1, ...arr2];<br> -->
+	</h3>
+	
+	
+	<input type="button" value="concat" onclick="proc9()">
+	
+	<br><br>
+
+   
+    <div id="result9"></div>
+   
+</div>
+
+<div class="box">
+
+	<h3>
+	arr.join() : arr배열을 하나의 문자열로 변경 <br>
+	</h3>
+	
+	<input type="button" value="join" onclick="proc10()">
+	
+	<br><br>
+
+    <div id="result10"></div>
+   
+</div>
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+

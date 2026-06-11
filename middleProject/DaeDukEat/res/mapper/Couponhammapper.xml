@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="couponham">
+
+  <!-- =========================
+       ResultMap (쿠폰함 + 쿠폰 + 가게 join 결과)
+       ========================= -->
+  <resultMap id="couponhamDetailMap" type="kr.or.ddit.store.vo.CouponhamVO">
+    <id     property="couponBoxId"   column="COUPON_BOX_ID"/>
+    <result property="useYn"         column="USE_YN"/>
+    <result property="issuedDate"    column="ISSUED_DATE"/>
+    <result property="usedDate"      column="USED_DATE"/>
+    <result property="couponId"      column="COUPON_ID"/>
+    <result property="userId"        column="USER_ID"/>
+
+    <result property="couponName"    column="COUPON_NAME"/>
+    <result property="couponContent" column="COUPON_CONTENT"/>
+    <result property="deductedPrice" column="DEDUCTED_PRICE"/>
+    <result property="minPrice"      column="MIN_PRICE"/>
+    <result property="expiredDate"   column="EXPIRED_DATE"/>
+    <result property="couponStatus"  column="COUPON_STATUS"/>
+
+    <result property="storeId"       column="STORE_ID"/>
+    <result property="storeName"     column="STORE_NAME"/>
+
+    <result property="discountRate"  column="DISCOUNT_RATE"/>
+    <result property="availability"  column="AVAILABILITY"/>
+  </resultMap>
+
+  <!-- =========================
+       SELECT: 쿠폰함 목록 (JSP list)
+       DAO: selectAvailableCoupons(String userId)
+       *단일 String 파라미터는 #{value}로 받는 게 안전*
+       ========================= -->
+  <select id="selectAvailableCoupons" parameterType="string" resultMap="couponhamDetailMap">
+    <![CDATA[
+    SELECT
+      CH.COUPON_BOX_ID,
+      CH.USE_YN,
+      CH.ISSUED_DATE,
+      CH.USED_DATE,
+      CH.COUPON_ID,
+      CH.USER_ID,
+
+      C.COUPON_NAME,
+      C.COUPON_CONTENT,
+      C.DEDUCTED_PRICE,
+      C.MIN_PRICE,
+      C.EXPIRED_DATE,
+      C.STATUS AS COUPON_STATUS,
+      C.STORE_ID,
+
+      S.STORE_NAME,
+
+      CASE
+        WHEN C.DEDUCTED_PRICE > 0 AND C.DEDUCTED_PRICE < 100 THEN C.DEDUCTED_PRICE
+        ELSE NULL
+      END AS DISCOUNT_RATE,
+
+      CASE
+        WHEN CH.USE_YN = 'Y' THEN 'USED'
+        WHEN C.EXPIRED_DATE < SYSDATE THEN 'EXPIRED'
+        WHEN C.STATUS = 'N' THEN 'DISABLED'
+        ELSE 'AVAILABLE'
+      END AS AVAILABILITY
+    FROM COUPONHAM CH
+    INNER JOIN COUPON C ON CH.COUPON_ID = C.COUPON_ID
+    INNER JOIN STORE  S ON C.STORE_ID  = S.STORE_ID
+    WHERE CH.USER_ID = #{value}
+    ORDER BY CH.USE_YN ASC, CH.ISSUED_DATE DESC
+    ]]>
+  </select>
+
+  <!-- 단건조회: Service에서 본인쿠폰/가게검증/만료검증할 때 -->
+  <select id="selectCouponById" parameterType="long" resultMap="couponhamDetailMap">
+    <![CDATA[
+    SELECT
+      CH.COUPON_BOX_ID,
+      CH.USE_YN,
+      CH.ISSUED_DATE,
+      CH.USED_DATE,
+      CH.COUPON_ID,
+      CH.USER_ID,
+
+      C.COUPON_NAME,
+      C.COUPON_CONTENT,
+      C.DEDUCTED_PRICE,
+      C.MIN_PRICE,
+      C.EXPIRED_DATE,
+      C.STATUS AS COUPON_STATUS,
+      C.STORE_ID,
+
+      S.STORE_NAME,
+
+      CASE
+        WHEN C.DEDUCTED_PRICE > 0 AND C.DEDUCTED_PRICE < 100 THEN C.DEDUCTED_PRICE
+        ELSE NULL
+      END AS DISCOUNT_RATE,
+
+      CASE
+        WHEN CH.USE_YN = 'Y' THEN 'USED'
+        WHEN C.EXPIRED_DATE < SYSDATE THEN 'EXPIRED'
+        WHEN C.STATUS = 'N' THEN 'DISABLED'
+        ELSE 'AVAILABLE'
+      END AS AVAILABILITY
+    FROM COUPONHAM CH
+    INNER JOIN COUPON C ON CH.COUPON_ID = C.COUPON_ID
+    INNER JOIN STORE  S ON C.STORE_ID  = S.STORE_ID
+    WHERE CH.COUPON_BOX_ID = #{value}
+    ]]>
+  </select>
+
+  <select id="getCouponCount" parameterType="string" resultType="int">
+    SELECT COUNT(*)
+    FROM COUPONHAM
+    WHERE USER_ID = #{value}
+  </select>
+
+  <!-- =========================
+       UPDATE: 쿠폰 사용 (Controller에서 map으로 전달)
+       DAO: useCoupon(Map{couponBoxId,userId,inputStoreId})
+       ========================= -->
+  <update id="useCoupon" parameterType="map">
+    <![CDATA[
+    UPDATE COUPONHAM
+       SET USE_YN = 'Y',
+           USED_DATE = SYSDATE
+     WHERE COUPON_BOX_ID = #{couponBoxId}
+       AND USER_ID = #{userId}
+       AND USE_YN = 'N'
+       AND COUPON_ID IN (
+           SELECT COUPON_ID
+           FROM COUPON
+           WHERE STORE_ID = #{inputStoreId}
+       )
+    ]]>
+  </update>
+
+<delete id="deleteCoupon" parameterType="long">
+  DELETE FROM COUPONHAM
+  WHERE COUPON_BOX_ID = #{value}
+</delete>
+
+
+  <!-- =========================
+       자동지급 1) 중복발급 체크
+       DAO: checkCouponIssued(userId, couponId) => map
+       ========================= -->
+  <select id="checkCouponIssued" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM COUPONHAM
+    WHERE USER_ID = #{userId}
+      AND COUPON_ID = #{couponId}
+  </select>
+
+  <!-- =========================
+       자동지급 2) 쿠폰함 insert
+       DAO: insertCoupon(CouponhamVO)
+       - ISSUED_DATE 기본값이 SYSDATE여도 명시해도 OK
+       - 시퀀스 이름만 너희 DB에 맞게 확인!
+       ========================= -->
+  <insert id="insertCoupon" parameterType="kr.or.ddit.store.vo.CouponhamVO">
+<selectKey keyProperty="couponBoxId" resultType="long" order="BEFORE">
+  SELECT COUPON_BOX_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+
+    INSERT INTO COUPONHAM (
+      COUPON_BOX_ID,
+      USE_YN,
+      ISSUED_DATE,
+      USED_DATE,
+      COUPON_ID,
+      USER_ID
+    ) VALUES (
+      #{couponBoxId},
+      #{useYn},
+      SYSDATE,
+      NULL,
+      #{couponId},
+      #{userId}
+    )
+  </insert>
+
+</mapper>

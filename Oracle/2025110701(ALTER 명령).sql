@@ -1,0 +1,54 @@
+2025-1107-01) ALTER 명령
+ALTER 테이블 ADD CONSTRAINT 키 PRIMARY KEY;
+
+1.테이블 이름변경
+ 사용형식)
+    ALTER TABLE 테이블명 RENAME TO 새로운 테이블명;
+ex) PRACTICE 게정의 PRODUCTS 테이블 이름을 GOODS로 변경할때
+ALTER TABLE PRODUCTS RENAME TO GOODS;
+CREATE ALTER DROP ... 롤백의 대상이 아님.
+
+2. 컬럼 이름 변경
+    ALTER TABLE 테이블명 RENAME COLUMN 현재 컬럼명 TO 새로운 컬럼명;
+    ALTER TABLE GOODS RENAME COLUMN PID TO GOODS_ID;
+    
+3. 컬럼 또는 제약조건의 속성 변경
+  -추가(ADD) 갱신(MODIFY) 삭제(DROP)
+
+-- 1)추가 ADD  
+컬럼의 추가나 제약사항의 추가 
+ 사용예)HR계정의 EMPLOYEES 테이블에서 EMP_NAME 이라는 컬럼을 추가하시오.
+ALTER TABLE 테이블명 ADD (컬럼명 데이터타입[(크기)][NOT NULL][DEFAULT 값] ) ;
+
+ALTER TABLE HR.EMPLOYEES ADD (EM_NAME VARCHAR2(45));
+
+-- 2)삭제 DROP
+컬럼의 삭제나 제약사항 삭제
+    사용예)
+ALTER TABLE 테이블명 DROP (COLUMN|CONSTRAINT) (컬럼명|제약명(기본키 설정명 또는 외래키 설정명))
+
+ALTER TABLE HR.EMPLOYEES DROP COLUMN EMP_NAME ;
+    DROP TABLE ORDERS;
+    사용예) ORDERS 테이블의 외래키 설정명을 삭제하시오.
+    ALTER TABLE ORDERS_PRODUCT DROP CONSTRAINT ORDER_ID;
+    
+    ALTER TABLE ORDERS ADD(CONSTRAINT 외래키이름 FOREIGN KEY(컬럼명)
+            REFERENCES 테이블명(컬럼명));
+            
+ ALTER TABLE ORDER_PRODUCT ADD CONSTRAINT FK_ORDERS_ID FOREIGN KEY(ORDER_ID) REFERENCES ORDERS(ORDER_ID);
+            CREATE TABLE ORDERS (ORDER_ID VARCHAR2(45));
+            ALTER TABLE ORDERS DROP CONSTRAINT FK_ORDERS_CUST;
+            DROP TABLE ORDERS;
+    ALTER TABLE ORDERS ADD CONSTRAINT PK_ORDERS_ID PRIMARY KEY (ORDER_ID);
+    
+-- 3)갱신? MODIFY
+   컬럼의 자료타입 또는 크기를 수정
+   컬럼에 자료가 있는경우 작은 크기로 변환할수 없고, 변환할 수 없는 타입의 자료가 포합되어있지 말아야함.
+   
+   사용예)
+   ALTER TABLE 테이블명 MODIFY(컬럼명 데이터타입[(크기)][NOT NULL][DEFAULT 값])
+   ex) HR계정의 EMPLOYEES 테이블에서 EMP_NAME 컬럼을 VARCHAR2(45)로 변경하시오
+   ALTER TABLE HR.EMPLOYEES MODIFY EMP_NAME VARCHAR2(45);
+   
+   INSERT INTO EMPLOYEES VALUE(EM
+   

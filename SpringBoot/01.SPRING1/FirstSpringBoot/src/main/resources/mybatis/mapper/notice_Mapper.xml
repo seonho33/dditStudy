@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.notice.mapper.INoticeMapper">
+
+	<sql id="noticeSearch">
+		<if test="searchWord != null and searchType == 'title'">
+			and (notice_title like '%'||#{searchWord}||'%')
+		</if>
+		<if test="searchWord != null and searchType == 'writer'">
+			and (notice_writer like '%'||#{searchWord}||'%')
+		</if>
+	</sql>
+
+
+<insert id="insertNotice" parameterType="noticeVO" useGeneratedKeys="true">
+	<selectKey keyProperty="noticeNo" resultType="int" order="BEFORE">
+		select SEQ_NOTICE.nextval from dual
+	</selectKey>
+	insert into notice(
+		NOTICE_NO,
+		NOTICE_TITLE,
+		NOTICE_CONTENT,
+		NOTICE_WRITER,
+		NOTICE_DATE
+	)values(
+		#{noticeNo},
+		#{noticeTitle},
+		#{noticeContent},
+		#{noticeWriter},
+		sysdate
+	)
+</insert>
+
+<select id="selectNotice" parameterType="int" resultType="noticeVO">
+	select	*
+	from	notice
+	where	notice_no = #{noticeNo}
+</select>
+
+<update id="incrementHit">
+	update	notice
+	set		
+			notice_hit = notice_hit + 1
+	where	notice_no = #{noticeNo}
+</update>
+
+<delete id="deleteNotice" parameterType="int">
+	delete	from notice
+	where	notice_no = #{noticeNo}
+</delete>
+
+<select id="selectNoticeCount" parameterType="paginationInfoVO">
+	select	count(notice_no)
+	from	notice
+	where	1=1
+	<include refid="noticeSearch"/>
+</select>
+
+<select id="selectNoticeList" parameterType="paginationInfoVO" resultType="noticeVO">
+	select *
+	from(
+		select			
+				row_number() over(order by notice_no desc) rnum,
+				NOTICE_NO,
+				NOTICE_TITLE,
+				NOTICE_CONTENT,
+				NOTICE_WRITER,
+				NOTICE_DATE,
+				NOTICE_HIT
+		from	notice
+		where	1=1
+		<include refid="noticeSearch"/>
+	)b
+	<![CDATA[
+		where b.rnum >= #{startRow} and b.rnum <= #{endRow}
+	]]>
+	
+</select>
+
+<update id="updateNotice" parameterType="noticeVO">
+	update	notice
+	set		
+			notice_title = #{noticeTitle},
+			notice_content = #{noticeContent},
+			notice_date = sysdate
+	where	notice_no = #{noticeNo}
+</update>
+
+</mapper>

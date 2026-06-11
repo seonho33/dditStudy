@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<style type="text/css">
+</style>
+
+<script type="text/javascript">
+const arr = [];
+
+const proc1 =()=>{
+	arr.length=0;
+	while(true){
+	
+	let item = prompt("배열에 추가할 이름을 적으십시오.")
+	
+	if(item==null||item==""||item==" "){
+		break;
+		}	
+/* 	arr.push(item); */
+	arr.splice(0,0,item);
+	}
+	let str = `arr[] : ${arr}<br>`;
+	document.querySelector("#result1").innerHTML = str;
+	
+	/*
+	splice를 이용한방법?
+	if문 속에
+	arr.splice(0,0,item);
+	*/
+}
+
+const proc2 = () =>{
+	const arr2 = [];
+	let sum = 0;
+	let arrStr = "";
+	
+	while(arr2.length<5){
+		let item = Number(prompt("중복되지 않은 숫자를 입력하십시오"));
+		
+		if(item==null||item==""){
+			break;
+		}
+		
+		
+		idx = arr2.indexOf(item);
+		if(idx == -1){
+		arr2.push(item);
+		}
+		arrStr +=`${item} `;
+	}
+	
+	for(i=0;i<arr2.length;i++){
+		sum += arr2[i];
+	}
+	
+	let str = `arr2[] : ${arr2}<br>`;
+	str +=`배열안의 모든 수의 합 : ${sum}<br>`;
+	str +=`입력한 모든 수 : ${arrStr}<br>`;
+	
+	document.querySelector("#result2").innerHTML = str;
+}
+	
+</script>
+
+</head>
+
+
+<body>
+
+<div class="box">
+
+	<h3>
+	1. prompt()를 이용하여 이름을 계속 입력 받아 배열에 저장하고
+	출력하는 프로그램.
+	- 입력의 마지막은 공백 문자를 입력하거나 “취소” 버튼을 눌렀을 때(null)로
+	한다
+	</h3>
+
+	
+	<input type="button" value="확인" onclick="proc1()">
+	<br><br>
+
+    <div id="result1"></div>
+   
+</div>
+
+<div class="box">
+
+	<h3>
+	2. prompt()를 이용하여 수 를 입력 받아 배열에 저장 후 출력하
+	는 프로그램
+	배열에 저장되는 값은 중복되지 않아야 한다
+	배열에 저장된 요소의 갯수가 5이면 종료한다
+
+	</h3>
+
+	
+	<input type="button" value="확인" onclick="proc2()">
+	<br><br>
+
+    <div id="result2"></div>
+   
+</div>
+
+
+
+</body>
+</html>

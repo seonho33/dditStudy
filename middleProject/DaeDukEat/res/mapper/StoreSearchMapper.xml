@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace = DAO에서 호출할 이름 -->
+<mapper namespace="storeSearch">
+	
+<!-- 	id          : DAO에서 호출할 메서드명
+        resultType  : store (config.xml의 typeAlias) -->
+
+<!-- <select id="selectStoreSearch" resultType="store">
+  SELECT DISTINCT
+      s.STORE_ID      AS storeId,
+      s.STORE_NAME    AS storeName,
+      s.CATEGORY      AS category,
+      s.RATING        AS rating,
+      s.DIBS_COUNT    AS dibsCount,
+      s.LIKES_COUNT   AS likesCount,
+      s.REVIEW_COUNT  AS reviewCount,
+      s.STORE_PICTURE AS storePicture,
+      s.STORE_CONTENT AS storeContent
+  FROM store s
+  LEFT JOIN menu m
+      ON s.STORE_ID = m.STORE_ID
+  WHERE s.STATUS = '승인'
+  
+  🔍 검색어 (메뉴명 OR 가게명)
+  <if test="keyword != null and keyword != ''">
+    AND (
+      UPPER(s.STORE_NAME) LIKE UPPER('%' || #{keyword} || '%')
+      OR UPPER(m.MENU_NAME) LIKE UPPER('%' || #{keyword} || '%')
+    )
+  </if>
+
+  🍜 MD 태그
+  <if test="tag != null and tag != ''">
+    AND (
+      UPPER(s.STORE_NAME) LIKE UPPER('%' || #{tag} || '%')
+      OR UPPER(m.MENU_NAME) LIKE UPPER('%' || #{tag} || '%')
+    )
+  </if>
+
+  ORDER BY
+  <choose>
+    <when test="sort == 'dibs'">
+      s.DIBS_COUNT DESC
+    </when>
+    <when test="sort == 'likes'">
+      s.LIKES_COUNT DESC
+    </when>
+    <when test="sort == 'distance'">
+      s.STORE_ID ASC
+    </when>
+    <otherwise>
+      s.DIBS_COUNT DESC
+    </otherwise>
+  </choose>
+</select> -->
+
+<select id="selectStoreSearch" resultType="store">
+  SELECT
+      s.STORE_ID        AS storeId,
+      s.STORE_NAME      AS storeName,
+      s.CATEGORY        AS category,
+      s.RATING          AS rating,
+      s.DIBS_COUNT      AS dibsCount,
+      s.LIKES_COUNT     AS likesCount,
+      s.REVIEW_COUNT    AS reviewCount,
+      s.STORE_PICTURE   AS storePicture,
+      s.STORE_CONTENT   AS storeContent,
+      rv.REVIEW         AS review,
+      rv.RATING         AS reviewRating,
+      rv.REVIEW_PICTURE AS reviewPicture
+  FROM store s
+
+  <!-- ✅ 가게 기준 최신 리뷰 1개 -->
+  LEFT JOIN (
+      SELECT
+          STORE_ID,
+          REVIEW,
+          RATING,
+          REVIEW_PICTURE
+      FROM (
+          SELECT
+              r.STORE_ID,
+              ur.REVIEW,
+              ur.RATING,
+              ur.REVIEW_PICTURE,
+              ROW_NUMBER() OVER (
+                  PARTITION BY r.STORE_ID
+                  ORDER BY ur.CREATE_DATE DESC
+              ) rn
+          FROM reservation r
+          JOIN user_review ur
+              ON r.RESERV_ID = ur.RESERV_ID
+          WHERE ur.STATUS = '정상'
+      )
+      WHERE rn = 1
+  ) rv
+      ON s.STORE_ID = rv.STORE_ID
+
+  WHERE s.STATUS = '승인'
+
+  <!-- 🔍 검색어 (가게명 OR 메뉴명) -->
+  <if test="keyword != null and keyword != ''">
+    AND (
+      UPPER(s.STORE_NAME) LIKE UPPER('%' || #{keyword} || '%')
+      OR EXISTS (
+          SELECT 1
+          FROM menu m
+          WHERE m.STORE_ID = s.STORE_ID
+            AND UPPER(m.MENU_NAME) LIKE UPPER('%' || #{keyword} || '%')
+      )
+    )
+  </if>
+
+  <!-- 🍜 태그 -->
+  <if test="tag != null and tag != ''">
+    AND (
+      UPPER(s.STORE_NAME) LIKE UPPER('%' || #{tag} || '%')
+      OR EXISTS (
+          SELECT 1
+          FROM menu m
+          WHERE m.STORE_ID = s.STORE_ID
+            AND UPPER(m.MENU_NAME) LIKE UPPER('%' || #{tag} || '%')
+      )
+    )
+  </if>
+
+  ORDER BY
+  <choose>
+    <when test="sort == 'dibs'">
+      s.DIBS_COUNT DESC
+    </when>
+    <when test="sort == 'likes'">
+      s.LIKES_COUNT DESC
+    </when>
+    <when test="sort == 'distance'">
+      s.STORE_ID ASC
+    </when>
+    <otherwise>
+      s.DIBS_COUNT DESC
+    </otherwise>
+  </choose>
+</select>
+
+
+
+
+
+
+
+
+ 	<!--맛집리스트 카테고리 목록 (중복 제거) -->
+    <select id="selectCategoryList" resultType="string">
+        SELECT DISTINCT CATEGORY
+        FROM store
+        WHERE STATUS = '승인'        
+    </select>
+    
+   <!--   가게 목록 조회 
+	  <select id="storeSearchCategory" parameterType="map" resultType="store">
+	    SELECT DISTINCT
+	        s.STORE_ID   AS storeId,
+	        s.STORE_NAME AS storeName,
+	        s.CATEGORY   AS category,
+	        s.STORE_CONTENT AS storeContent,
+	        s.RATING     AS rating,
+	        s.DIBS_COUNT AS dibsCount,
+	        s.LIKES_COUNT AS likesCount,
+	        s.STORE_PICTURE AS storePicture,
+	        r.REVIEW     AS review  사용자 리뷰 가져오기
+	    FROM store s
+	    LEFT JOIN reservation rsv ON s.STORE_ID = rsv.STORE_ID
+	    LEFT JOIN user_review r ON rsv.RESERV_ID = r.RESERV_ID
+	    WHERE s.STATUS = '승인'
+	    
+	    전체보기가 아닐 때만 카테고리 필터링
+	    <if test="category != null and category != '' and category != '전체보기'">
+	        AND s.CATEGORY = #{category}
+	    </if>
+	
+	    ✅ 동적 정렬
+	    ORDER BY
+	    <choose>
+	        <when test="sort == 'dibs'">
+	            s.DIBS_COUNT DESC  찜 많은 순
+	        </when>
+	        <when test="sort == 'likes'">
+	            s.REVIEW_COUNT DESC  좋아요(리뷰) 많은 순
+	        </when>
+	        <when test="sort == 'distance'">
+	            s.STORE_ID ASC  거리 가까운 순 (임시: ID 오름차순)
+	        </when>
+	        <otherwise>
+	            s.DIBS_COUNT DESC  기본값: 찜 많은 순
+	        </otherwise>
+	    </choose>
+	</select> -->
+
+
+<!-- 가게 목록 조회 -->
+<select id="storeSearchCategory" parameterType="map" resultType="store">
+    SELECT 
+        s.STORE_ID   AS storeId,
+        s.STORE_NAME AS storeName,
+        s.CATEGORY   AS category,
+        s.STORE_CONTENT AS storeContent,
+        s.RATING     AS rating,
+        s.DIBS_COUNT AS dibsCount,
+        s.LIKES_COUNT AS likesCount,
+        s.STORE_PICTURE AS storePicture,
+        MAX(r.REVIEW) AS review  <!-- 최신 리뷰를 가져오기 위해 MAX 사용 -->
+    FROM store s
+    LEFT JOIN reservation rsv ON s.STORE_ID = rsv.STORE_ID
+    LEFT JOIN user_review r ON rsv.RESERV_ID = r.RESERV_ID
+    WHERE s.STATUS = '승인'
+    
+    <!-- 전체보기가 아닐 때만 카테고리 필터링 -->
+    <if test="category != null and category != '' and category != '전체보기'">
+        AND s.CATEGORY = #{category}
+    </if>
+
+    <!-- GROUP BY로 각 가게에 대해 집계 -->
+    GROUP BY 
+        s.STORE_ID,
+        s.STORE_NAME,
+        s.CATEGORY,
+        s.STORE_CONTENT,
+        s.RATING,
+        s.DIBS_COUNT,
+        s.LIKES_COUNT,
+        s.STORE_PICTURE
+    
+    <!-- 동적 정렬 -->
+    ORDER BY
+    <choose>
+        <when test="sort == 'dibs'">
+            s.DIBS_COUNT DESC  <!-- 찜 많은 순 -->
+        </when>
+        <when test="sort == 'likes'">
+            s.LIKES_COUNT DESC  <!-- 좋아요(리뷰) 많은 순 -->
+        </when>
+        <when test="sort == 'distance'">
+            s.STORE_ID ASC  <!-- 거리 가까운 순 (임시: ID 오름차순) -->
+        </when>
+        <otherwise>
+            s.DIBS_COUNT DESC  <!-- 기본값: 찜 많은 순 -->
+        </otherwise>
+    </choose>
+</select>
+
+
+		
+
+		
+    
+
+	
+
+
+</mapper>

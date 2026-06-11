@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="storeRoulette">
+   
+   <!-- 룰렛용 - 모든 가게 조회 -->
+   <select id="getstoreRoulette" resultType="store">
+      SELECT
+          STORE_ID as storeId,
+          STORE_NAME as storeName,
+          STORE_ADDR as storeAddr, 
+          STORE_PHONE as storePhone, 
+          CATEGORY as category,      
+          RATING as rating,
+          DIBS_COUNT as dibsCount,
+          REVIEW_COUNT as reviewCount, 
+          STORE_PICTURE as storePicture
+      FROM STORE
+      WHERE STATUS = '승인'
+        AND RATING > 0
+      ORDER BY RATING DESC, REVIEW_COUNT DESC
+   </select>
+   
+   <!-- 카테고리별 가게 조회 -->
+   <select id="getstoreCategory" parameterType="String" resultType="store">
+      SELECT
+          STORE_ID as storeId,
+          STORE_NAME as storeName,
+          STORE_ADDR as storeAddr, 
+          STORE_PHONE as storePhone, 
+          CATEGORY as category,      
+          RATING as rating,
+          REVIEW_COUNT as reviewCount, 
+          STORE_PICTURE as storePicture
+      FROM STORE 
+      WHERE STATUS = '승인'
+        AND CATEGORY = #{category}
+        AND RATING > 0
+      ORDER BY RATING DESC, REVIEW_COUNT DESC
+   </select>
+   
+   <!-- 최소 평점 이상 가게 조회 -->
+   <select id="getstoreRating" parameterType="int" resultType="store">
+      SELECT
+          STORE_ID as storeId,
+          STORE_NAME as storeName,
+          STORE_ADDR as storeAddr, 
+          STORE_PHONE as storePhone, 
+          CATEGORY as category,      
+          RATING as rating,
+          REVIEW_COUNT as reviewCount, 
+          STORE_PICTURE as storePicture
+      FROM STORE 
+      WHERE STATUS = '승인'
+        AND RATING >= #{rating}
+      ORDER BY RATING DESC, REVIEW_COUNT DESC
+   </select>
+
+
+
+
+</mapper>

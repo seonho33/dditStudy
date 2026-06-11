@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet"  href="../css/public.css">
+
+<style>
+label{
+  display : inline-block;
+  width : 80px;
+  height : 30px;
+}
+span{
+  display : inline-block;
+  border : 1px solid gold;
+   width : 80px;
+   height : 30px;
+}
+</style>
+
+<script>
+
+const calc = (op) =>{
+	
+	//id=x인 요소 접근 - 값가져오가 
+	
+	
+}
+</script>
+</head>
+<body>
+
+<div class="box">
+<form>
+<label>첫번째</label>
+<input id="x"><br>
+
+<label>두번째</label>
+<input id="y"><br>
+
+<label>결과</label>
+<input id="sum"><br>
+
+<input type="button" onclick="calc('+')" value="+">
+<input type="button" onclick="calc('-')" value="-">
+<input type="button" onclick="calc('*')" value="*">
+<input type="button" onclick="calc('/')" value="/"><br><br>
+<p>첫번째 값 :<span id="sp1"></span> </p>
+<p>두번째 값 :<span id="sp2"></span> </p>
+<p>결과 :<span id="sp3"></span> </p>
+</form>
+
+</div>
+
+</body>
+</html>

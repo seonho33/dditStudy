@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<style type="text/css">
+.box{
+ 	background-image : linear-gradient(skyblue,white);
+}
+</style>
+
+<script type="text/javascript">
+const proc1=()=>{
+	userName = prompt("이름입력");
+	
+	opener.document.querySelector("#result2").innerHTML=userName;
+	
+	//창닫기
+	window.close();
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	여기는 자식창<br>
+	이름 입력해서 부모창에 출력한다<br>
+	부모창을 가리키는 속성은 opener이다..<br>
+	</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+	<div id="result1">
+	</div>
+
+</div>
+
+</body>
+</html>

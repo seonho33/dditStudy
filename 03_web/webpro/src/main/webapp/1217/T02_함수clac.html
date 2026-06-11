@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<script type="text/javascript">
+
+const calc = (type) =>{
+
+	let xValue = Number(document.querySelector("#x").value.trim());
+	let yValue = Number(document.querySelector("#y").value.trim());
+	let res = 0;
+	
+	if(type == "+"){
+		res = add(xValue,yValue);	
+		
+	}else if(type =="-"){
+		res = minus(xValue,yValue);
+		
+	}else if(type =="*"){
+		res = multi(xValue,yValue);
+		
+	}else{
+		res = divide(xValue,yValue);
+		
+	}
+	document.querySelector("#sp1").innerHTML = xValue;
+	document.querySelector("#sp2").innerHTML = yValue;
+	document.querySelector("#sp3").innerHTML = Number(res.toFixed(2)).toLocaleString();
+	document.querySelector("#sum").value = Number(res.toFixed(2)).toLocaleString();
+}
+
+const add = (x,y) =>{
+	return x + y; 
+}
+
+const minus = (x,y) =>{
+	return x - y;
+}
+
+const multi = (x,y) =>{
+	return x*y;
+}
+
+const divide = (x,y) =>{
+	return x/y;
+}
+
+</script>
+<style type="text/css">
+label{
+	display: inline-block;
+	width: 80px;
+	height: 30px;
+}
+span{
+	display:inline-block;
+	border: 1px solid black;
+	width: 80px;
+	height: 30px;
+}
+.result{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+.result p{
+	display: flex;
+	align-items: center;
+	width: 200px;
+	height: 50px;
+}
+.result span{
+	margin-left: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<form>
+<label>첫번째</label>
+<input id="x"><br>
+
+<label>두번째</label>
+<input id="y"><br>
+
+<label>결과</label>
+<input id="sum"><br>
+
+<input type="button" onclick="calc('+')" value="+">
+<input type="button" onclick="calc('-')" value="-">
+<input type="button" onclick="calc('*')" value="*">
+<input type="button" onclick="calc('/')" value="/"><br>
+<div class="result">
+	<p>첫번째 값 :<span id="sp1"></span> </p>
+	<p>두번째 값 :<span id="sp2"></span> </p>
+	<p>결과 :<span id="sp3"></span> </p>
+</div>
+</form>
+</div>
+
+</body>
+</html>

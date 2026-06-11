@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+ul{
+	border : 1px solid red;
+	border-width : 1px;
+	border-style : solid;
+	border-color : red;
+	border-width: 1px 5px;
+	
+	width : 40%;
+}
+li{
+	border : 2px dotted green;
+	margin: 5px;
+}
+#u2{
+	list-style-type: circle;
+}
+#u3{
+	list-style-type: square;
+}
+#u4{
+	list-style-image: url("../images/check.png");
+}
+#u5{
+	list-style-position: inside;
+}
+#u6{
+	list-style: square inside url(../images/check.png);
+}
+#u7{
+	list-style: none;
+}
+
+</style>
+</head>
+<body>
+<pre>
+disk	: 검정 동그라미
+ul		: 순서(번호)가 없는 리스트를 나열
+list-style-type : disk,circle,equare
+</pre>
+
+<h3>기본값 : list-style-type : disk</h3>
+<ul id="u1">
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JAVASCRIPT</li>
+</ul>
+<hr color="blue">
+<h3>list-style-type : circle</h3>
+<ul id="u2">
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JAVASCRIPT</li>
+</ul>
+<hr color="blue">
+<h3>list-style-type : square</h3>
+<ul id="u3">
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JAVASCRIPT</li>
+</ul>
+<hr color="blue">
+<h3>list-style-img : url</h3>
+<ul id="u4">
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JAVASCRIPT</li>
+</ul>
+<hr color="blue">
+<h3>list-style-position : inside</h3>
+<ul id="u5">
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JAVASCRIPT</li>
+</ul>
+<hr color="blue">
+<h3>list-style: inside url(../images/check.png)</h3>
+<ul id="u6">
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JAVASCRIPT</li>
+</ul>
+<hr color="blue">
+<h3>list-style: none</h3>
+<ul id="u7">
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JAVASCRIPT</li>
+</ul>
+<hr color="blue">
+
+</body>
+</html>

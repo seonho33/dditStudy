@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coupon">
+
+    <resultMap id="couponMap" type="kr.or.ddit.store.vo.CouponVO">
+        <id property="couponId" column="COUPON_ID"/>
+        <result property="couponName" column="COUPON_NAME"/>
+        <result property="couponContent" column="COUPON_CONTENT"/>
+        <result property="deductedPrice" column="DEDUCTED_PRICE"/>
+        <result property="minPrice" column="MIN_PRICE"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="expiredDate" column="EXPIRED_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="status" column="STATUS"/>
+        <result property="couponQty" column="COUPON_QTY"/>
+        <result property="storeId" column="STORE_ID"/>
+    </resultMap>
+
+    <!-- ✅ 단일 String 파라미터는 #{value} -->
+    <select id="selectCouponsByStoreId" parameterType="string" resultMap="couponMap">
+        SELECT *
+        FROM COUPON
+        WHERE STORE_ID = #{value}
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <!-- ✅ 단일 String 파라미터는 #{value} -->
+    <select id="selectActiveCoupons" parameterType="string" resultMap="couponMap">
+        SELECT *
+        FROM COUPON
+        WHERE STORE_ID = #{value}
+          AND STATUS = 'Y'
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <insert id="insertCoupon" parameterType="kr.or.ddit.store.vo.CouponVO">
+        <selectKey keyProperty="couponId" resultType="long" order="BEFORE">
+            SELECT COUPON_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO COUPON (
+            COUPON_ID,
+            COUPON_NAME,
+            COUPON_CONTENT,
+            DEDUCTED_PRICE,
+            MIN_PRICE,
+            EXPIRED_DATE,
+            COUPON_QTY,
+            STORE_ID,
+            STATUS,
+            CREATE_DATE
+        ) VALUES (
+            #{couponId},
+            #{couponName},
+            #{couponContent, jdbcType=VARCHAR},
+            #{deductedPrice},
+            #{minPrice},
+            #{expiredDate, jdbcType=DATE},
+            #{couponQty, jdbcType=NUMERIC},
+            #{storeId},
+            'Y',
+            SYSDATE
+        )
+    </insert>
+
+    <insert id="insertCouponRule" parameterType="kr.or.ddit.store.vo.CouponRuleVO">
+        INSERT INTO COUPON_RULE (COUPON_ID, REVIEW_N)
+        VALUES (#{couponId}, #{reviewN})
+    </insert>
+
+    <!-- ✅ 단일 Long 파라미터는 #{value} -->
+    <update id="deactivateCoupon" parameterType="long">
+        UPDATE COUPON
+           SET STATUS = 'N'
+         WHERE COUPON_ID = #{value}
+    </update>
+
+    <!-- ✅ 단일 Long 파라미터는 #{value} -->
+    <delete id="deleteCoupon" parameterType="long">
+        DELETE FROM COUPON
+        WHERE COUPON_ID = #{value}
+    </delete>
+
+    <!-- ✅ 단일 Long 파라미터는 #{value} -->
+    <select id="selectCouponById" parameterType="long" resultMap="couponMap">
+        SELECT *
+        FROM COUPON
+        WHERE COUPON_ID = #{value}
+    </select>
+
+    <resultMap id="rewardCouponMap" type="kr.or.ddit.store.vo.RewardCouponVO">
+        <id property="couponId" column="COUPON_ID"/>
+        <result property="storeId" column="STORE_ID"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="expiredDate" column="EXPIRED_DATE"/>
+        <result property="reviewN" column="REVIEW_N"/>
+    </resultMap>
+
+    <!-- ✅ 단일 String 파라미터는 #{value} -->
+    <select id="selectActiveRewardCouponsByStoreId" parameterType="string" resultMap="rewardCouponMap">
+        SELECT
+            C.COUPON_ID,
+            C.STORE_ID,
+            C.CREATE_DATE,
+            C.EXPIRED_DATE,
+            CR.REVIEW_N
+        FROM COUPON C
+        INNER JOIN COUPON_RULE CR ON C.COUPON_ID = CR.COUPON_ID
+        WHERE C.STORE_ID = #{value}
+          AND C.STATUS = 'Y'
+          AND (C.EXPIRED_DATE IS NULL OR C.EXPIRED_DATE >= SYSDATE)
+        ORDER BY C.CREATE_DATE DESC
+    </select>
+
+</mapper>

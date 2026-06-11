@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<script type="text/javascript">
+const today = new Date();
+
+const proc1 = () =>{
+	
+	const myday = new Date("1996.3.13");
+	
+	let a = today.getTime(); 
+	let b = myday.getTime();
+	
+	console.log(a);
+	console.log(b);
+	
+	times = today.getTime() - myday.getTime();
+	
+	console.log(times);
+	
+	let days = times/1000;
+	
+	let str = `오늘은 ${today.toLocaleDateString()} <br>
+			   생년월일은 ${myday.toLocaleDateString()}<br>
+			   ${days} 초동안 살았습니다.`
+	document.querySelector("#result1").innerHTML =str;
+}
+
+const proc2 = () =>{
+	const day2 = 100*1000*60*60*24;
+	const totime = today.getTime();
+	const after = new Date(day2+totime);
+	
+	document.querySelector("#result2").innerHTML
+	=`오늘날짜 : ${today.toLocaleDateString()} <br>
+	100일후 날짜는 ${after.toLocaleDateString()}`
+}
+
+const proc3 = () =>{
+	const endDay = new Date("2026.6.8");
+	console.log(endDay.getTime());
+	let times = endDay.getTime()-today.getTime();
+	let day3 = times/1000/60/60/24;
+	
+	document.querySelector("#result3").innerHTML
+	=`수료까지 남은 일수는 ${Math.floor(day3)}일 남았습니다.`
+	
+/* 	let day3 = endDay.getTime()-today.getTime();
+	document.querySelector("#result3").innerHTML = `수료일까지 ${day3/1000/60/60/24} 일 남았습니다.` */
+}
+
+</script>
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	태어난 날로부터 현재까지 일 수 구하기...
+	</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3>
+	100일 후의 날짜 구하기
+	</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3>
+	수료일까지 남은 일수 구하기
+	</h3>
+
+	<input type="button" value="확인" id="btn3" onclick="proc3()">
+
+	<br><br>
+
+		<div id="result3">
+		</div>
+
+</div>
+
+</body>
+</html>

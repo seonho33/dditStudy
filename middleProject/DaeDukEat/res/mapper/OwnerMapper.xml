@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    사장님 전용 Mapper
+    - namespace는 DAO Interface Full Path와 정확히 일치
+    - id는 Interface 메서드명과 정확히 일치
+-->
+<mapper namespace="owner">
+
+    <!-- ========== ResultMaps ========== -->
+    
+    <!-- 통계 데이터 매핑 -->
+    <resultMap id="ownerStatsMap" type="kr.or.ddit.store.vo.OwnerStatsVO">
+        <result property="userId" column="USER_ID"/>
+        <result property="storeId" column="STORE_ID"/>
+        <result property="storeName" column="STORE_NAME"/>
+        <result property="rating" column="RATING"/>
+        <result property="dibsCount" column="DIBS_COUNT"/>
+        <result property="reviewCount" column="REVIEW_COUNT"/>
+        <result property="todayReservCount" column="TODAY_RESERV_COUNT"/>
+        <result property="pendingReservCount" column="PENDING_RESERV_COUNT"/>
+    </resultMap>
+    
+    <!-- 프로필 데이터 매핑 -->
+    <resultMap id="ownerProfileMap" type="kr.or.ddit.store.vo.OwnerProfileVO">
+        <result property="userId" column="USER_ID"/>
+        <result property="name" column="NAME"/>
+        <result property="division" column="DIVISION"/>
+        <result property="storeId" column="STORE_ID"/>
+        <result property="storeName" column="STORE_NAME"/>
+        <result property="storeAddr" column="STORE_ADDR"/>
+        <result property="storeAddr2" column="STORE_ADDR2"/>
+        <result property="storePhone" column="STORE_PHONE"/>
+        <result property="category" column="CATEGORY"/>
+        <result property="storeContent" column="STORE_CONTENT"/>
+        <result property="operationHours" column="OPERATION_HOURS"/>
+        <result property="bizNo" column="BIZ_NO"/>
+        <result property="ownerEmail" column="OWNER_EMAIL"/>
+        <result property="deposit" column="DEPOSIT"/>
+    </resultMap>
+
+    <!-- ========== Queries ========== -->
+    
+    <!-- 
+        사장님 통계 조회
+        - V_OWNER_STATS 뷰 활용
+        - 파라미터: userId (String)
+    -->
+<select id="selectOwnerStats" parameterType="string" resultMap="ownerStatsMap">
+  SELECT
+    s.USER_ID,
+    s.STORE_ID,
+    s.STORE_NAME,
+    s.RATING,
+    s.DIBS_COUNT,
+    s.REVIEW_COUNT,
+
+    /* 오늘 생성된 예약 수 */
+    (SELECT COUNT(*)
+       FROM RESERVATION r
+      WHERE r.STORE_ID = s.STORE_ID
+        AND TRUNC(r.CREATE_DATE) = TRUNC(SYSDATE)
+    ) AS TODAY_RESERV_COUNT,
+
+    /* 승인 대기 예약 수 */
+    (SELECT COUNT(*)
+       FROM RESERVATION r
+      WHERE r.STORE_ID = s.STORE_ID
+        AND r.RESERV_STATUS = '대기'
+    ) AS PENDING_RESERV_COUNT
+
+  FROM STORE s
+  WHERE s.USER_ID = #{value}
+</select>
+
+    
+    <!-- 
+        사장님 프로필 조회
+        - USERS + STORE 조인
+        - 파라미터: userId (String)
+    -->
+    <select id="selectOwnerProfile" parameterType="string" resultMap="ownerProfileMap">
+        SELECT 
+            u.USER_ID,
+            u.NAME,
+            u.DIVISION,
+            s.STORE_ID,
+            s.STORE_NAME,
+            s.STORE_ADDR,
+            s.STORE_ADDR2,
+            s.STORE_PHONE,
+            s.CATEGORY,
+            s.STORE_CONTENT,
+            s.OPERATION_HOURS,
+            s.BIZ_NO,
+            s.OWNER_EMAIL,
+            s.DEPOSIT,
+            s.STORE_PICTURE
+        FROM USERS u
+        INNER JOIN STORE s ON u.USER_ID = s.USER_ID
+        WHERE u.USER_ID = #{userId}
+    </select>
+    
+    <!-- 
+        가게 정보 수정
+        - 파라미터: OwnerProfileVO
+        - 수정 가능 필드: 가게명, 주소, 전화번호, 소개글, 운영시간, 예약금
+    -->
+    <update id="updateStoreInfo" parameterType="kr.or.ddit.store.vo.OwnerProfileVO">
+        UPDATE STORE
+        SET 
+            STORE_NAME = #{storeName},
+            STORE_ADDR = #{storeAddr},
+            STORE_ADDR2 = #{storeAddr2},
+            STORE_PHONE = #{storePhone},
+            STORE_CONTENT = #{storeContent},
+            OPERATION_HOURS = #{operationHours},
+            DEPOSIT = #{deposit}
+        WHERE STORE_ID = #{storeId}
+          AND USER_ID = #{userId}
+        <!-- 보안: 본인 가게만 수정 가능 -->
+    </update>
+    
+    <select id="selectOwnerStatsByStoreId"
+        parameterType="string"
+        resultType="kr.or.ddit.store.vo.OwnerStatsVO">
+
+    SELECT
+        S.STORE_ID               AS storeId,
+        S.STORE_NAME             AS storeName,
+        S.RATING                 AS rating,
+        S.REVIEW_COUNT           AS reviewCount,
+
+        /* 오늘 예약 */
+        (
+            SELECT COUNT(*)
+            FROM RESERVATION R
+            WHERE R.STORE_ID = S.STORE_ID
+              AND TRUNC(R.CREATE_DATE) = TRUNC(SYSDATE)
+        ) AS todayReservCount,
+
+        /* 승인 대기 */
+        (
+            SELECT COUNT(*)
+            FROM RESERVATION R
+            WHERE R.STORE_ID = S.STORE_ID
+              AND R.RESERV_STATUS = '대기'
+        ) AS pendingReservCount
+
+    FROM STORE S
+    WHERE S.STORE_ID = #{storeId}
+</select>
+    
+    <!-- 오늘 예약 리스트 매핑 -->
+<resultMap id="todayReservMap" type="kr.or.ddit.store.vo.ReservationVO">
+  <id     property="reservId"      column="RESERV_ID"/>
+  <result property="guestCount"    column="GUEST_COUNT"/>
+  <result property="reservTime"    column="RESERV_TIME"/>
+  <result property="reservStatus"  column="RESERV_STATUS"/>
+  <result property="note"          column="NOTE"/>
+  <result property="createDate"    column="CREATE_DATE"/>
+  <result property="amount"        column="AMOUNT"/>
+  <result property="userId"        column="USER_ID"/>
+  <result property="storeId"       column="STORE_ID"/>
+
+  <!-- JOIN (예약자 정보) -->
+  <result property="userName"      column="USER_NAME"/>
+  <result property="userNo"        column="USER_NO"/>
+</resultMap>
+    
+    
+    <!-- 오늘 예약 리스트 (storeId 기준) -->
+<select id="selectTodayReservListByStoreId"
+        parameterType="string"
+        resultMap="todayReservMap">
+
+  SELECT
+    r.RESERV_ID,
+    r.GUEST_COUNT,
+    r.RESERV_TIME,
+    r.RESERV_STATUS,
+    r.NOTE,
+    r.CREATE_DATE,
+    r.AMOUNT,
+    r.USER_ID,
+    r.STORE_ID,
+
+    u.NAME      AS USER_NAME,
+    m.USER_NO   AS USER_NO
+
+  FROM RESERVATION r
+  JOIN USERS u  ON u.USER_ID = r.USER_ID
+  LEFT JOIN MEMBER m ON m.USER_ID = r.USER_ID
+
+  WHERE r.STORE_ID = #{storeId}
+    AND TRUNC(r.CREATE_DATE) = TRUNC(SYSDATE)
+
+  ORDER BY r.RESERV_TIME ASC
+</select>
+    
+    
+
+</mapper>

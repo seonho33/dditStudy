@@ -1,0 +1,83 @@
+package kr.or.ddit.basic;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class T08HashMapTest {
+/*
+    Map => key값과 value값을 한 쌍으로 관리하는 객체
+        => key값은 중복을 허용하지 않고 인덱스 개념이 존재하지 않음.
+        => value값은 중복을 허용한다. 
+*/
+	public static void main(String[] args) {
+		Map<String, String> hMap = 
+				new HashMap<String, String>();
+		
+		// 데이터 추가하기 => put(key값, value값);
+		hMap.put("name", "홍길동");
+		hMap.put("addr", "대전");
+		hMap.put("tel", "010-1234-5678");
+		
+		// 데이터 수정하기 => 데이터를 저장할 때 key값이 같으면
+		//                나중에 입력한 value값이 저장된다.
+		//            => put(수정할key값, 새로운value값)
+		hMap.put("addr", "서울");
+		System.out.println("hMap => " + hMap);
+		
+		// 데이터 삭제하기 => remove(삭제할key값)
+		hMap.remove("name");
+		System.out.println("hMap => " + hMap);
+		
+		// 데이터 읽기 => get(key값)
+		System.out.println("addr=" + hMap.get("addr"));
+		System.out.println("==========================");
+		
+		// key값들을 읽어와 모든 데이터를 출력하는 방법
+		
+		// 방법1 => keySet()메서드 사용하기
+		Set<String> keySet = hMap.keySet();
+		
+		System.out.println("Iterator 이용하기");
+		Iterator<String> it = keySet.iterator();
+		
+		while(it.hasNext()) {
+			String key = it.next();
+			System.out.println(key + " : " + hMap.get(key));
+		}
+		System.out.println("----------------------");
+		System.out.println("향상된 for문(for-each문) 이용하기");
+		
+		for(String key : keySet) {
+			System.out.println(key + " : " + hMap.get(key));
+		}
+		System.out.println("------------------------");
+		
+		// 방법2: value값들만 읽어와 출력하기 => values() 이용
+		System.out.println("values()메서드 이용하기");
+		for(String value : hMap.values()) {
+			System.out.println(value);
+		}
+		System.out.println("-------------------------");
+		
+		// 방법3: Map관련 클래스에는 Map.Entry타입의 내부 클래스가
+		//       정의되어 있다. 이 Entry타입의 객체를 Set형식으로
+		//       제공하는 메서드를 이용하는 방법 => entrySet()메서드
+		System.out.println("entrySet() 메서드 이용하기");
+		
+		Set entrySet = hMap.entrySet();
+		Iterator it2 = entrySet.iterator();
+		while(it2.hasNext()) {
+			Entry entry = (Entry)it2.next();
+			System.out.println("key값 : " + entry.getKey());
+			System.out.println("value값 : " + entry.getValue());
+		}
+		
+		Map<Integer, Integer> map2 = 
+				new HashMap<Integer, Integer>();
+		map2.put(111, 3333);
+		
+	}
+}

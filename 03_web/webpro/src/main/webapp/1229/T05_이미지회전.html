@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public_css.css">
+<script type="text/javascript">
+idx=-1;
+
+const start = () =>{
+	
+	//시작버튼을 검색해 찾고 감추기
+	startb = document.querySelector('input[value=시작]');
+	//startb.style.display = "none"
+	startb.style.background = 'black'
+	startb.disabled = true;
+
+	
+	//result1 을 검색하고 모든 자식들을 가져온다
+	vimg = document.querySelectorAll("#result1 img");
+	vres = document.querySelector("#result1");
+	
+	vimg.forEach(img =>{
+		img.style.border = "none";
+	})
+	
+	//vchilds 를 배열로 변경함 =child = Array.form(vchilds)
+	//child = [...vchilds];	//배열이 되었으므로 forEach 사용가능
+
+		vchilds = vres.children;	//HTMLCollection 을 반환함
+	inter = setInterval(function(){
+		
+		vres.appendChild(vchilds[0]);
+		
+	},500);
+}
+
+const stop = () =>{
+	
+//	startb.style.display = "inline";
+	startb.disabled = false;
+	startb.style.background = 'blue'
+
+	clearInterval(inter);
+	
+	//랜덤발생
+	idx = Math.floor(Math.random()*vimg.length);
+	
+	vimg[idx].style.border = "3px solid red";
+}
+
+</script>
+
+<style>
+img {
+  width : 100px;
+  height : 100px;
+}
+ #result1 {
+    display: flex;
+    gap: 5px; /* margin 대신 간격 유지 */
+}
+
+</style>
+
+
+</head>
+<body>
+
+
+<div class="box">
+
+	<h3>
+	시작버튼 클릭하면 첫 번째 이미지(index: 0)를 div box의 뒤로 추가한다<br>
+  첫 번째 이미지가 div box의 뒤로 추가될때 첫 번째 이미지는 삭제되어진다 - appendChild() 기능<br>
+ 1초마다 반복적으로 실행한다<br>
+ 시작버튼은 클릭하면 감췄다가 종료 버튼 클릭 시 다시 표시된다<br>
+
+   시작, 종료 버튼을 초기 실행시 검색을 이용한다 <br>
+   종료버튼 클리시 랜덤으로 상품당첨이 되도록한다. 당첨상품에 테두리를 설정한다.
+	</h3>
+	
+	<input type="button" value="시작" onclick="start()">
+	<input type="button" value="종료" onclick="stop()">
+	
+	<br><br>
+
+    <div id="result1">
+        <img src="../images/Koala.jpg" alt="Koala.jpg">
+        <img src="../images/Penguins.jpg" alt="Penguins.jpg">
+        <img src="../images/flower-1.jpg" alt="flower-1.jpg">
+        <img src="../images/coffee1.jpg" alt="coffee1.jpg">
+        <img src="../images/shopping.jpg" alt="shopping.jpg">
+        <img src="../images/Tulips.jpg" alt="Tulips.jpg">
+    </div>
+    
+</div>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

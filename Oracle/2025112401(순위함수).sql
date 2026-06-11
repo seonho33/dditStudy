@@ -1,0 +1,79 @@
+2025-11-24-01) 순위함수
+ - RANK() OVER, DENSE_RANK() OVER, ROW_NUMBER() OVER 가 제공됨
+ - SELECT 절에서만 사용함
+ 사용형식)
+  RANK()|DENSE_RANK()|ROW_NUMBER() OVER(ORDER BY 컬럼명 [ASC|DESC][,컬럼명[ASC|DESC],...) AS 컬럼별칭
+ 
+ 사용예)
+ 1) 회원테이블에서 마일리지가 많은 회원부터 순위를 부여하시오 조회는 회원번호, 회원명, 마일리지, 순위
+ 
+    SELECT MEM_ID AS 회원번호,
+           MEM_NAME AS 회원명,
+           MEM_MILEAGE AS 마일리지,
+      RANK()OVER(ORDER BY MEM_MILEAGE DESC,MEM_NAME ASC) AS "순위(RANK)",
+DENSE_RANK()OVER(ORDER BY MEM_MILEAGE DESC,MEM_NAME ASC) AS "순위(DENSE_RANK)",
+ROW_NUMBER()OVER(ORDER BY MEM_MILEAGE DESC,MEM_NAME ASC) AS "순위(ROW_NUMBER)"
+      FROM MEMBER
+ 
+ SELECT MEM_ID AS 회원번호,
+        MEM_NAME AS 회원명,
+        MEM_MILEAGE AS 마일리지,
+        RANK() OVER(ORDER BY MEM_MILEAGE DESC) AS "순위(RANK)",
+        DENSE_RANK() OVER(ORDER BY MEM_MILEAGE DESC) AS "순위(DENSE_RANK)",
+        ROW_NUMBER() OVER(ORDER BY MEM_MILEAGE DESC) AS "순위(ROW_NUMBER)"
+ FROM MEMBER
+ 
+  2) 회원테이블에서 마일리지가 많은 회원부터 순위를 부여하시오+같은 마일리지면 나이가 적은 순으로 순위를 부여하시오
+    조회는 회원번호, 회원명, 마일리지, 순위
+    
+    SELECT MEM_ID AS 회원번호,
+           MEM_NAME AS 회원명,
+           MEM_MILEAGE AS 마일리지,
+           RANK() OVER (ORDER BY MEM_MILEAGE DESC, EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM MEM_BIR) ASC) AS 순위
+      FROM MEMBER
+    
+ SELECT MEM_ID AS 회원번호,
+        MEM_NAME AS 회원명,
+        MEM_MILEAGE AS 마일리지,
+        RANK() OVER(ORDER BY MEM_MILEAGE DESC,EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM MEM_BIR) ASC) AS "순위(RANK)",
+        EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM MEM_BIR) AS "나이"
+ FROM MEMBER
+ 
+--**그룹별 순위함수 PARTITION BY 컬럼명: '컬럼명'을 기준으로 그룹화
+--  RANK()|DENSE_RANK()|ROW_NUMBER() OVER(PARTITION BY 컬럼명 ORDER BY 컬럼명... [ASC|DESC][,컬럼명[ASC|DESC],...) AS 컬럼별칭
+
+ 사용예)
+ 1.사원테이블에서 부서별 급여순으로 순위를 부여하시오.(사원번호,사원이름,부서번호,급여,순위)
+    
+    SELECT EMPLOYEE_ID AS 사원번호,
+           EMP_NAME AS 사원이름,
+           DEPARTMENT_ID AS 부서번호,
+           SALARY AS 급여,
+           RANK() OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY DESC) AS 순위
+      FROM HR.EMPLOYEES
+ 
+ 
+ SELECT EMPLOYEE_ID AS 사원번호,
+        EMP_NAME AS 사원이름,
+        DEPARTMENT_ID AS 부서번호,
+        SALARY AS 급여,
+        RANK() OVER(PARTITION BY DEPARTMENT_ID ORDER BY SALARY DESC) AS 순위
+ FROM HR.EMPLOYEES
+ 
+ 2.회원테이블에서 연령대별 마일리지 순으로 부여하시오...
+ 
+    SELECT  MEM_ID AS 회원번호,
+            MEM_NAME AS 회원명,
+            (TRUNC((EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM MEM_BIR))/10)*10) AS 연령대,
+            MEM_MILEAGE AS 마일리지,
+            RANK() OVER (PARTITION BY (TRUNC((EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM MEM_BIR))/10)*10) ORDER BY MEM_MILEAGE) AS 순위
+      FROM  MEMBER
+    ORDER BY 3;
+ 
+ SELECT MEM_ID AS 회원번호,
+        MEM_NAME AS 회원명,
+        TRUNC((EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM MEM_BIR))/10)*10 AS 연령대,
+        MEM_MILEAGE AS 마일리지,
+        RANK() OVER(PARTITION BY TRUNC((EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM MEM_BIR))/10)*10 ORDER BY MEM_MILEAGE DESC) AS 순위
+ FROM   MEMBER
+ 

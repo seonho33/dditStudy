@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="kr.or.ddit.controller.chapt11.mapper.ISecMemberMapper">
+
+	<resultMap type="kr.or.ddit.vo.crud.CrudMember"
+		id="memberMap">
+		<id property="userNo" column="user_no" />
+		<result property="userNo" column="user_no" />
+		<result property="userId" column="user_id" />
+		<result property="userPw" column="user_pw" />
+		<result property="userName" column="user_name" />
+		<result property="regDate" column="reg_date" />
+		<result property="updDate" column="upd_date" />
+		<collection property="authList" resultMap="memberAuthMap" />
+	</resultMap>
+
+	<!-- resultMap -->
+	<resultMap type="kr.or.ddit.vo.crud.CrudMemberAuth"
+		id="memberAuthMap">
+		<result property="userNo" column="user_no" />
+		<result property="auth" column="auth" />
+	</resultMap>
+
+		
+	<select id="readByUIserInfo" parameterType="string" resultMap="memberMap">
+		SELECT
+		    m.user_no, user_id,
+		    user_pw, user_name,
+		    reg_date, upd_date,
+		    auth
+		FROM
+		    member m
+		    	left join member_auth ma on(m.user_no = ma.user_no)
+		where
+			m.user_id = #{userId}
+	</select>
+	
+
+
+
+
+</mapper>

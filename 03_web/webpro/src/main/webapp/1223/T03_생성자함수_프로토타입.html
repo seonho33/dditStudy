@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+
+//생성자 객체함수 정의
+function Rect(garo, sero){
+	this.garo = garo;
+	this.sero = sero;
+};
+
+ Rect.prototype = {
+	constructor :Rect,
+	area(){
+		return (this.garo*this.sero);
+	},
+	circum(){
+		return (this.garo+this.sero)*2;
+	}
+}; 
+
+//정보출력함수 정의
+const printRect = (obj, out) =>{
+	console.log(obj);
+	
+ 	let str =	`가로 : ${obj["garo"]}<br>
+				세로 : ${obj["sero"]}<br>
+				면적 : ${obj["area"]()}<br>
+				둘레 : ${obj["circum"]()}`
+	 
+	  
+/*	let str = "";
+				
+	//entries는 prototype의 메소드는 포함시키지 않는다.
+ 	ents = Object.entries(obj);
+	console.log(ents);
+	Object.entries(obj).forEach((item,idx) =>{
+		str+= `${item[0]} : ${item[1]}<br>`
+	})  */
+
+	//entries는 prototype에 추가한 메소드가 나오지않아..
+	document.querySelector(out).innerHTML = str;
+};
+
+//프로토타입에 메서드 추가(prototype) -> 여러개의 객체가 동시에 사용하게됨
+/* Rect.prototype.area = function(){} */
+
+//ES6 방식
+/*  Rect.prototype += {
+	constructor : Rect,
+	area(){
+		return (this.garo*this.sero)*2;
+	}
+}
+
+Rect.prototype += {
+	constructor : Rect,
+	circum(){
+		return (this.garo+this.sero)*2;
+	}
+}
+ */
+/* const proc1 =()=>{
+	const r1 = new Rect(7,3);
+	printRect(r1,"#result1");
+} */
+ //두개의 메서드를 한꺼번에 출하
+
+const proc1 =()=>{
+	const r1 = new Rect(7,3);
+	printRect(r1,"#result1");
+};
+
+const proc2 =()=>{
+	const r1 = new Rect(6,8);
+	printRect(r1,"#result2");
+};
+ 
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+p {
+	color : blue;
+}
+#pp:hover {
+	color: red;
+}
+p[id=pp]{
+	background: pink;
+}
+p[title]{
+	background: lightgreen;
+}
+p[title=꽃]{
+	font-size: 1.5rem;
+}
+p[class^=test]{
+	background: orange;
+}
+.korea{
+	color: red;
+}
+p[class=korea]{
+	color: hotpink;
+}
+p[class$=test]{
+	border: 2px solid red;
+}
+
+</style>
+<script type="text/javascript">
+
+window.onload=function(){
+  document.querySelector("p[id=pp]").style.background = "blue";
+}
+</script>
+
+</head>
+<body>
+
+<p id="pp">1111</p>
+<p class="pp-test">2222</p>
+<p class="pp-test">3333</p>
+<p title="무궁화">4444</p>
+<p title="꽃">55555</p>
+<p class="korea">6666</p>
+<p class="test-f">77777</p>
+<p class="test-f">8888</p>
+
+</body>
+</html>

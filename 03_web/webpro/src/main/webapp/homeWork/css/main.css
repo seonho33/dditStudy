@@ -1,0 +1,238 @@
+@charset "UTF-8";
+
+header{
+	display: flex;
+	flex-direction: row;
+	width: 1500px;
+	background-color: #F9D877;
+	border-radius: 20px;
+	margin: 10px auto;
+	box-sizing: border-box;
+	align-items: center;
+	justify-content: space-between;
+}
+.headerleft{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+#mainlogo{
+	justify-content: flex-start;
+	width: 50px;
+	height: 50px;
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+#header-line{
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 30px;
+}
+.headerright{
+	display: flex;
+	flex-direction: row;
+	margin-left: auto;
+	margin-right: 20px;
+}
+.headerright a{
+	margin: 10px;
+}
+nav ul{
+	list-style: none;
+	width: 1500px;
+	height: 50px;
+	margin: auto;
+	display: flex;
+	justify-content: space-around;
+	align-items:center;
+	border-radius: 20px;
+	background: #CDB4DE;
+	box-sizing: border-box;
+	color : white;
+}
+nav ul li{
+	margin: 5px;
+	text-align: center;
+	flex-basis:220px;
+}
+.main-container{
+	display: flex;
+	flex-direction: row;
+	width: 1500px;
+	height: 600px;
+	box-sizing: border-box;
+	margin: 10px auto;
+}
+.aside-left{
+	display:flex;
+	flex-direction:column;
+	background: #F7EBEB;
+	border-radius:30px;
+	width: 20%;
+	padding: 10px;
+	align-items: flex-start;
+}
+.aside-left-ul{
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	border-radius: 20px;
+}
+.aside-left-ul li{
+	display: block;
+	list-style: none;
+	width: 100%;
+	height: 40px;
+	background: #DEB4B5;
+	text-decoration: none;
+	color: white;
+	box-sizing: border-box;	
+	border: 1px solid white;
+	border-top: none;
+}
+.aside-left-ul li:first-child{
+	border-top-right-radius: 20px;
+	border-top-left-radius: 20px;
+}
+.aside-left-ul li:last-child{
+	border-bottom-right-radius: 20px;
+	border-bottom-left-radius: 20px;
+}
+.aside-left-ul li:first-child{
+	border:1px solid white;
+}
+.aside-left-ul li:hover{
+	background: gray;
+	box-sizing: border-box;
+}
+#alul a:visited {
+	color: white;
+	list-style: none;
+}
+#alul a:active{
+	color: white;
+}
+#alul a:hover{
+	color: white;
+}
+#alul a{
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: white;
+	padding-top: 5px;
+	padding-left: 10px;
+}
+.main-section{
+	width: 60%;
+	height: 600px;
+	border-radius: 20px;
+	background: #FAFAFA;
+	margin-left: 5px;
+}
+.section-article{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
+}
+.section-article iframe{
+	width: 100%;
+	height: 100%;
+	outline: none;
+	box-shadow: none;
+	background: transparent;
+	border: none;
+}
+.aside-right {
+	box-sizing:border-box;
+	margin-left: 5px;
+	padding: 10px;
+	background: #F7EBEB;
+	border-radius: 20px;
+	width: 20%;
+	height: 600px;
+}
+.shopcart{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.shopcart iframe{
+	outline:none;
+	background: transparent;
+	box-shadow: none;
+	width: 100%;
+	box-sizing: border-box;
+	height: 100px;
+	border: none;
+}
+
+.login{
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	margin-left: 10px;
+}
+.login-form{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+.login-form .row{
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
+.login-form label{
+	width: 90px;
+}
+.row input{
+	width: 100px;
+}
+.login-help a{
+	font-size: 15px;
+	padding-right: 5px;
+	color : blue;
+	text-decoration: underline;
+	width: 1500px;
+}
+.login-help a:hover , .login-help a:visited {
+	color : blue;
+	text-decoration: underline;
+}
+.footer{
+	display:flex;
+	background: gray;
+	color: white;
+	text-align: center;
+	box-sizing: border-box;
+	margin: 10px auto;
+	border-radius: 20px;
+	height: 50px;
+	width: 1500px;
+	justify-content: center;
+	align-items: center;
+}
+.footer pre{
+	font-size: 15px;
+	font-weight: bold;
+}
+.shopcart a{
+	color: blue;
+	text-decoration: underline;
+}
+.shopcart a:visited{
+	color: blue;
+}
+.shopcart a:hover{
+	color: blue;
+}
+.shopcart a:active{
+	color: blue;
+}

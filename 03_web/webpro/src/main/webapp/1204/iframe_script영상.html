@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+img{
+	width:	100px;
+	height:	100px;
+}
+iframe {
+	width: 	80%;
+	height: 500px;
+	border: 2px solid gray;
+}
+
+</style>
+
+<script>
+//함수를 정의한다	function 함수이름(){}
+function proc_click(str){
+	//동영상의 주소 설정
+	let url = "https://www.youtube.com/embed/"+str;
+	//html요소 인 iframe 영역을 검색, 찾기
+	vfr = document.querySelector("#ifr");
+	//vfr = document.querySelector('iframe'); 
+	
+	//vfr변수의 iframe 요소를 검색 대입
+	//iframe의 src""속성을 설정해야함..-attribute
+	vfr.setAttribute("src",url)
+}
+//함수호출 : 함수이름()(proc_click())
+</script>
+<!--=========================-->
+</head>
+<body>
+<br>
+<br>
+<pre>
+이벤트 핸들러 작성
+이벤트는 무언가 일어났다는 신호 - onclick, onmouseover, onmouseout, onchange, onkeydown, onkeyup
+이벤트에 반응하려면 이벤트가 발생했을때 시행되는 함수인
+핸들러를 할당해야한다
+핸들러는 사용자의 행동에 어떻게 반응할지를
+자바스크립트 코드로 표현 한 것
+</pre>
+<img alt="무지게5.png" src="../images/무지게5.png" onclick="proc_click('GfJy8Xcb5kQ?si=JVatNrZ5l1NISJ7o')">
+<img alt="무지게4.png" src="../images/모래알갱이2.png" onclick="proc_click('TzFyIFBBrFo?si=_sQvSTY8Spi5ApZe')">
+
+<br>
+<br>
+
+<iframe id="ifr" name="ifr" title="아이프레임"></iframe>
+
+</body>
+</html>

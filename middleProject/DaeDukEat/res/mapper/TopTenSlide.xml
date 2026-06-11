@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="slideStore">
+	
+    <select id="StoreSlide" resultType="store">
+      SELECT 
+         STORE_ID as storeId,
+         STORE_NAME as storeName,
+         STORE_ADDR as storeAddr,
+         STORE_PHONE as storePhone,
+         CATEGORY as category,
+         RATING as rating,
+         LIKES_COUNT as likesCount,
+         REVIEW_COUNT as reviewCount,
+         STORE_PICTURE as storePicture
+      FROM STORE  
+      WHERE STATUS = '승인'
+      ORDER BY LIKES_COUNT DESC, RATING DESC
+      FETCH FIRST 10 ROWS ONLY
+    </select>
+
+</mapper>

@@ -1,0 +1,6 @@
+2025-12-26 15:34:17.777 [main] DEBUG log4jexam.sql.Query - sql : INSERT INTO MYMEMBER(MEM_ID,MEM_NAME,MEM_TEL,MEM_ADDR)
+ VALUES (?,?,?,?)
+2025-12-26 15:34:17.781 [main] DEBUG log4jexam.sql.Parameter - memId=x001, memName=도선호, memTel=123, memAddr=대전
+2025-12-29 14:09:36.184 [main] DEBUG log4jexam.sql.Query - sql : INSERT INTO MYMEMBER(MEM_ID,MEM_NAME,MEM_TEL,MEM_ADDR)
+ VALUES (?,?,?,?)
+2025-12-29 14:09:36.188 [main] DEBUG log4jexam.sql.Parameter - memId=a101, memName=도선호, memTel=123, memAddr=321

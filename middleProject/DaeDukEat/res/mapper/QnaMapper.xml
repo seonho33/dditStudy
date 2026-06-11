@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="qna">
+
+    <!-- ResultMap -->
+    <resultMap id="qnaMap" type="qnaVO">
+        <id property="qnaId" column="QNA_ID"/>
+        <result property="qnaTitle" column="QNA_TITLE"/>
+        <result property="qnaContent" column="QNA_CONTENT"/>
+        <result property="answerContent" column="ANSWER_CONTENT"/>
+        <result property="statusYn" column="STATUS_YN"/>
+        <result property="secretYn" column="SECRET_YN"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="answerDate" column="ANSWER_DATE"/>
+        <result property="userId" column="USER_ID"/>
+    </resultMap>
+
+    <!-- 질문 등록 -->
+    <insert id="insertQna" parameterType="qnaVO">
+        <selectKey keyProperty="qnaId" resultType="long" order="BEFORE">
+            SELECT QNA_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        
+        INSERT INTO QNA (
+            QNA_ID, QNA_TITLE, QNA_CONTENT, 
+            STATUS_YN, SECRET_YN, USER_ID
+        ) VALUES (
+            #{qnaId}, #{qnaTitle}, #{qnaContent}, 
+            '접수', #{secretYn}, #{userId}
+        )
+    </insert>
+
+    <!-- 전체 질문 조회 (최신순) -->
+    <select id="selectAllQnas" resultMap="qnaMap">
+        SELECT * FROM QNA
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <!-- 질문 상세 조회 -->
+    <select id="selectQnaById" parameterType="long" resultMap="qnaMap">
+        SELECT * FROM QNA
+        WHERE QNA_ID = #{qnaId}
+    </select>
+
+    <!-- 질문 수정 (사용자) -->
+    <update id="updateQna" parameterType="qnaVO">
+        UPDATE QNA
+        SET QNA_TITLE = #{qnaTitle},
+            QNA_CONTENT = #{qnaContent},
+            SECRET_YN = #{secretYn}
+        WHERE QNA_ID = #{qnaId}
+    </update>
+
+    <!-- 답변 등록 (관리자) -->
+    <update id="insertAnswer" parameterType="qnaVO">
+        UPDATE QNA
+        SET ANSWER_CONTENT = #{answerContent},
+            STATUS_YN = '완료',
+            ANSWER_DATE = SYSDATE
+        WHERE QNA_ID = #{qnaId}
+    </update>
+
+    <!-- 질문 삭제 -->
+    <delete id="deleteQna" parameterType="long">
+        DELETE FROM QNA
+        WHERE QNA_ID = #{qnaId}
+    </delete>
+
+    <!-- 전체 개수 -->
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*) FROM QNA
+    </select>
+
+    <!-- 페이징 조회 -->
+    <select id="selectQnasWithPaging" resultMap="qnaMap">
+        SELECT * FROM QNA
+        ORDER BY CREATE_DATE DESC
+        OFFSET #{offset} ROWS
+        FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <!-- 내가 작성한 질문 조회 -->
+    <select id="selectMyQnas" parameterType="string" resultMap="qnaMap">
+        SELECT * FROM QNA
+        WHERE USER_ID = #{userId}
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <!-- 제목 검색 -->
+    <select id="searchByTitle" parameterType="string" resultMap="qnaMap">
+        SELECT * FROM QNA
+        WHERE QNA_TITLE LIKE '%' || #{keyword} || '%'
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <!-- 상태별 조회 (접수/완료) -->
+    <select id="selectByStatus" parameterType="string" resultMap="qnaMap">
+        SELECT * FROM QNA
+        WHERE STATUS_YN = #{statusYn}
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+</mapper>

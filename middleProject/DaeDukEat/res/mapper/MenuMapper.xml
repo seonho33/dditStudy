@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ============================================================
+    MENU 테이블 MyBatis Mapper
+    
+    Critical Rules:
+      1. namespace = DAO Interface Full Qualified Name
+      2. id = 메서드명 완전 일치
+      3. parameterType = VO alias 또는 Full Name
+      4. resultMap 사용 시 Snake_Case → CamelCase 자동 변환
+    
+    Author: Senior Architect
+    Date: 2025-01-26
+    ============================================================
+-->
+<mapper namespace="kr.or.ddit.menu.dao.IMenuDAO">
+
+    <!-- ============================================================
+         ResultMap: MENU 테이블 컬럼 → MenuVO 필드 매핑
+         (mapUnderscoreToCamelCase=true 설정으로 자동 변환되지만 명시)
+         ============================================================ -->
+    <resultMap id="menuMap" type="kr.or.ddit.menu.vo.MenuVO">
+        <id property="menuId" column="MENU_ID"/>
+        <result property="storeId" column="STORE_ID"/>
+        <result property="menuName" column="MENU_NAME"/>
+        <result property="menuPrice" column="MENU_PRICE"/>
+        <result property="menuPicture" column="MENU_PICTURE"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <!-- 추가 컬럼일 경우: -->
+        <!-- <result property="menuStatus" column="MENU_STATUS"/> -->
+    </resultMap>
+
+    <!-- ============================================================
+         특정 가게의 전체 메뉴 조회
+         @param storeId (String)
+         @return List<MenuVO>
+         
+         Tuning Point:
+           - CREATE_DATE DESC 정렬 (최신 등록 메뉴 우선)
+           - INDEX: STORE_ID에 인덱스 생성 권장
+         ============================================================ -->
+    <select id="selectMenusByStoreId" parameterType="string" resultMap="menuMap">
+        SELECT 
+            MENU_ID,
+            STORE_ID,
+            MENU_NAME,
+            MENU_PRICE,
+            MENU_PICTURE,
+            CREATE_DATE,
+            UPDATE_DATE
+        FROM MENU
+        WHERE STORE_ID = #{storeId}
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <!-- ============================================================
+         메뉴 상세 조회 (단건)
+         @param menuId (Long)
+         @return MenuVO
+         ============================================================ -->
+    <select id="selectMenuById" parameterType="long" resultMap="menuMap">
+        SELECT 
+            MENU_ID,
+            STORE_ID,
+            MENU_NAME,
+            MENU_PRICE,
+            MENU_PICTURE,
+            CREATE_DATE,
+            UPDATE_DATE
+        FROM MENU
+        WHERE MENU_ID = #{menuId}
+    </select>
+
+    <!-- ============================================================
+         메뉴 등록
+         @param MenuVO
+         @return int (영향받은 행 수)
+         
+         Critical:
+           - MENU_SEQ.NEXTVAL로 menuId 자동 생성
+           - <selectKey>로 생성된 ID를 MenuVO에 주입
+           - CREATE_DATE는 DEFAULT SYSDATE로 자동 설정
+         ============================================================ -->
+    <insert id="insertMenu" parameterType="kr.or.ddit.menu.vo.MenuVO">
+        <selectKey keyProperty="menuId" resultType="long" order="BEFORE">
+            SELECT MENU_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        
+        INSERT INTO MENU (
+            MENU_ID,
+            STORE_ID,
+            MENU_NAME,
+            MENU_PRICE,
+            MENU_PICTURE
+        ) VALUES (
+            #{menuId},
+            #{storeId},
+            #{menuName},
+            #{menuPrice},
+            #{menuPicture}
+        )
+    </insert>
+
+    <!-- ============================================================
+         메뉴 수정
+         @param MenuVO
+         @return int (영향받은 행 수)
+         
+         Critical:
+           - UPDATE_DATE는 SYSDATE로 자동 갱신
+           - WHERE절 MENU_ID 필수 (누락 시 전체 행 UPDATE 위험)
+         ============================================================ -->
+    <update id="updateMenu" parameterType="kr.or.ddit.menu.vo.MenuVO">
+        UPDATE MENU
+        SET 
+            MENU_NAME = #{menuName},
+            MENU_PRICE = #{menuPrice},
+            MENU_PICTURE = #{menuPicture},
+            UPDATE_DATE = SYSDATE
+        WHERE MENU_ID = #{menuId}
+    </update>
+
+    <!-- ============================================================
+         메뉴 삭제
+         @param menuId (Long)
+         @return int (영향받은 행 수)
+         
+         Warning:
+           - 물리 삭제 (복구 불가)
+           - 필요 시 논리 삭제(상태 플래그) 방식으로 변경 권장
+         ============================================================ -->
+    <delete id="deleteMenu" parameterType="long">
+        DELETE FROM MENU
+        WHERE MENU_ID = #{menuId}
+    </delete>
+
+    <!-- ============================================================
+         메뉴 상태 변경 (판매중/품절)
+         @param Map<String, Object> {menuId, status}
+         @return int (영향받은 행 수)
+         
+         Note:
+           - MENU_STATUS 컬럼이 추가되었다고 가정
+           - 컬럼이 없으면 ALTER TABLE로 추가 필요
+         ============================================================ -->
+    <update id="updateMenuStatus" parameterType="map">
+        UPDATE MENU
+        SET 
+            MENU_STATUS = #{status},
+            UPDATE_DATE = SYSDATE
+        WHERE MENU_ID = #{menuId}
+    </update>
+
+    <!-- ✅ 추가: 복합키 조회 -->
+    <select id="selectMenuByIdWithStore"
+            parameterType="kr.or.ddit.menu.vo.MenuVO"
+            resultType="kr.or.ddit.menu.vo.MenuVO">
+        SELECT
+            menu_id      AS menuId,
+            store_id     AS storeId,
+            menu_name    AS menuName,
+            menu_price   AS menuPrice,
+            menu_picture AS menuPicture,
+            create_date  AS createDate
+        FROM menu
+        WHERE store_id = #{storeId}
+          AND menu_id  = #{menuId}
+    </select>
+
+
+</mapper>

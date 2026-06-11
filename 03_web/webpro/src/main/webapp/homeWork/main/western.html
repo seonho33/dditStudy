@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/mystyle.css">
+<script src="../js/western.js"></script>
+
+<style type="text/css">
+</style>
+
+</head>
+<body>
+<div class="main-food">
+	<div class="card" onclick="cart('w1')">
+		<img alt="스파게티.jpg" src="../images/western/스파게티.jpg">
+		<div class="food-name">스파게티</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('w2')">
+		<img alt="알리오올리오.jpg" src="../images/western/알리오올리오.jpg">
+		<div class="food-name">알리오올리오</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('w3')">
+		<img alt="피자.jpg" src="../images/western/피자.jpg">
+		<div class="food-name">피자</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('w4')">
+		<img alt="햄버거.jpg" src="../images/western/햄버거.jpg">
+		<div class="food-name">햄버거</div>
+		<div class="food-price">10,000</div>
+	</div>
+</div>
+
+<form class="cartData" action="shopcart.html" method="post">
+	<input type="hidden" name="food-name">
+	<input type="hidden" name="food-price">
+</form>
+
+
+</body>
+</html>

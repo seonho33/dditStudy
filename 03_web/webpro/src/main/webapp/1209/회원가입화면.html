@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+<style type="text/css">
+fieldset {
+	border: 2px solid blue;
+	margin: 10px auto;
+	width: 250px;
+	padding : 20px;
+}
+label{
+	display: inline-block;
+	width: 50px;
+}
+
+h1 {
+	text-align: center;
+}
+pre{
+	text-align: center;
+	font-size: 18px;
+}
+
+</style>
+
+<script type="text/javascript">
+
+function sandData(){
+	
+	alert("이름 : " + document.querySelector("#name").value +
+		  "\n주소 : " + document.querySelector("#add").value + 
+		  "\n이메일 : " + document.querySelector("#email").value + 
+		  "\n내용 : " + document.querySelector("#textarea1").value +
+		  "\n\n제출 완료했습니다.");
+}
+
+</script>
+
+</head>
+<body>
+<pre><b>회원가입 화면</b></pre>
+<br>
+
+<fieldset id="fieldset1" >
+
+<form action="회원가입화면.jsp">
+<label for="name">이름</label>
+<input type="text" name="name" id="name" autofocus="autofocus" placeholder="이름" required="required">
+<br>
+<label for="add">주소</label>
+<input type="text" name="add" id="add" placeholder="주소" required="required">
+<br>
+<label for="email">이메일</label>
+<input type="text" name="email" id="email" placeholder="이메일" required="required">
+<br>
+<label>성별</label>
+<input type="radio" name="gender" value="male" class="gender" required="required"><b>Male</b>
+<input type="radio" name="gender" value="female" class="gender"><b>Female</b>
+<br>
+<label for="textarea1">내용</label>
+<textarea rows="5" cols="23" placeholder="내용" id="textarea1"></textarea>
+<br><br>
+
+<input type="submit" value="전송" onclick="sandData()">
+<input type="reset" >
+</form>
+</fieldset>
+
+</body>
+</html>

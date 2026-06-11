@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript">
+function fn_calc(){
+	
+	// id=price 인 html 요소에 접근, 검색하고
+	v_price = document.querySelector("#price");
+	
+	// id=qty 인 html 요소에 접근, 검색하고 값을 가져온다
+	id_qty = document.querySelector("#qty");
+
+	//검색요소에서 값을 가져오기 기본값이 String ...
+	priceValue = v_price.value;
+	idValue = id_qty.value;
+	
+	// 계산하기
+	
+	result = priceValue*idValue
+	
+	// 출력내용 만들기
+	
+	str = "수량 : " + idValue + "<br>";
+	str += "가격 : " + priceValue + "<br>";
+	str += "총 가격 : " + result +"<br>"
+	
+	//출력하기
+	
+	document.querySelector("div").innerHTML = str;
+	
+}
+</script>
+
+</head>
+
+<body>
+
+<form action="버튼_clac.jsp" method="post">
+
+<!-- 물품가격<input type="text" id = "price" name = "price"><br>
+수량<input type="text" id="qty" name="qty"><br>
+ -->
+물품가격<input type="number" min="100" max="50000" step="10" value="2000" id = "price" name = "price"><br>
+수량<input type="number" id="qty" name="qty"><br>
+<br>
+
+<pre>
+
+&lt;input type="button" value="확인" onclick="fn_calc()">
+&lt;button type="button" onclick="fn_calc()" >확인2&lt;/button>
+
+</pre>
+
+
+<input type="button" value="확인" onclick="fn_calc()">
+<button type="button" onclick="fn_calc()" >확인2</button>
+<input type="submit" value="전송">
+
+</form>
+<!-- 출력장소  -->
+<hr color = "red">
+<div>
+
+</div>
+
+</body>
+</html>

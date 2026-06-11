@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+div{
+  border : 5px dotted orange;
+  margin :20px;
+  padding : 30px;
+  height : 300px;
+  width : 50%;
+  overflow : auto; /* hidden  scroll */
+}
+
+.dd{
+   border : 2px dotted blue;
+   margin :10px;
+   padding : 10px;
+   height : 200px;
+ }
+
+#ddd1{
+  background-image : linear-gradient(#fa709a, #fee140,#30cfd0);
+}
+#ddd2{
+  background-image : linear-gradient(to right, #fa709a, #fee140,#30cfd0);
+}
+#ddd3{
+  background-image : linear-gradient(to left, #fa709a, #fee140, #30cfd0);
+}
+#ddd4{
+  background-image : linear-gradient(to top, #fa709a, #fee140, #30cfd0);
+}
+
+#dd1{
+  background-image : linear-gradient(140deg, #fa709a, #fee140);
+}
+#dd2{
+  background-image : linear-gradient(20deg, #fa709a, #fee140);
+}
+#dd3{
+  background-image : linear-gradient(140deg, #fa709a, #fee140, #fa709a);
+}
+#dd4{
+  background-image : linear-gradient(140deg, #fa709a, #fee140, #fa709a,#30cfd0);
+}
+
+#d1{
+  background-image:    radial-gradient(royalblue,skyblue, white);
+}
+
+#d2{
+    background-image:   radial-gradient(#2a5298 10%, #209cff 30%, #68e0cf 80%);
+   
+}
+ #d3{
+    background-image:  radial-gradient( #2a5298 30%,   #209cff 60%,   #68e0cf 90%);
+   
+}
+#d4{
+   background-image:   radial-gradient(#2a5298 30%, #209cff 50% , #68e0cf 70% );
+}
+#d5{
+   background-image:   radial-gradient(#2a5298 0%, #209cff 50% , #68e0cf 100% );
+} 
+#d6{
+
+  background-image:   radial-gradient( red, yellow, green);
+}
+#d7{
+   background-image:   radial-gradient( red 30%, yellow 70%, green 80%);
+}
+
+
+</style>
+</head>
+<!--background-image: radial-gradient(#2a5298 30%, #209cff 70%, #68e0cf 50%)
+이 코드에서 30%, 70%, 50%는 **색상이 원형 그라디언트 내에서 퍼지는 지점(색상 전환 위치)**을 나타냅니다.
+radial-gradient는 중심에서 바깥으로 퍼지는 원형 또는 타원형의 그라디언트를 만듭니다.
+각 색상 뒤의 %는 그 색상이 나타나는 위치를 의미합니다.
+퍼센트는 그라디언트의 반지름에 대한 상대 위치를 기준으로 합니다.
+
+0%는 중심
+100%는 가장자리
+background-image: radial-gradient(#2a5298 30%, #68e0cf 50%, #209cff 70%);
+
+✅ 각 숫자의 의미
+#2a5298 30%
+→ 중심에서 30% 지점까지는 이 색상 (진한 파란색)으로 채움
+
+#68e0cf 50%
+→ 30% ~ 50% 사이에서 색상이 #2a5298 → #68e0cf로 전환
+
+#209cff 70%
+→ 50% ~ 70% 사이에서 #68e0cf → #209cff로 전환
+이후는 #209cff로 채움
+  -->
+  
+<!--    %가 없을때 자동으로 균등하게 분배된 위치로 색상 전환 지점을 설정
+ red: 시작점 (0%)yellow: 중간점 (50%)green: 끝점 (100%)
+ [중심] red (0%)
+   ↓ 점점 yellow로
+[중간] yellow (50%)
+   ↓ 점점 green으로
+[끝쪽] green (100%)
+  --> 
+<body>
+<div id="ddd1">ddd1</div>
+<div id="ddd2">ddd2 to right</div>
+<div id="ddd3">ddd3 to left</div>
+<div id="ddd4">ddd4 to top</div>
+<div class="dd" id="dd1">dd1 140deg</div>
+<div class="dd" id="dd2">dd2 20deg</div>
+<div class="dd" id="dd3">dd3 140deg</div>
+<div class="dd" id="dd4">dd4 140deg</div>
+<div id="d1">d1</div>
+<div id="d2">d2 #2a5298 10%, #209cff 30%, #68e0cf 80%</div>
+<div id="d3">d3 #2a5298 30%,   #209cff 60%,   #68e0cf 90%</div>
+<div id="d4">d4 #2a5298 30%, #209cff 50% , #68e0cf 70%</div>
+<div id="d5">d5 #2a5298 0%, #209cff 50% , #68e0cf 100%</div>
+<div id="d6">d6 red, yellow, green</div>
+<div id="d7">d7 red 30%, yellow 70%, green 80%</div>
+</body>
+</html>

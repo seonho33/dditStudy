@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<style type="text/css">
+#sel{
+	width: 200px;
+	height: 50px;
+	font-size: 1.5rem;
+}
+</style>
+<script type="text/javascript">
+const proc1 = ()=>{
+	//id=sel인 요소를 접근해서 값을 가져온다 -String 타입이다.
+	
+	const selValue = document.querySelector("#sel").value;
+	console.log(selValue);
+	
+	//값을 이용해서 Date객체를 생성
+	const selDate = new Date(selValue)
+	
+	//오늘의 millesec구하기
+	const today = new Date()
+	
+	//위에서 구한 값 - selDate의 milliSec
+	times = today.getTime() - selDate.getTime();
+	
+	//times를 이용해서 실제 날 수를 구한다..
+	day = Math.floor(times/1000/60/60/24);
+	
+	//if문을 이용해 7일이 넘었으면 교환 불가능 출력 안넘었으면 가능 출력...
+	if(day>7){
+		str = `오늘 ${today.toLocaleDateString()}<br>
+			  구입날짜 ${selDate.toLocaleDateString()}<br>
+			  경과일수 ${day}일<br> 교환불가능`
+	}else{
+		str = `오늘 ${today.toLocaleDateString()}<br>
+			  구입날짜 ${selDate.toLocaleDateString()}<br>
+			  경과일수 ${day}일<br> 교환가능`
+	}
+	document.querySelector("#result1").innerHTML = str;
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	상품 구입날짜를 선택한다.<br>
+	7일경과했으면 교환 불가능, 아니면 가능이라는 결과를 출력
+	</h3>
+	<input type="date" value = "날짜" id="sel">
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+.grandparent{
+   border : 3px solid blue;
+   height : 200px;
+   margin : 10px;
+   padding : 2px;
+}
+.parent-container{
+   border : 2px solid green;
+   height : 90%;
+   margin : 10px;
+   padding : 2px;
+}
+.child{
+   border: 1px solid gold;
+   height: 90%;
+   margin: 5px;
+   font-size: 1.5rem;
+
+   display: flex;
+   align-items: center;     /* 세로 중앙 */
+   justify-content: center; /* 가로 중앙 */
+
+   box-sizing: border-box;
+}
+</style>
+
+<script type="text/javascript">
+window.onload=function(){
+	childs = document.querySelectorAll('.child');
+	//NodeList를 리턴 - 유사배열 - childs[0] childs[1]...
+	console.log(childs);
+	
+	//childs에 대한 이벤트 핸들러
+/* 	for(i=0;i<childs.length;i++){
+		childs[i].addEventListener('click',function(){})
+	}
+	
+	for(let ch of childs){
+		ch.addEventListener('click',function(){})
+	}
+	 */
+	childs.forEach(ch =>{
+		ch.addEventListener('click',procClick) //호출방식이 아닌 참조방식...
+	})
+	
+/* 	function procClick(){
+		 	console.log(this);
+	 } */
+
+	function procClick(){
+		console.log(this);
+		
+		//child를 클릭하면 그의 부모를 찾아서 배경색을 변경한다
+		/* this.parentNode */
+		/* this.parentElement.parentElement.style.background="yellow"; */
+		this.closest('.parent-container').style.background='pink';
+	}
+}	//window.onload 끝
+
+</script>
+</head>
+<body>
+
+<div class="grandparent">
+  <div class="parent-container">
+     <div class="child">Hello</div>
+  </div>
+</div>
+
+
+<div class="grandparent">
+ <div class="parent-container">
+     <div class="child">Hello</div>
+  </div>
+ </div>
+ 
+ <div class="grandparent">
+ <div class="parent-container">
+     <div class="child">Hello</div>
+  </div>
+ </div>
+ 
+ <div class="grandparent">
+ <div class="parent-container">
+     <div class="child">Hello</div>
+  </div>
+ </div>
+ 
+ 
+</body>
+</html>

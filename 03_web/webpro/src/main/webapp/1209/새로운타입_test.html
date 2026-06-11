@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- 외부스타일 지정 -->
+<link rel="stylesheet" href="../css/public_css.css">
+
+<style type="text/css">
+
+span {
+	border: 2px solid black;
+	padding: 5px 20px;
+}
+
+#form1{
+	border: 2px solid black;
+	width: 300px;
+	height: 200px;
+	margin-bottom: 20px;
+	padding-left: 20px;
+}
+
+#form2{
+	border: 2px solid black;
+	width: 300px;
+	height: 200px;
+	margin-bottom: 20px;
+	padding-left: 20px;
+}
+
+</style>
+
+<script type="text/javascript">
+
+function changePro(target){
+	
+/* 	console.log(target)
+	console.log(target.nextElementSibling);
+	
+	alert(target);
+	alert(target.nextElementSibling); */
+	console.log(target.value);
+	
+	console.log(target.nextElementSibling.id);
+	
+	out = target.nextElementSibling.id;
+	
+	
+	//range의 값을 얻어야함
+	//span태그에 출력
+	
+	document.getElementById(out).innerText = target.value;
+}
+
+function inputPro(target){
+	
+	out = target.nextElementSibling.id;
+
+	document.getElementById(out).innerText = target.value;
+}
+
+function onchangeCol(target){
+	
+	console.log(target.value);
+	color = target.value;
+	
+	out = target.parentNode.id;
+	console.log(out);
+	parent = document.getElementById(out);
+	//document.getElementById(out).style.backgroundColor = target.value;
+	//배경색 변경 - color 선택이 바뀌면 form의 배경색도 바뀐다 - 동적
+	parent.style.backgroundColor = color;
+	
+}
+
+function inputCol(target){
+	
+	out = target.parentElement.id;
+	document.getElementById(out).style.backgroundColor = target.value;
+	
+}
+
+</script>	
+
+</head>
+<body>
+
+<pre>
+&lt;input type="range" name="range" min="1000" max="10000" step="100" value="5000">
+&lt;input type="range" name="range" min="10" max="10000" step="10" value="500">
+</pre>
+
+<h3>onchange="changePro(this)"</h3>
+<h2>onchange는 마우스 드래그를 놓아야 값이 바뀜</h2>
+<form action="" method="" id="form1">
+<br><br>
+<label>가격</label>
+<input type="range" name="range" min="1000" max="10000" step="100" value="5000" onchange="changePro(this)">
+<span id="sprice" style="background-color: white;">5000</span>
+<br><br>
+<label >수량</label>
+<input type="range" name="range" min="10" max="1000" step="10" value="500" onchange="changePro(this)">
+<span id="sqty" style="background-color: white;">500</span>
+<br>
+
+<br>
+<input type="color" id="colf1" onchange="onchangeCol(this)">
+<br>
+<input type="date">
+<br>
+<input type="datetime-local">
+</form>
+
+<hr color="red">
+
+<h3>oninput = "inputPro(this)"</h3>
+<h2>oninput은 드래그할때 계속 값이 바뀜</h2>
+
+<form action="" method="" id="form2">
+<br><br>
+<label>가격</label>
+<input type="range" name="range" min="1000" max="10000" step="100" value="5000" oninput="inputPro(this)">
+<span id="iprice" style="background-color: white;">5000</span>
+<br><br>
+
+<label>수량</label>
+<input type="range" name="range" min="10" max="1000" step="10" value="500" oninput="inputPro(this)">
+<span id="iqty">500</span>
+<br><br>
+
+<input type="color" id="colf2" oninput="inputCol(this)">
+
+</form>
+
+
+
+
+</body>
+</html>

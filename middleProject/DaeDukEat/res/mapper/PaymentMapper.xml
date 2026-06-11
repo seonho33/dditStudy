@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+    [CRITICAL] namespace는 DAO Interface의 Full Qualified Name과 반드시 일치
+-->
+<mapper namespace="kr.or.ddit.reservation.dao.IPaymentDAO">
+
+    <!-- ========================================
+         [ResultMap] Snake_Case → CamelCase 매핑
+         ======================================== -->
+    <resultMap id="paymentMap" type="paymentVO">
+        <id property="payNo" column="PAY_NO"/>
+        <result property="payMethod" column="PAY_METHOD"/>
+        <result property="payDate" column="PAY_DATE"/>
+        <result property="payStatus" column="PAY_STATUS"/>
+        <result property="impUid" column="IMP_UID"/>
+        <result property="reservId" column="RESERV_ID"/>
+    </resultMap>
+
+    <!-- ========================================
+         [INSERT] 결제 정보 등록
+         - payNo: BEFORE 시퀀스로 자동 생성
+         - payDate: DB DEFAULT SYSDATE 사용
+         ======================================== -->
+    <insert id="insertPayment" parameterType="paymentVO">
+        <selectKey keyProperty="payNo" resultType="long" order="BEFORE">
+            SELECT SEQ_PAYMENT.NEXTVAL FROM DUAL
+        </selectKey>
+        
+        INSERT INTO PAYMENT (
+            PAY_NO, PAY_METHOD, PAY_STATUS, 
+            IMP_UID, RESERV_ID
+        ) VALUES (
+            #{payNo}, #{payMethod}, #{payStatus}, 
+            #{impUid}, #{reservId}
+        )
+    </insert>
+
+    <!-- ========================================
+         [SELECT] 예약 ID로 결제 정보 조회
+         ======================================== -->
+    <select id="selectPaymentByReservId" parameterType="long" resultMap="paymentMap">
+        SELECT * FROM PAYMENT
+        WHERE RESERV_ID = #{reservId}
+    </select>
+
+</mapper>

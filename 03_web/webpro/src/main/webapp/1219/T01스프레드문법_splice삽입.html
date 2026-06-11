@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<script type="text/javascript">
+const original = [10,20,30,40,50];
+const arr1 = [1,4];
+const arr2 = [2,3];
+
+document.addEventListener("DOMContentLoaded",()=>{
+	
+	//id=btn1인 요소를 검색 - 이벤트 핸들러 작성
+	let clickB = document.querySelector("#btn1");
+	
+	//id=btn2인 요소를 검색하고 이벤트 핸들러 작성하기
+	let clickB2 = document.querySelector("#btn2");
+	
+/* 	clickB.onclick = ()=>{
+		
+	}
+ */	
+ 	//1번째 박스에서 클릭
+ 	clickB.addEventListener("click",()=>{
+		
+ 		//배열을 깊은 복사
+ 		const copy1 = [...original];
+		
+ 		copy1.splice(2,0,99);
+ 		
+ 		//출력내용
+ 		let str = `original : ${original}<br>
+ 				   copy1 : ${copy1}<br>`;
+ 		document.querySelector("#result1").innerHTML = str;
+
+ 	})
+
+ 	//2번째 박스에서 클릭
+ 	clickB2.addEventListener("click",()=>{
+ 		
+ 		let copy2 = [...arr1];
+ 		
+ 		//
+		copy2.splice(1,0,arr2);
+ 		
+ 		document.querySelector("#result2").innerHTML = copy2;
+ 		
+ 		copy2 = [...arr1];
+ 		copy2.splice(1,0,...arr2);
+ 		document.querySelector("#result2").innerHTML += copy2;
+ 	
+ 	})
+})
+
+</script>
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+
+	<input type="button" value="확인" id="btn1" onclick="">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+
+
+<div class="box">
+
+	<h3>
+		const arr1 = [1,4];<br>
+		const arr2 = [2,3];<br>		
+	 	arr1.splice(1,0,arr2);<br>
+ 		arr1.splice(1,0,...arr2);<br>
+ 		1번은 배열 그대로 넣었고,<br>
+ 		2번은 스프레드 문법으로 ...arr2 로 펼쳐서 넣었다.<br>
+	</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+</body>
+</html>

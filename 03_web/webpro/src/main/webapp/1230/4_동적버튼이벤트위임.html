@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet"  href="../css/public_css.css">
+
+<style type="text/css">
+.newBtn{
+	width : 150px;
+}
+.box input[type=button]{
+	width: 150px;
+	background: pink;
+}
+</style>
+
+<script type="text/javascript">
+idx = 0;
+
+
+//새로운 버튼이 생성되는
+function addNewButton(){
+	//새로운 버튼 만들기 <input type="button" class="newb" value="새로운버튼(1)"> 
+	
+	newBtn = document.createElement('input');
+	newBtn.type = "button"
+	newBtn.className = "newb"
+	newBtn.value = `새로운버튼(${++idx})`
+	
+	res1.appendChild(newBtn);
+}
+
+//새로운 버튼 클릭시 실행되는 핸들러-배경색 바꾸기
+function changeBackground(ev){
+	//	
+/*  	if(ev.target.closest('.newb')){
+		cr = Math.floor(Math.random()*256);
+		cb = Math.floor(Math.random()*256);
+		cg = Math.floor(Math.random()*256);
+		
+		res2.style.background = `rgb(${cr},${cb},${cg})`
+	}  */
+ 	if(ev.target.classList.contains('newb')){
+		//result2의 배경색 바꾸기
+		cr = Math.floor(Math.random()*256);
+		cb = Math.floor(Math.random()*256);
+		cg = Math.floor(Math.random()*256);
+		
+		res2.style.background = `rgb(${cr},${cb},${cg})`
+	} 
+	
+}
+
+window.onload=()=>{
+	addBtn = document.querySelector("#add");
+	stopBtn = document.querySelector("#stop");
+	res1 = document.querySelector("#result1");
+	res2 = document.querySelector("#result2");
+	
+	//추가버튼 클릭 --------
+	addBtn.addEventListener('click',addNewButton)
+	
+	//새로운 버튼 .newb를 클릭 - #result1 을 이용한 이벤트 위임방식 delegate방식
+	
+/* 	document.querySelectorAll(".newb").forEach(nb =>{
+		nb.addEventListener('click',function(){
+			//result2의 배경색 변경
+			res2.style.background = "gold";
+		})
+	}) */ //이벤트 위임방식이 아니기때문에 실행되지 않음...bind 방식
+	
+	
+	//새로운 버튼 .newb를 클릭 - #result1 을 이용한 이벤트 위임방식 delegate방식
+	res1.addEventListener('click', changeBackground);
+	//result1의 위임방식
+	
+	
+	//해제버튼 -------------
+	stopBtn.addEventListener('click',function(){
+		
+		//새로운 버튼 만들기 기능 - 추가버튼 기능을 해제
+		addBtn.removeEventListener('click',addNewButton);
+		
+		//배경색 바꾸기 기능 - 새로운 버튼의 기능 해제
+		res1.removeEventListener('click',changeBackground);
+	})
+	
+}
+
+</script>
+
+</head>
+<body>
+script에서 요소 검색후 이벤트 핸들러 작성<br>
+새로운 버튼에 대한 이벤트 핸들러 등록<br>
+1. body에 이벤트 위임 등록<br>
+2.  result1에(새로운버튼의 부모) 이벤트 위임 등록<br>
+<div class="box">
+
+  <h3>추가버튼 클릭시 새로운 버튼을 생성 <br>
+  새로운 버튼을 클릭시 result2의 배경색변경<br>
+  해제버튼 클릭시 더이상 새로운 버튼을 생성하지 않는다</h3>
+  <input type="button" value="추가" id="add">
+  <input type="button" value="해제" id="stop">
+  <br><br>
+  
+  <div id="result1"></div>
+  <div id="result2"></div>
+</div>
+</body>
+
+</html>

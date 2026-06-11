@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public.css">
+
+<script type="text/javascript">
+
+const fetch_login = (url,head,data) =>{
+	fetch(url, {
+		method : "post",
+		headers : head,
+		body : data
+	})
+	.then(res =>{
+		return res.json();
+	})
+	.then(data=>{
+		console.log(data);
+		
+		let code ="";
+		if(data){
+			code = `${data['mem_name']}님 환영합니다`
+		}else{
+			code = `로그인 실패`; 
+		} 
+		document.querySelector("#result1").innerHTML=code;
+		document.querySelector("#result1").style.color="blue";
+	})
+	.catch(err =>{
+		console.log(err);
+	})
+}
+
+const await_login = async (url,head,bodyData) => {
+	try{
+		const res = await fetch(url, {
+								method : "post",
+								headers : head,
+								body : bodyData
+						   });
+		const data = await res.json();
+		
+		let code ="";
+		if(data){
+			code = `${data['mem_name']}님 환영합니다`
+		}else{
+			code = `로그인 실패`; 
+		}
+	document.querySelector("#result1").innerHTML=code;
+	document.querySelector("#result1").style.color="blue";
+
+	}catch(err){
+		console.log(err);
+	}
+}
+
+window.onload=()=>{
+	let btn_1 = document.querySelector("#btn1")
+	let btn_2 = document.querySelector("#btn2")
+	
+	//btn.onclick = () =>{}
+	
+	btn_1.addEventListener('click',()=>{
+		//아이디와 패스 입력한 값을 가져온다
+		idValue = document.querySelector("#mem_id").value.trim();
+		passValue = document.querySelector("#mem_pass").value.trim();
+		
+		//서버로 전송
+		url = "http://localhost/webpro/Login.do";
+		head = {"content-type" : "application/json;charset=utf-8"};
+		
+		//직렬화 전송 - 서버에서 역직렬화 - java클래스 타입이 필요(MemberVO)
+		data = JSON.stringify({mem_id : idValue, mem_pass : passValue})
+		fetch_login(url,head,data)
+	})
+	
+	btn_2.addEventListener('click',()=>{
+		//아이디와 패스 입력한 값을 가져온다
+		idValue = document.querySelector("#mem_id").value.trim();
+		passValue = document.querySelector("#mem_pass").value.trim();
+		
+		//서버로 전송
+		url = "http://localhost/webpro/Login.do";
+		head = {"content-type" : "application/json;charset=utf-8"};
+		
+		//직렬화 전송 - 서버에서 역직렬화 - java클래스 타입이 필요(MemberVO)
+		bodyData = JSON.stringify({mem_id : idValue, mem_pass : passValue});
+		await_login(url,head,bodyData);
+	})
+	
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3></h3>
+<form id="ff">
+	<input type="text" placeholder="아이디 입력"  id="mem_id"><br>
+	<input type = "password" placeholder="비밀번호 입력" id="mem_pass"><br>
+	<input type="button" value="fetch" id="btn1">
+	<input type="button" value="await_async" id="btn2">
+</form>
+	<br><br>
+
+	<div id="result1">
+	</div>
+
+</div>
+
+</body>
+</html>

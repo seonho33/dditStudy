@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<style type="text/css">
+div{
+	width: 30%;
+	height: 200px;
+	margin: 10px;
+	padding: 20px;
+	border: 1px solid blue;
+	background-image : url("../images/Penguins.jpg");
+	background-repeat: no-repeat;
+}
+div[id=d1]{
+	background-size: auto;		/* 원래크기 일부만(머리만)보이기  */
+}
+div#d2{
+	background-size: cover;		/* div크기에 맞게 늘리거나 줄여서 표시 */
+}
+#d3{
+	background-size: contain;	/* div에 온전히 보이도록 늘리거나 줄임 */
+}
+
+
+</style>
+
+</head>
+<body>
+
+<pre>
+div[id=d1]{
+	background-size: auto;			/* 원래크기 일부만(머리만)보이기  */
+}
+div#d2{
+	background-size: cover;			/* div크기에 맞게 늘리거나 줄여서 표시 */
+}
+#d3{
+	background-size: contain;		/* div에 온전히 보이도록 늘리거나 줄임 */
+}
+</pre>
+
+<div id="d1"></div>
+<div id="d2"></div>
+<div id="d3"></div>
+
+</body>
+</html>

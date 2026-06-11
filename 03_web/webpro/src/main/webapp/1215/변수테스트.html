@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="shortcut icon" href="../images/check.png">
+<link rel="stylesheet" href="../css/public_css.css">
+</head>
+<style>
+
+</style>
+
+
+<body>
+<input type="button" name="function" onclick="proc1()" value="proc1">
+<input type="button" name="function" onclick="proc2()" value="proc2">
+<input type="button" name="function" onclick="proc3()" value="proc3">
+
+<script type="text/javascript">
+function proc1() {
+	let a =10;
+	a=a+50;
+	a=30;
+	
+	let x;
+	x=20;
+	
+	console.log(a);
+
+	//let 은 재선언 불가 let a = 50;XX
+	/* for(let i=0;i<3;i++){
+		console.log(i);
+	} */
+	//그냥 i변수는 for 내부에서만 사용가능한 변수이다...
+	
+	for(var i=0;i<3;i++){
+		console.log(i);
+	}
+	//var 변수는 함수내에서 사용가능하게 변함
+	console.log(a,i);
+	
+}
+
+function proc2() {
+	var b = 20;
+	b=50;
+	//재선언 가능
+	var b =30;
+	
+	var y;
+	y=30;
+	
+	console.log(b,y);
+}
+
+function proc3(){
+	//상수의 의미를 가진 conseet..
+	const c= 30;
+	
+	let a = c + 50;
+	
+	console.log(c);
+}
+
+
+
+
+</script>
+
+
+</body>
+</html>

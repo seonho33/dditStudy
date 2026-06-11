@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<link rel="shortcut icon" href="../images/check.png">
+
+</head>
+<body>
+<pre>
+호이스팅 : 실행시 변수 위치를 실행가능한 위치로 끌어올려서 실행한다.
+var는 가능하지만 let, const는 불가능하다...
+</pre>
+
+<input type="button" value="프로1" onclick="proc1()">
+<input type="button" value="프로2" onclick="proc2()">
+
+<script type="text/javascript">
+function proc1(){
+	console.log(a);
+	var a;
+
+	a=10;
+	console.log(a);
+}
+
+function proc2(){
+	console.log(a);
+	let a;
+	
+	a=10;
+	console.log(a);
+}
+
+
+
+</script>
+
+
+</body>
+</html>

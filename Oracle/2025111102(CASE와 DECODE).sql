@@ -1,0 +1,65 @@
+2025-11-11-02)표현식
+
+ - SELECT 절에서만 사용하며 조건을 판단하여 서로 다른 결과를 반환함
+ - 자바의 SWITCH ~ CASE와 유사
+ - CASE WHEN THEN END와 DECODE가 제공됨
+ 
+ --1. CASE WHEN THEN END (관계연산자
+ 사용형식
+     CASE WHEN 조건1 THEN 반환값1
+          WHEN 조건2 THEN 반환값2
+                :
+        [ELSE 반환값n] END AS 별칭
+    - '조건1'이 참이면 '반환값1'을 반환하고 end 다음 컬럼을 처리
+    - '조건'이 맞는 것이 없으면 'ELSE' 다음의 값을 반환
+    
+ --2. CASE WHEN THEN END
+ 사용형식
+    CASE 컬럼
+        WHEN 값1 THEN 반환값1
+        WHEN 값2 THEN 반환값2
+                :
+        [ELSE 반환값n] END AS 별칭
+    -'컬럼'과 '값1'을 비교하여 동등하면 '반환값1'을 반환하고 END 다음 컬럼을 처리
+    -'컬럼'의 값이 일치하는 '값'을 찾지 못하면 'ELSE' 다음의 값을 반환
+ 
+ 
+ -- 사용예) 
+    회원테이블에서 회원들이 보유한 마일리지가 2000미만이면 비고란에 'Novice Member',
+    2001~4000이면 'Normal Member', '4001~6000'이면 'Excellent Member',
+    그 이상이면 'MVP Member'를 출력하시오
+    출력은 회원번호, 회원명, 직업, 마일리지, 비고이다.
+  SELECT MEM_ID AS 회원번호,
+         MEM_NAME AS 회원명,
+         MEM_JOB AS 직업,
+         MEM_MILEAGE AS 마일리지,
+         CASE   WHEN MEM_MILEAGE<=2000 THEN 'Novice Member'
+                WHEN MEM_MILEAGE<=4000 THEN 'Normal Member'
+                WHEN MEM_MILEAGE<=6000 THEN 'Excellent Member'
+                ELSE 'MVP Member' END AS 비고
+  FROM MEMBER
+  ORDER BY 4 DESC;
+  
+-- 사용예2)
+    회원 테이블에서 회원번호, 회원명, 성별을 구하시오
+  SELECT MEM_ID AS 회원번호,
+         MEM_NAME AS 회원명,
+         CASE SUBSTR(MEM_REGNO2,1,1)
+                WHEN '1' THEN '남성회원'
+                WHEN '2' THEN '여성회원'
+                WHEN '3' THEN '남성회원'
+                WHEN '4' THEN '여성회원'
+                ELSE '주민번호 오류' END AS 성별
+    FROM MEMBER;
+
+  SELECT MEM_ID AS 회원번호,
+         MEM_NAME AS 회원명,
+         DECODE (SUBSTR(MEM_REGNO2,1,1),'1','남성회원','2','여성회원','3','남성회원','4','여성회원','주민번호 오류') AS 성별
+     FROM MEMBER;
+
+ --3. DECODE
+ 사용형식
+    DECODE(컬럼명,값1,'반환값1',값2,'반환값2',...,값n,'반환값n' [,'반환값n+1']
+     - 컬럼명의 값과 '값1'을 비교하여 같으면 '반환값1'을, 같지않으면 컬럼명의 값과
+       '값2'를 비교하여 '반환값2'를 ... ;;
+       

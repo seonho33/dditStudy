@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.board.mapper.IBoardMapper">
+	
+	<sql id="boardSearch">
+		<if test="searchWord !=null and searchType == 'title'">
+			and (bo_title like '%'||#{searchWord}||'%')
+		</if>
+		<if test="searchWord !=null and searchType == 'writer'">
+			and (bo_writer like '%'||#{searchWord}||'%')
+		</if>
+	</sql>
+	
+	<insert id="insertBoard" parameterType="boardVO" useGeneratedKeys="true">
+		<selectKey keyProperty="boNo" resultType="int" order="BEFORE">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into board(
+			bo_no,
+			bo_title,
+			bo_content,
+			bo_writer,
+			bo_date
+		)values(
+			#{boNo},
+			#{boTitle},
+			#{boContent},
+			#{boWriter},
+			sysdate
+		)
+	</insert>
+
+	<update id="incrementHit" parameterType="int">
+		update	board
+		set		
+				bo_hit = bo_hit + 1
+		where	bo_no = #{boNo}
+	</update>
+
+	<select id="selectBoardVOList" resultType="boardVO">
+		select 	*
+		from	board
+	</select>
+
+
+	<select id="selectBoard" parameterType="int" resultType="boardVO">
+		select 
+				bo_no,
+				bo_title,
+				bo_content,
+				bo_writer,
+				bo_date,
+				bo_hit
+		from 	board
+		where 	bo_no = #{boNo}
+	</select>
+	
+	<update id="updateBoard" parameterType="boardVO">
+		update 	board
+		set
+				bo_title = #{boTitle},
+				bo_content = #{boContent},
+				bo_date = sysdate
+		where 	bo_no = #{boNo}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		delete 	from board
+		where	bo_no = #{boNo}
+	</delete>
+
+	<select id="selectBoardCount" parameterType="paginationInfoVO" resultType="int">
+		select count(bo_no)
+		from board
+		where 1=1
+		<include refid="boardSearch"/>
+	</select>
+	
+	<select id="selectBoardList" parameterType="paginationInfoVO" resultType="boardVO">
+			select *
+			from(
+				select	
+						row_number() over(order by bo_no desc) rnum,
+						bo_no,
+						bo_title,
+						bo_content,
+						bo_writer,
+						bo_date,
+						bo_hit
+				from	board
+				where	1=1
+				<include refid="boardSearch"/>
+			) b
+		<![CDATA[
+			where b.rnum >= #{startRow} and b.rnum <= #{endRow}
+		]]>
+	</select>
+	
+</mapper>

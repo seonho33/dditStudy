@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="config/db.properties" />
+
+	<settings>
+        <!-- 카멜케이스 자동 변환 활성화 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--  -->
+         <setting name="logImpl" value="STDOUT_LOGGING"/>
+         
+            <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
+	
+	<typeAliases>
+        <!-- GS25 프로모션 -->
+        <typeAlias type="kr.or.ddit.board.vo.GsPromotionVO" alias="gsPromotionVO"/>     
+        <typeAlias type="kr.or.ddit.board.vo.NoticeVO" alias="noticeVO"/>
+        <typeAlias type="kr.or.ddit.board.vo.QnaVO" alias="qnaVO"/>
+	
+		<typeAlias type="kr.or.ddit.user.vo.UserVO" alias="uvo" />
+ 		<typeAlias type="kr.or.ddit.user.vo.MemberVO" alias="mvo" />
+ 		<typeAlias type="kr.or.ddit.user.vo.UserMemberVO" alias="umvo" />
+ 		<typeAlias type="kr.or.ddit.user.vo.BlackListVO" alias="blvo" />
+
+ 		<typeAlias type="kr.or.ddit.admin.vo.AdminUserBanVO" alias="aubvo" />
+ 		<typeAlias type="kr.or.ddit.admin.vo.BanRequestVO" alias="brvo" />
+ 		<typeAlias type="kr.or.ddit.admin.vo.OwnerApplyVO" alias="oavo" />
+ 		<typeAlias type="kr.or.ddit.admin.vo.BotVO" alias="botvo" />
+ 		<typeAlias type="kr.or.ddit.admin.vo.GsVO" alias="gsVO" />
+ 		
+ 		<typeAlias type="kr.or.ddit.store.vo.StoreVO" alias="store"/>
+ 		<typeAlias type="kr.or.ddit.store.vo.MenuVO" alias="mSearch"/>
+ 		<typeAlias type="kr.or.ddit.store.vo.UserLikesDidsVO" alias="UserLikesDidsVO"/>
+ 		
+        <!-- ✅ 추가: UserVO alias -->
+ 		<typeAlias type="kr.or.ddit.store.vo.ReservationVO" alias="reservationVO"/>
+        <typeAlias type="kr.or.ddit.store.vo.ReservationDetailVO" alias="reservationDetailVO"/>
+        <typeAlias  type="kr.or.ddit.store.vo.CouponhamVO" alias="couponhamVO" />
+        <typeAlias  type="kr.or.ddit.store.vo.CouponVO" alias="couponVO" />
+        
+        <typeAlias type="kr.or.ddit.review.vo.UserReviewVO" alias="userReviewVO"/>
+		<typeAlias type="kr.or.ddit.review.vo.ReviewDetailVO" alias="reviewDetailVO"/>
+		<typeAlias type="kr.or.ddit.review.vo.CeoReviewVO" alias="ceoReviewVO"/>
+		<typeAlias type="kr.or.ddit.review.vo.CEOReviewDetailVO" alias="CEOreviewDetailVO"/>
+		
+
+		<typeAlias type="kr.or.ddit.reservation.vo.PaymentVO" alias="paymentVO"/>
+		
+		
+		<typeAlias type="kr.or.ddit.store.vo.OwnerStatsVO" alias="ownerStatsVO"/>
+    	<typeAlias type="kr.or.ddit.store.vo.OwnerProfileVO" alias="ownerProfileVO"/>
+    	 <typeAlias type="kr.or.ddit.store.detail.vo.StoreDetailVO" alias="storeDetailVO"/>
+    	 <typeAlias type="kr.or.ddit.store.vo.StoreGameVO" alias="storeGameVO"/>
+<!--     	<typeAlias type="kr.or.ddit.store.detail.vo.StorePictureVO" alias="storePictureVO"/>
+ -->
+     	<typeAlias type="kr.or.ddit.store.detail.vo.ReviewDetailVO" alias="rdvo"/>
+    	
+    	
+      	<typeAlias type="kr.or.ddit.menu.vo.MenuVO" alias="menuVO"/>
+    </typeAliases>
+	
+	<environments default="dev1">
+		<environment id="dev1">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="mapper/admin.xml" />
+        <mapper resource="mapper/NoticeMapper.xml"/>
+        <mapper resource="mapper/QnaMapper.xml"/>
+        <mapper resource="mapper/member.xml"/>
+        <mapper resource="mapper/login.xml"/>
+        <mapper resource="mapper/StoreMapper.xml"/>
+        <mapper resource="mapper/StoreSearchMapper.xml"/>
+        <mapper resource="mapper/UlikesDids.xml"/>
+        <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/User.xml"/>
+        <mapper resource="mapper/ReviewMapper.xml"/>
+        <mapper resource="mapper/CouponMapper.xml" />
+        <mapper resource="mapper/Couponhammapper.xml" />
+        
+        <mapper resource="mapper/ReservationMapper.xml"/>
+        <mapper resource="mapper/OwnerMapper.xml"/>
+        <mapper resource="mapper/MenuMapper.xml"/>
+        <mapper resource="mapper/CEOReviewMapper.xml"/>
+        
+        <mapper resource="mapper/deadukGame.xml"/>
+        
+        <mapper resource="mapper/PayReservationMapper.xml"/>
+		<mapper resource="mapper/PaymentMapper.xml"/>
+		<mapper resource="mapper/StoreDetailMapper.xml"/>
+		<mapper resource="mapper/bot.xml"/>
+        <mapper resource="mapper/GsPromotionMapper.xml"/>
+		<mapper resource="mapper/storeRoulette.xml"/>
+		<mapper resource="mapper/TopTenSlide.xml"/>
+        
+    </mappers>
+ </configuration>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+<script type="text/javascript">
+
+const proc1 = ()=>{
+	//vua = document.querySelector("#ua");
+	//list = vua.querySelectorAll("li");	//NodeList로 반환되었음
+	
+	vua = document.querySelector("#ua");
+	list = vua.children;	//HTML.Collection으로 반환
+	console.log(list,"children");
+	
+//	list = vua.childNodes;
+//	console.log(list,"childNodes");
+	
+//	list = document.querySelectorAll('#ua li')//NodeList
+//	console.log(list,"document");
+	
+	//list 를 배열로 변경
+//	alist = Array.from(list)
+	alist = [...list]
+	console.log(alist)
+
+	str = "";
+	alist.forEach(li=>{
+		//str += li.firstChild.data +'<br>';
+		
+		str += li.innerText + "<br>"
+	})
+	
+	document.querySelector("#result1").innerHTML = str;
+}
+
+const proc2=()=>{
+	
+	list = document.querySelectorAll("#ub li");
+	
+	//배열로 변경
+	alist = [...list];	//또는 Array.from(list);
+	
+	alist.forEach( item =>{
+		//console.log(item)
+		liText = item.firstChild.data ;
+		liText = item.innerText;
+		console.log(liText)
+		
+		//이미지 태그 생성 <img src="" alt="">
+		vimg = document.createElement("img");
+		vimg.src = "../images/" + liText;
+		vimg.alt = liText;
+		
+		item.appendChild(vimg);
+	})
+}
+
+const proc3 = (target) =>{
+	
+	//클릭한 li(target)의 문자열을 가져온다
+	liText=target.innerText;
+	
+	//이미지생성
+	vimg = document.createElement("img");
+	vimg.src = `../images/${liText}`;
+	vimg.art = liText;
+	
+	target.appendChild(vimg);
+	
+}
+
+</script>
+
+<style type="text/css">
+img{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+}
+li{
+	border: 1px solid black;
+	margin: 5px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="box">
+	<h3></h3>
+	
+	<ul id="ua">
+		<li>List item1</li>
+		<li>List item2</li>
+		<li>List item3</li>
+		<li>List item4</li>
+		<li>List item5</li>
+		<li>List item5</li>
+	</ul>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+	<div id="result1">
+	</div>
+
+</div>
+
+<div class="box">
+	<h3></h3>
+	
+	<ul id="ub">
+		<li>국화.jpg</li>
+		<li>국화10.jpg</li>
+		<li>국화3.jpg</li>
+		<li>수국6.jpg</li>
+		<li>사자2.jpg</li>
+		<li>Desert.jpg</li>
+	</ul>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+	<div id="result2">
+	</div>
+
+</div>
+
+<div class="box">
+	<h3></h3>
+	
+	<ul id="uc">
+		<li onclick="proc3(this)">국화.jpg</li>
+		<li onclick="proc3(this)">국화10.jpg</li>
+		<li onclick="proc3(this)">국화3.jpg</li>
+		<li onclick="proc3(this)">수국6.jpg</li>
+		<li onclick="proc3(this)">사자2.jpg</li>
+		<li onclick="proc3(this)">Desert.jpg</li>
+	</ul>
+
+	<br><br>
+
+	<div id="result3">
+	</div>
+
+</div>
+
+</body>
+</html>

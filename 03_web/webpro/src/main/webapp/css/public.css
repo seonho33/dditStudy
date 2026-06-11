@@ -1,0 +1,49 @@
+@charset "UTF-8";
+.box{
+	border: 1px solid blue;
+	margin: 10px;
+	padding: 20px;
+	width: 1000px;
+ 	background-image : linear-gradient(rgb(128, 255, 255),white);
+	
+}
+.box div{
+	border: 2px dotted orange;
+	padding: 20px;
+	width: 80%;
+	margin: 2px;
+}
+.box input[type=button], .box button, .box input[type=submit]{
+	background: blue;
+	color: white;
+	width:  auto;
+	height: 50px;
+	padding: 5px;
+	border-radius: 30px;
+	font-size: 1.3rem;
+	cursor: pointer;
+}
+.box input[type=button]:hover, .box button:hover{
+	background: gray;
+	
+}
+
+pre{
+	border: 5px inset green;
+	font-size: 1.2rem;
+	/* em : 부모를 기준으로 배수 (body는 16px) , rem : root(body)를 기준으로 배수 */
+	margin: 10px;
+	padding : 20px;
+
+	white-space: pre-wrap;
+}
+
+/* 
+	pre-wrap: 자동 줄 바뀜		공백 그대로
+	pre-line: 자동 줄 바뀜		공백 1개만 표현
+	pre		: 자동 줄 안바뀜 	공백 그대로
+	nowrap	: 자동 줄 안바뀜	공백 1개만 표현
+	nomal	: 자동 줄 바뀜		공백 1개만 표현
+
+
+ */

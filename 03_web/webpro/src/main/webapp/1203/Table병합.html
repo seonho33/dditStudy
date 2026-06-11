@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+table{
+	border		: 2px solid blue;
+}
+th{
+	height: 60px;
+}
+td{
+	width : 300px;
+}
+#table2{
+	border	: 5px inset green;
+	
+}
+#table2 td{
+	width : 150px;
+	height: 60px;
+	text-align: center;
+	font-size: 20px;
+}
+#table2 caption{
+	border : 3px solid pink;
+	padding : 10px;
+	margin: 10px;
+	font-size: 30px;
+}
+
+pre{
+	border : 10px groove red;
+	padding: 10px;
+	font-size: 1.2em;/*배수 부모태그의 1.2배 현재 부모는 body .. 기본 16px*/
+	
+	border-left : none;
+	border-right: none;
+	width : 400px;
+	margin-left: 100px;
+}
+
+</style>
+
+</head>
+<body>
+
+<!-- <table border="1">
+	<tr>
+		<th>1</th>
+		<th>2</th>
+		<th>3</th>
+	</tr>
+	
+	<tr>
+		<td rowspan="2">1</td>
+		<td>2</td>
+		<td>3</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>3</td>
+	</tr>
+	
+	<tr>
+		<td colspan="3">1</td>
+	</tr>		
+</table> -->
+<hr color="red">
+<pre>
+#table2 caption{
+	border : 3px solid pink;
+	padding : 10px;
+	margin: 10px;
+	caption-side: bottom;
+	font-size: 30px;
+}
+</pre>
+<table border="1" id="table2">
+	<caption>
+		테이블 병합하기
+	</caption>
+	<tr>
+		<th colspan="2">1</th>
+		<th	colspan="2">2</th>
+		<th>3</th>
+		<th>4</th>
+	</tr>
+
+	<tr>
+		<td colspan="4">1</td>
+		<td colspan="2">2</td>
+	</tr>
+
+	<tr>
+		<td colspan="4">1</td>
+		<td colspan="2" rowspan="2">2</td>
+	</tr>
+
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+
+
+</table>
+
+</body>
+</html>

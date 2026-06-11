@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/mystyle.css">
+<script src="../js/china.js"></script>
+
+<style type="text/css">
+</style>
+
+
+
+</head>
+<body>
+<div class="main-food">
+	<div class="card" onclick="cart('c1')">
+		<img alt="동파육.jpg" src="../images/china/동파육.jpg">
+		<div class="food-name">동파육</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('c2')">
+		<img alt="짜장면.jpg" src="../images/china/짜장면.jpg">
+		<div class="food-name">짜장면</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('c3')">
+		<img alt="짬뽕.jpg" src="../images/china/짬뽕.jpg">
+		<div class="food-name">짬뽕</div>
+		<div class="food-price">10,000</div>
+	</div>
+	<div class="card" onclick="cart('c4')">
+		<img alt="탕수육.jpg" src="../images/china/탕수육.jpg">
+		<div class="food-name">탕수육</div>
+		<div class="food-price">10,000</div>
+	</div>
+</div>
+
+<form class="cartData" action="shopcart.html" method="post">
+	<input type="hidden" name="food-name" id="food-name">
+	<input type="hidden" name="food-price" id="food-price">
+</form>
+
+
+</body>
+</html>

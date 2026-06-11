@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- 회원가입 페이지 아이디+중복검사버튼,패스워드,패스워드확인,이름,휴대폰번호,이메일,생일,홈페이지,성별,제출과초기화버튼 -->
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+
+<pre> 회원가입 페이지 </pre>
+<br>
+<fieldset id="fieldset1">
+
+<form action="#">
+<label for="id">아이디</label>
+<input type="text" name="userId" id="userId" autofocus="autofocus" required="required">
+<br>
+<label for="password">패스워드</label>
+<input type="password" name="userPassword" id="userPassword" required="required">
+<br>
+<label for="password2">패스워드 확인</label>
+<input type="password" name="userPassword2" id="userPassword2" required="required">
+<br>
+<label for="name">이름</label>
+<input type="text" name="userName" id="userName" placeholder="홍길동" required="required">
+<br>
+<label for="phoneNumber">휴대폰번호</label>
+<input type="number" pattern="010[0-9]{8}" name="userPhoneNumber" id="userPhoneNumber" placeholder="010-1234-1234" required="required" >
+<br>
+<label for="email">이메일</label>
+<input type="text" name="userEmail" id="userEmail" placeholder="abc00@google.com" pattern="[a-zA-Z][a-zA-z0-9]*@[a-zA-z]*.[a-zA-Z]*" required="required">
+<br>
+<label for="birthday">생일</label>
+<input type="date" name="userBirthday" id="userBirthday">
+<br>
+<label for="gender">성별</label>
+<input type="radio" name="userGender" class="userGender" required="required">남자
+<input type="radio" name="userGender" class="userGender">여자
+<br>
+<div class="registerButton">
+	<input type="button" value="제출">
+	<input type="reset" value="초기화">
+</div>
+</form>
+
+</fieldset>
+
+</body>
+</html>

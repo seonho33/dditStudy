@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- 내부스타일 -->
+<style>
+body *{
+	/* 크기설정 : 내용, border, padding 를 포함  */
+	box-sizing: border-box; /* 내용을 기준으로 크기를 잡는다, 기본값.. content-box; */
+	align-items: center;
+}
+
+div#out{
+	border : 1px dotted red;
+	width : 1000px;
+	height: 500px;
+	padding: 5px;
+}
+div#out h1{
+	letter-spacing : 20px;
+	text-align : center;
+	background: pink;
+}
+div#out div#Left{
+	width : 28%;
+	padding-left: 20px;
+	padding-top: 10px;
+	float: left;
+}
+div#out div#right{
+	width :70%;
+	float: right;
+	margin-right: 10px;
+}
+div#out .in{
+	height: 380px;
+	border: 2px solid green;
+	margin: 2px;
+	vertical-align: top;
+}
+div#out #Left img{
+	width : 95%;
+	height: 95%;
+}
+span{
+	background: pink;
+}
+</style>
+
+</head>
+<body>
+
+<div id="out">
+	<!-- <h1>H&nbsp;&nbsp;&nbsp;e&nbsp;&nbsp;&nbsp;l&nbsp;&nbsp;&nbsp;l&nbsp;&nbsp;&nbsp;o</h1> -->
+	<h1>HELLO</h1>
+	<div id="Left" class="in">
+	<img alt="국화1.jpg" src="../images/국화1.jpg">
+	</div><div id="right" class="in">국화는 중국이 원산지로서, 동양에서 재배하는 관상식물 중 가장 역사가 오래된 꽃이다.
+	[2] 최초로 재배를 시작한 시기는 중국 진나라 이전이라고 추정된다. 이후, 동진 시대 도연명이 집에서 국화를 길렀다는 기록이 있으며,
+	당나라 때는 <span>재배와 육종 기술</span>이 향상되면서 국화는 원래 단일 노란색에서 "진하고 연한 보라색, 흰색" 등으로 개량되었다.
+	송나라에 이르러 국화 재배 기술이 더욱 향상되어 국화 전문가가 대거 등장하고 새로운 품종이 대거 출현하게 되었다.
+	유몽의 『유사거보』(1104)가 출판되면서 <span>국화재배의 전성기</span>를 맞이하게 되었고, 이어서 심경의 『국화보』(1213), 석주의 『백거보』(1242) 등이 그 뒤를 이었다.
+	이후 많은 품종이 개발되어, 명나라 왕향진(王祥金)의 『군방보』 (1630년)에는 국화의 꽃색과 개화시기에 따라 270종의 국화 품종이 기록되어 있다.</div>
+</div>
+
+</body>
+</html>

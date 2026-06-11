@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.ILoginMapper">
+
+	<select id="idCheck" parameterType="string" resultType="kr.or.ddit.vo.NoticeMemberVO">
+		select	mem_id
+		from	NOTICEMEMBER
+		where 	mem_id = #{memId}	
+	</select>
+	
+	<insert id="signup" parameterType="kr.or.ddit.vo.NoticeMemberVO">
+		insert into noticemember(
+		
+			mem_no,		mem_id, 
+			mem_pw,		mem_name, 
+			mem_gender,		mem_email, 
+			mem_phone,		mem_postcode, 
+			mem_address1,	mem_address2, 
+			mem_agree,		mem_profileimg, 
+			mem_regdate
+		
+		)values(
+		
+			seq_noticemember.nextval, 		#{memId}, 
+			#{memPw},		#{memName},		#{memGender}, 
+			#{memEmail},	#{memPhone},	#{memPostcode},
+			#{memAddress1},	#{memAddress2},	#{memAgree},
+			#{memProfileimg},	SYSDATE
+			
+		)
+	</insert>
+	
+	<select id="loginCheck" parameterType="kr.or.ddit.vo.NoticeMemberVO" resultType="kr.or.ddit.vo.NoticeMemberVO">
+		select
+			mem_no,		mem_id, 
+			mem_pw,		mem_name, 
+			mem_gender,		mem_email, 
+			mem_phone,		mem_postcode, 
+			mem_address1,	mem_address2, 
+			mem_agree,		mem_profileimg, 
+			mem_regdate
+		from	NOTICEMEMBER
+		where	mem_id = #{memId}
+		and		mem_pw = #{memPw}
+	</select>
+	
+	<select id="idForgetProcess" parameterType="kr.or.ddit.vo.NoticeMemberVO" resultType="string">
+		select
+			mem_id
+		from
+			NOTICEMEMBER
+		where
+			mem_email	= #{memEmail}
+		and	mem_name	= #{memName}
+	</select>
+
+	<select id="pwForgetProcess" parameterType="kr.or.ddit.vo.NoticeMemberVO" resultType="string">
+		select
+			mem_pw
+		from
+			NOTICEMEMBER
+		where
+			mem_id	= #{memId}
+		and	mem_email	= #{memEmail}
+		and	mem_name	= #{memName}	
+	</select>
+
+</mapper>

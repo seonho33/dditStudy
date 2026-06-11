@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+
+/* function proc() {} */
+
+const rect = {
+		garo : 3,
+		sero : 5,
+	 /* area : function(){
+			
+		},
+		circum : function(){
+			
+		} */
+		area(){
+			return this.garo*this.sero;
+		},
+		circum(){
+			return (this.garo + this.sero)*2;
+		}
+}
+
+const proc1 = () =>{
+	//객체 정보 출력
+	printObj("#result1");
+}
+
+	//객체 정보를 출력하는 함수 정의
+const printObj=(out)=>{
+/* 	let str = `가로 : ${rect.garo} 세로 : ${rect.sero} <br>
+			면적 : ${rect.area()} 둘레 : ${rect.circum()}<br>`;
+ */	
+
+ 	let str = `가로 : ${rect['garo']} 세로 : ${rect.sero} <br>
+	면적 : ${rect['area']()} 둘레 : ${rect['circum']()}<br>`;
+	
+	document.querySelector(out).innerHTML = str;
+}
+
+const proc2 = () =>{
+	
+	//입력 - prompt 메소드는 String을 return함
+	rect.garo = Number(prompt("가로 입력"));
+	rect.sero = Number(prompt("세로 입력"));
+	
+	//정보출력 - 함수호출
+	printObj("#result2")
+}
+
+</script>
+
+</head>
+<body>
+
+<div class="box">
+
+	<h3>rect 객체의 사로세로 정보출력</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br><br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+<div class="box">
+
+	<h3>가로, 세로 입력해서 정보출력</h3>
+
+	<input type="button" value="확인" id="btn2" onclick="proc2()">
+
+	<br><br>
+
+		<div id="result2">
+		</div>
+
+</div>
+
+</body>
+</html>

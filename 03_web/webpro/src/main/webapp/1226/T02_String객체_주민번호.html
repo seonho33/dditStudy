@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/public_css.css">
+
+<script type="text/javascript">
+const proc1 =() =>{
+	item1 = prompt("앞자리");
+	item2 = prompt("뒷자리");
+	
+	pcode = `${item1}-${item2}`;//가짜 주민번호 출력용으로 -가 붙은채로 유지
+	
+	code = pcode.replace("-","");//작업용 "-" 없는걸로 만듬
+	
+	nums = "234567892345";
+	let sum =0;
+	for(i=0;i<nums.length;i++){
+		sum += nums.substr(i,1)*code.substr(i,1);
+	}
+	result=11-sum%11;
+	result=result%10;
+	
+	str = `주민번호 : ${pcode.substring(0,8)}******<br>`
+	
+	cres = code.substr(code.length-1,1);
+	if(result == cres){
+		str +="진짜"
+	}else{
+		str +="가짜"
+	}
+	document.querySelector("#result1").innerHTML = str;
+}
+</script>
+</head>
+<body>
+
+<div class="box">
+
+	<h3>
+	주민등록번호를 입력 받아 주민등록번호의 유효성을 검사하는 프
+로그램
+	</h3>
+
+	<input type="button" value="확인" id="btn1" onclick="proc1()">
+
+	<br>
+	<br>
+
+		<div id="result1">
+		</div>
+
+</div>
+
+</body>
+</html>

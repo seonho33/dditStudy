@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/shopcart1.css">
+<script src="../js/shopcart1.js"></script>
+
+</head>
+<body>
+
+<table border="1" id="cartTable" class="cartTable">
+	<caption>
+		장바구니 페이지
+	</caption>
+	<tr>
+		<th>품목</th>
+		<th>가격</th>
+		<th>수량</th>
+		<th>합계</th>
+	</tr>
+	<tr>
+		<td class="cartFoodName">김치찌개</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">불고기</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput"  value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">비빔밥</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">제육볶음</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">동파육</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">짜장면</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">짬뽕</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">탕수육</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">돈부리</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">돈코츠라멘</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">초밥</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">스파게티</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">알리오올리오</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">피자</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td class="cartFoodName">햄버거</td>
+		<td class="cartFoodPrice">10000</td>
+		<td class="cartFoodNumber">
+			<input type="number" class="cartFoodNumberInput" value="0">
+		</td>
+		<td class="cartFoodSum"></td>
+	</tr>
+	<tr>
+		<td colspan="3">총합</td>
+		<td class="sumPrice" id="sumPrice"></td>
+	</tr>
+</table>
+<div class="CalcButton" id="CalcButton">
+	<input type="button" onclick="foodPriceCalc()" value="계산">
+	<input type="button" onclick="resetFoodCart()" value="초기화">
+</div>
+
+
+</body>
+</html>

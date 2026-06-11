@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+label{
+	width: 100px;
+	height: 30px;
+	vertical-align: top;
+}
+
+form {
+	border: 1px solid blue;
+	margin: auto;
+	padding : 20px;
+	width: 40%;
+}
+
+</style>
+
+</head>
+
+<body>
+<pre>
+form 내부에 input type="text" 인 요소가 한개만 있을때는
+text요소에서 엔터를 치면 jsp가 수행된다
+</pre>
+
+<form action="textarea_작업.jsp" method="post" >
+
+
+<label>이름</label>
+<input type="text" name="name"><br>
+
+<label>자기소개</label>
+<textarea rows="5" cols="50" name="info" maxlength="50"></textarea><br>
+
+<br>
+
+<button>전송</button>
+<input type="submit" value="전송2">
+<button type="submit">전송3</button>
+
+
+</form>
+
+</body>
+</html>

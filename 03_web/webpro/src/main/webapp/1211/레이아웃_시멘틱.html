@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+body *{
+	border: 2px dotted red;
+	margin: 2px;
+	padding: 2px;
+	border-radius: 20px;
+	box-sizing: border-box;
+}
+header,footer{
+	width: 98%;
+	height: 100px;
+	background: pink;
+}
+aside,section{
+	height: 500px;
+}
+aside{
+	width: calc(29% - 1%);
+/* 	background: cyan;
+ */	float : left;
+}
+section{
+	width: calc(69% - 1%);
+	background: orange;
+	float: right;
+}
+footer{
+	clear: both;
+}
+article{
+	width : 95%;
+	height : 45%;
+	
+	border-color: green;
+}
+aside figure{
+	width: 80%;
+	height: 30%;
+	border-color: black;
+	border: none;
+/* 	background-image: url("../images/spongebob.png");
+	background-size: contain;
+	background-repeat: no-repeat; */
+	
+}
+img{
+	width: 70%;
+	height: 70%;
+	border: none;
+}
+nav{
+	height: 50px;
+	width: 98%;
+	background: yellow;
+}
+ul,li,a{
+	border: none;
+}
+ul {
+	margin-left: 30px;
+}
+h1{
+	border: none;
+	margin-left : 30px;
+}
+a:link{
+	color: red;
+	text-decoration: none;
+}
+a:visited{
+	
+}
+a:hover{
+	background: silver;
+}
+a:active{
+	color: blue;
+}
+
+</style>
+
+</head>
+<body>
+
+<header></header>
+<nav>nav</nav>
+<aside>
+	<h1>Links</h1>
+	
+	<ul>
+		<li><a href="#" target="_top">naver</a></li>
+		<li><a href="#">nate</a></li>
+		<li><a href="#">daum</a></li>
+	</ul>
+	<figure>
+	<img alt="spongebob.png" src="../images/spongebob.png"> 
+
+	<figcaption>스폰지밥</figcaption>
+	</figure>
+
+</aside>
+<section>
+
+	<h3>여기제목 나누기</h3>
+	<article>1</article>
+	<article>2</article>
+
+</section>
+<footer></footer>
+
+</body>
+</html>

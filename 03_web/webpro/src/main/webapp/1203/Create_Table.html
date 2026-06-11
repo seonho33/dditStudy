@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+
+	table{
+		border : 12px double blue;
+		border-style: outset;
+		border-style: groove;
+		border-color: red;
+		border-style: ridge solid;
+		
+		margin : 20px;
+/* 		width : 500px */
+	}
+	
+	th{
+		background 		: #0ffae2;
+		color			: black;
+		border-bottom	: 3px dashed red;
+	}
+	
+	td{
+/* 		text-align:right;*/
+		width 				: 200px;
+		height				: 30px;
+		border-bottom		: 3px dashed red;
+	}
+	
+	#table2{
+		border				: 5px solid green;
+		margin				: 20px; 
+		border-collapse		: collapse;
+	}
+	
+	#table3{
+		border-spacing		: 10px;
+	}
+</style>
+</head>
+<body>
+
+<table border=1>
+	<tr>
+		<td>이름</td>
+		<td>주소</td>
+		<td>전화번호</td>
+	</tr>
+	
+	<tr>
+		<td>홍길동</td>
+		<td>대전</td>
+		<td>010-1231-2312</td>
+	</tr>
+	
+	<tr>
+		<td>홍도화</td>
+		<td>서울</td>
+		<td>010-1234-5678</td>
+	</tr>
+	
+	<tr>
+		<td>홍매화</td>
+		<td>부산</td>
+		<td>010-1233-2112</td>
+	</tr>
+	
+</table>
+
+<h3>border-collapse		: collapse</h3>
+<table border=1 id="table2">
+	<tr>
+		<th>이름</th>
+		<th>주소</th>
+		<th>전화번호</th>
+	</tr>
+	
+	<tr>
+		<td>홍길동</td>
+		<td>대전</td>
+		<td>010-1231-2312</td>
+	</tr>
+	
+	<tr>
+		<td>홍도화</td>
+		<td>서울</td>
+		<td>010-1234-5678</td>
+	</tr>
+	
+	<tr>
+		<td>홍매화</td>
+		<td>부산</td>
+		<td>010-1233-2112</td>
+	</tr>
+	
+</table>
+<h3>border-spacing		: 10px;</h3>
+<table border=1 id="table3">
+	<tr>
+		<th>이름</th>
+		<th>주소</th>
+		<th>전화번호</th>
+	</tr>
+	
+	<tr>
+		<td>홍길동</td>
+		<td>대전</td>
+		<td>010-1231-2312</td>
+	</tr>
+	
+	<tr>
+		<td>홍도화</td>
+		<td>서울</td>
+		<td>010-1234-5678</td>
+	</tr>
+	
+	<tr>
+		<td>홍매화</td>
+		<td>부산</td>
+		<td>010-1233-2112</td>
+	</tr>
+	
+</table>
+
+
+</body>
+</html>

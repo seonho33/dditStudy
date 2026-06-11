@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+    
+    <!-- ✅ USERS 테이블에 INSERT -->
+    <insert id="insertUser" parameterType="uvo">
+        INSERT INTO USERS (
+            USER_ID, 
+            PASSWORD, 
+            NAME, 
+            DIVISION, 
+            BLOCK_YN, 
+            USE_YN
+        ) VALUES (
+            #{userId}, 
+            #{password}, 
+            #{name}, 
+            #{division}, 
+            #{blockYn},
+            #{useYn}
+        )
+    </insert>
+
+    <!-- ✅ USER_ID로 조회 -->
+    <select id="selectUserById" parameterType="string" resultType="uvo">
+        SELECT 
+            USER_ID AS userId,
+            PASSWORD AS password,
+            NAME AS name,
+            DIVISION AS division,
+            BLOCK_YN AS blockYn,
+            USE_YN AS useYn
+        FROM USERS
+        WHERE USER_ID = #{userId}
+    </select>
+    
+    <!-- ================= 사장님 탈퇴 (논리 삭제) ================= -->
+	<update id="withdrawUser" parameterType="string">
+	    UPDATE USERS
+	    SET USE_YN = 'N'
+	    WHERE USER_ID = #{userId}
+	</update>
+    
+
+    <select id="selectMemberByUserId" parameterType="string" resultType="mvo">
+    SELECT
+        user_id      AS userId,
+        user_bir     AS userBir,
+        user_mail    AS userMail,
+        user_no      AS userNo,
+        profile_img  AS profileImg
+    FROM member
+    WHERE user_id = #{userId}
+</select>
+
+
+    <!-- 사용자 정보 업데이트 -->
+<update id="updateUser" parameterType="uvo">
+  UPDATE USERS
+  <trim prefix="SET" suffixOverrides=",">
+    <if test="name != null and name != ''">
+      NAME = #{name},
+    </if>
+    <if test="password != null and password != ''">
+      PASSWORD = #{password},
+    </if>
+  </trim>
+  WHERE USER_ID = #{userId}
+</update>
+
+
+    
+    <!-- 비밀번호 확인 -->
+    <select id="checkPassword" parameterType="map" resultType="uvo">
+        SELECT *
+        FROM USERS
+        WHERE USER_ID = #{userId}
+          AND PASSWORD = #{password}
+    </select>
+    
+<update id="updateStoreEmail" parameterType="map">
+  UPDATE STORE
+  <set>
+    <if test="ownerEmail != null and ownerEmail != ''">
+      , OWNER_EMAIL = #{ownerEmail, jdbcType=VARCHAR}
+    </if>
+  </set>
+  WHERE USER_ID = #{userId}
+</update>
+
+    
+</mapper>

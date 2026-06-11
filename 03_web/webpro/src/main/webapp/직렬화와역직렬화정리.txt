@@ -1,0 +1,45 @@
+직렬화는 객체를 저장 가능한 상태(예를 들어 디스크에 파일 형태 등) 
+혹은 전송 가능한 상태(네트워크 상의 데이터 스트림 형태)로 변환하는 것을 뜻한다 
+
+직렬화는 응용 프로그램에서 쓰는 데이터를 네트워크를 통해 전송하거나 
+DB 또는 파일에 저장 가능한 형식으로 바꾸는 프로세스다. 
+역직렬화는 외부 소스에서 데이터를 읽고 이를 런타임 객체로 바꾸는 반대 프로세스
+
+직렬화(serialize)란 자바 언어에서 사용되는 Object 또는 Data를 다른 컴퓨터의 자바 시스템에서도
+ 사용 할수 있도록 바이트 스트림(stream of bytes) 형태로 연속적인(serial) 데이터로 변환하는 
+포맷 변환 기술을 일컫는다. 
+
+그 반대 개념인 역직렬화는(Deserialize)는 바이트로 변환된 데이터를 원래대로 자바 시스템의 
+Object 또는 Data로 변환하는 기술이다.
+
+데이터 직렬화 포맷
+CSV, XML, JSON 형태의 직렬화
+
+CSV(영어: comma-separated values)는 몇 가지 필드를 쉼표(,)로 구분한 텍스트 데이터 및 텍스트 파일이다. 
+텍스트와 숫자를 CSV 파일에 저장하면 프로그램 간에 이동하기가 쉽다.
+확장자는 .csv이며 MIME 형식은 text/csv이다. 
+오래전부터 스프레드시트나 데이터베이스 소프트웨어에서 많이 쓰였음
+--------------------------------------------------------
+역직렬화(Deserialization)는?
+직렬화된 파일 등을 역으로 직렬화하여 다시 객체의 형태로 만드는 것을 의미한다.
+ 저장된 파일을 읽거나 전송된 스트림 데이터를 읽어 원래 객체의 형태로 복원한다.
+-------------------------------------
+GSON : . 
+Google에서 제공하는 Java라이브러리로 Java객체와 json간의 직렬화 및 역직렬화를 지원합니다 
+
+주로 사용할 클래스는 Gson 이고 그냥 new Gson() 으로 객체생성하면 된다.
+GsonBuilder 클래스는 다양한 셋팅을 해서 Gson 객체를 생성할 때 사용한다. 
+
+기본객체  :
+ Gson  gson = new Gson();
+Gson  gson = new GsonBuilder().create();
+Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+--자바에서 ----
+Java 객체를 JSON표현식으로 변환하는 API - 직렬화  - Gson.toJSON(obj)
+JSON 표현식 형태의 스트링을 Java 객체로 변환 또한 가능하다 -역직렬화 - Gson.fromJSON(str, typeclass)
+
+
+--script에서 ---
+JSON.stringify(object) : script형태의 객체(Object)를 json문자열로 변환 (직렬화)
+JSON.parse(str) : json형태의 문자열(str)을 javascript객체로 변환(역직렬화)
